@@ -9,8 +9,8 @@ set -uo pipefail
 cd ~/lewm_research
 
 export PUSHT_H5_PATH=/ssd_scratch/mayaank.ashok/lewm_data/datasets/pusht_expert_train.h5
-source .venv/bin/activate
-PY=/home2/mayaank.ashok/lewm_research/.venv/bin/python
+source /home2/mayaank.ashok/.venv/bin/activate
+PY=/home2/mayaank.ashok/.venv/bin/python
 EVAL_DIR=outputs/b3_pusht/actor/rollout_eval
 LOG_DIR=outputs/b3_pusht/actor/sweep_logs
 mkdir -p "$LOG_DIR"

@@ -33,9 +33,9 @@ node change, even though `/home2` (the repo/venv) does. Checklist, in order:
    ```
 3. **The venv itself is fine** (`/home2` is node-independent) — but only from `adag`, never
    `ada` (the login node's plain `python3` is a different, older interpreter with no torch;
-   this is a standing gotcha, not new). Sanity check: `ssh adag "cd /home2/mayaank.ashok/
-   lewm_research && source .venv/bin/activate && python -c 'import torch; print(torch.
-   __version__, torch.cuda.is_available())'"`.
+   this is a standing gotcha, not new). Sanity check: `ssh adag "source /home2/mayaank.ashok/
+   .venv/bin/activate && python -c 'import torch; print(torch.__version__,
+   torch.cuda.is_available())'"`.
 4. **Re-stage `/ssd_scratch` from scratch** — the dataset and any tier caches pointed there are
    gone on the new node, even though they're still safely on `/share1` (dataset master) or
    nowhere at all (tier caches were never anywhere but the old node's now-unreachable
@@ -188,7 +188,8 @@ checkpoint/resume system. Everything below is verified directly against the actu
 
 | What | Where | Verified how |
 |---|---|---|
-| Code + venv | `/home2/mayaank.ashok/lewm_research/` | NFS home is `/home2`, not `/home` (`whoami`+`$HOME` check). Reachable from both login and compute nodes. Deliberately a different directory from the pre-existing `~/LEWM` (that one's the base repo checkout -- `jepa.py`/`eval.py`/`module.py` -- not these research scripts). |
+| Code | `/home2/mayaank.ashok/lewm_research/` | NFS home is `/home2`, not `/home` (`whoami`+`$HOME` check). Reachable from both login and compute nodes. Deliberately a different directory from the pre-existing `~/LEWM` (that one's the base repo checkout -- `jepa.py`/`eval.py`/`module.py` -- not these research scripts). |
+| venv | `/home2/mayaank.ashok/.venv/` | **Update (2026-09-10):** moved out of `lewm_research/` to sit directly under home (same /home2 filesystem/quota, just not nested under the repo). Activate with `source /home2/mayaank.ashok/.venv/bin/activate` from anywhere -- no need to `cd` into `lewm_research` first. All the venv's own internal absolute paths (pyvenv.cfg, bin/activate, console-script shebangs) were fixed with `sed` after the move; every script/doc that used to `source .venv/bin/activate` after `cd lewm_research` was updated to this new absolute path instead. |
 | LeWM checkpoint | `data/checkpoints/models--quentinll--lewm-tworooms/{config.json,weights.pt}` inside the repo above | Small (72MB) -- lives permanently in the repo, no per-job staging. Downloaded directly: `quentinll/lewm-tworooms` is BOTH a dataset repo (ships `tworoom.tar.zst`) and a separate model repo (ships `config.json`+`weights.pt`) under the same name -- confirmed via `HfApi().model_info(...)` / `.dataset_info(...)`, not assumed. |
 | Dataset master copy (compressed) | `/share1/mayaank.ashok/lewm_data/tworoom.tar.zst` (~3.3GB) | `/share1` is mounted on the login node only (confirmed: `ls /share1/...` works via plain `ssh ada`, fails with "No such file or directory" from inside an `srun` compute-node shell). |
 | Per-job dataset staging (decompressed) | `/ssd_scratch/mayaank.ashok/lewm_data/` | Confirmed present and large (880GB) on compute nodes; NOT present on the login node at all. |
@@ -256,8 +257,7 @@ compute nodes at all, this means running `pip install` from `ssh ada` directly (
 package installation doesn't need a GPU), not from a compute-node job:
 ```bash
 ssh ada
-cd /home2/mayaank.ashok/lewm_research
-source .venv/bin/activate
+source /home2/mayaank.ashok/.venv/bin/activate
 export PIP_CACHE_DIR=/share1/mayaank.ashok/pip_cache
 pip install ...
 ```

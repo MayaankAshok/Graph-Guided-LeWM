@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /home2/mayaank.ashok/lewm_research
-source .venv/bin/activate
+source /home2/mayaank.ashok/.venv/bin/activate
 export PUSHT_H5_PATH=/ssd_scratch/mayaank.ashok/lewm_data/datasets/pusht_expert_train.h5
 export PUSHT_TIER_CACHE_DIR=/ssd_scratch/mayaank.ashok/lewm_pusht_cache/tier_cache
 export PUSHT_ROLLOUT_CACHE_DIR=/ssd_scratch/mayaank.ashok/lewm_pusht_cache/rollout_cache

@@ -19,8 +19,8 @@ cd ~/lewm_research
 export PUSHT_H5_PATH=/ssd_scratch/mayaank.ashok/lewm_data/datasets/pusht_expert_train.h5
 export PUSHT_TIER_CACHE_DIR=/ssd_scratch/mayaank.ashok/lewm_pusht_cache/tier_cache_eps99pct
 mkdir -p "$PUSHT_TIER_CACHE_DIR"
-source .venv/bin/activate
-PY=/home2/mayaank.ashok/lewm_research/.venv/bin/python
+source /home2/mayaank.ashok/.venv/bin/activate
+PY=/home2/mayaank.ashok/.venv/bin/python
 EVAL_DIR=outputs/b3_pusht/actor/rollout_eval
 mkdir -p outputs/b3_pusht/actor/sweep_logs
 
