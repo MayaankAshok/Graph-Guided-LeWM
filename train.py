@@ -1,4 +1,6 @@
+import json
 import os
+import re
 from functools import partial
 from pathlib import Path
 
@@ -12,6 +14,64 @@ from omegaconf import OmegaConf, open_dict
 
 from module import SIGReg
 from utils import get_column_normalizer, get_img_preprocessor, SaveCkptCallback
+
+
+def _remap_vit_key(k: str) -> str | None:
+    """Map an old-style (`encoder.encoder.layer.{i}...`) checkpoint key, as produced by
+    an older transformers/stable_pretraining version, onto the currently-installed ViT
+    attribute names (`encoder.layers.{i}...`). See scripts/common/lewm_loader.py for the
+    original of this remap (duplicated here rather than imported, since train.py's base
+    pipeline and scripts/ are deliberately separate codepaths -- see CLAUDE.md)."""
+    m = re.match(r"^encoder\.encoder\.layer\.(\d+)\.(.*)$", k)
+    if not m:
+        return k
+    i, rest = m.group(1), m.group(2)
+    if rest.startswith("attention.attention.query"):
+        rest2 = rest.replace("attention.attention.query", "attention.q_proj")
+    elif rest.startswith("attention.attention.key"):
+        rest2 = rest.replace("attention.attention.key", "attention.k_proj")
+    elif rest.startswith("attention.attention.value"):
+        rest2 = rest.replace("attention.attention.value", "attention.v_proj")
+    elif rest.startswith("attention.output.dense"):
+        rest2 = rest.replace("attention.output.dense", "attention.o_proj")
+    elif rest.startswith("intermediate.dense"):
+        rest2 = rest.replace("intermediate.dense", "mlp.fc1")
+    elif rest.startswith("output.dense"):
+        rest2 = rest.replace("output.dense", "mlp.fc2")
+    elif rest.startswith("layernorm_before") or rest.startswith("layernorm_after"):
+        rest2 = rest
+    else:
+        return None
+    return f"encoder.layers.{i}.{rest2}"
+
+
+def load_pretrained_encoder(world_model, ckpt_dir: Path):
+    """Load only the `encoder.*`/`projector.*` weights of a pretrained quentinll/lewm-<env>
+    HF checkpoint into a freshly-instantiated world_model, leaving predictor/action_encoder/
+    pred_proj at their (possibly differently-shaped) random init. Caller is expected to
+    freeze the loaded submodules afterwards if desired."""
+    sd = torch.load(ckpt_dir / "weights.pt", map_location="cpu")
+    remapped = {}
+    for k, v in sd.items():
+        if not (k.startswith("encoder.") or k.startswith("projector.")):
+            continue
+        if k.startswith("encoder.encoder.layer."):
+            nk = _remap_vit_key(k)
+            if nk is None:
+                raise RuntimeError(f"Could not remap checkpoint key: {k}")
+        else:
+            nk = k
+        remapped[nk] = v
+
+    missing, unexpected = world_model.load_state_dict(remapped, strict=False)
+    unexpected = [k for k in unexpected]
+    bad_missing = [
+        k for k in missing if k.startswith("encoder.") or k.startswith("projector.")
+    ]
+    if unexpected or bad_missing:
+        raise RuntimeError(
+            f"Pretrained encoder load mismatch: missing={bad_missing} unexpected={unexpected}"
+        )
 
 
 def lejepa_forward(self, batch, stage, cfg):
@@ -56,11 +116,17 @@ def run(cfg):
     dataset = swm.data.load_dataset(
         dataset_name, transform=None, cache_dir=cache_dir, **dataset_cfg
     )
-    transforms = [get_img_preprocessor(source='pixels', target='pixels', img_size=cfg.img_size)]
-    
+    # "emb" columns come from precompute_embeddings.py (frozen-encoder output cached to
+    # disk) and skip image preprocessing entirely -- see jepa.py's JEPA.encode().
+    has_pixels = "pixels" in cfg.data.dataset.keys_to_load
+    transforms = (
+        [get_img_preprocessor(source='pixels', target='pixels', img_size=cfg.img_size)]
+        if has_pixels else []
+    )
+
     with open_dict(cfg):
         for col in cfg.data.dataset.keys_to_load:
-            if col.startswith("pixels"):
+            if col in ("pixels", "emb"):
                 continue
             normalizer = get_column_normalizer(dataset, col, col)
             transforms.append(normalizer)
@@ -71,18 +137,30 @@ def run(cfg):
     dataset.transform = transform
 
     rnd_gen = torch.Generator().manual_seed(cfg.seed)
-    train_set, val_set = spt.data.random_split(
-        dataset, lengths=[cfg.train_split, 1 - cfg.train_split], generator=rnd_gen
-    )
+    if cfg.get("split_mode", "random") == "contiguous":
+        # first `train_split` fraction of the dataset (in on-disk order) as train, the
+        # rest as val -- unlike spt.data.random_split, does not shuffle before splitting.
+        n_train = int(len(dataset) * cfg.train_split)
+        train_set = torch.utils.data.Subset(dataset, range(0, n_train))
+        val_set = torch.utils.data.Subset(dataset, range(n_train, len(dataset)))
+    else:
+        train_set, val_set = spt.data.random_split(
+            dataset, lengths=[cfg.train_split, 1 - cfg.train_split], generator=rnd_gen
+        )
 
     train = torch.utils.data.DataLoader(train_set, **cfg.loader,shuffle=True, drop_last=True, generator=rnd_gen)
     val = torch.utils.data.DataLoader(val_set, **cfg.loader, shuffle=False, drop_last=False)
-    
+
     ##############################
     ##       model / optim      ##
     ##############################
 
     world_model = hydra.utils.instantiate(cfg.model)
+
+    if cfg.get("pretrained_ckpt_dir"):
+        load_pretrained_encoder(world_model, Path(cfg.pretrained_ckpt_dir))
+        if cfg.get("freeze_encoder", False):
+            world_model.freeze(["encoder", "projector"])
 
     optimizers = {
         'model_opt': {

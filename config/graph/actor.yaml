@@ -1,0 +1,132 @@
+defaults:
+  - _self_
+  - env: pusht
+
+# AWR actor training + live-rollout eval. See scripts/actor_train.py,
+# scripts/actor_rollout_eval.py.
+beta: 3.0
+awr_weight_clip: 100.0
+# Both default false = the exact historical behaviour (every published Two-Room number).
+# Added from the Push-T underperformance investigation (scripts/investigations/pusht_lowscore/):
+# aux_standardize    -- regress V onto the z-scored pseudo_v instead of its raw value, i.e.
+#                       learn the graph's ORDERING (Spearman +0.9952 vs true expert step-gaps
+#                       on Push-T) without importing its absolute scale, which is behavioural
+#                       distance rather than the optimal cost-to-go the Bellman objective wants.
+# awr_normalize_adv  -- z-score the AWR advantage before exp(), so a drifting V cannot
+#                       silently rebias every actor weight.
+aux_standardize: false
+awr_normalize_adv: false
+id_eps2_override: null   # null = use the calibrated eps2 (common.graph_lib.compute_calibration)
+                   # as always. Set to a number to bypass calibration entirely and use that
+                   # fixed squared-distance threshold for identification edges instead --
+                   # e.g. an EMPIRICAL quantile of real 1-step transition distances measured
+                   # directly off the histogram (not compute_calibration's chi2-formula
+                   # approximation at the same quantile -- the two disagree; measured on
+                   # Push-T's 300-episode set, empirical 99th pct=14.16 vs the formula's
+                   # q=0.99 value of 3.12). Only affects id_edge_method=capped (Push-T).
+aux_lambda: 0.3   # matches datatiers.yaml's own aux_lambda -- kept as a separate field since
+                   # actor.yaml doesn't compose datatiers.yaml (different tier/seed CLI usage)
+aux_cross_lambda: 0.0   # weight on the second, cross-episode aux term (pairs drawn from the
+                   # graph's own cross-episode identification edges -- see actor_train.py's
+                   # module comment above the cross-episode aux setup). 0.0 = off, the exact
+                   # historical behaviour (the HER-based aux term only ever sees same-episode
+                   # pairs). This is the term most likely to move live-rollout success rather
+                   # than the same-episode Spearman proxy, since it's the only place V ever
+                   # sees the graph's cross-episode stitching during training.
+eval_every: 50
+train_frac: 0.8   # passed through to datatiers.build_tier_setups, same value as datatiers.yaml
+n_eval_pairs: 1000
+n_steps: 35000          # was 20000 (truncated from the 50000 datatiers budget, Two-Room-only
+                         # empirical basis -- see actor_train.py's module docstring). Raised
+                         # because expert_100's training-step history showed rho/success both
+                         # flat-to-declining by 20k under the OLD her_goal_gamma=0.9, not still
+                         # rising -- but that check predates her_goal_gamma=0.99 below, which
+                         # gives V/the actor a much longer HER horizon to learn and may need
+                         # more steps to converge; re-check the tail of history[] once this
+                         # run exists rather than assuming 35k is enough either.
+her_goal_gamma: 0.99    # was 0.9 (mean 10-step HER goals). 0.99 = the LeWM paper's own GCIQL
+                         # critic value (mean 1/(1-0.99)=100-step goals, common.training.
+                         # GOAL_GAMMA is still 0.9 -- this only overrides the actor stage).
+                         # Matches env.paper_goal_offset=100 below so training and eval/
+                         # selection target the same horizon.
+phi_mode: dense         # dense = cache the full NxN graph-distance matrix (needed by the
+                         # Spearman-sweep path too). sparse = keep only the graph and compute
+                         # phi at the HER pairs on demand (common.graph_lib.phi_for_pairs);
+                         # for tiers where NxN stops fitting. none = skip the graph object and
+                         # phi entirely, keep only the raw identification edges -- variant=stitch
+                         # only (see common.training.build_stitch_her_tuples); takes precedence
+                         # over need_graph, same as sparse. Ignored when need_graph=false (dense
+                         # path only).
+stitch_goals_per_edge: 4  # variant=stitch only: cross-episode HER goals sampled per
+                           # identification-edge direction (see build_stitch_her_tuples).
+                           # Matches common.training.GOALS_PER_TRANSITION, the same-episode
+                           # HER budget per real transition.
+stitch_hop_gamma: 0.9      # variant=stitch only: geometric bias (mean 1/(1-x) steps) on how
+                           # far past the identification point the goal is sampled, instead
+                           # of uniformly across the whole remaining suffix -- see
+                           # build_stitch_her_tuples' docstring and
+                           # scripts/investigations/pusht_stitch_diagnosis/diagnose.py.
+                           # Deliberately NOT her_goal_gamma (0.99, mean ~100 steps): that
+                           # value was measured to barely differ from uniform on Push-T's
+                           # ~125-step episodes, whereas 0.9 (mean 10) keeps most stitched
+                           # goals in the regime the diagnosis found comparably legitimate
+                           # to ordinary same-episode HER.
+need_graph: true        # false = skip graph construction + the dense NxN phi_dist entirely
+                         # (baseline-only; lets very large expert_N tiers train without the
+                         # O(n^2) matrix). variant=auxphi refuses to run without it.
+rollout_eval_every: 2500
+rollout_eval_episodes: 20      # was 12 -- each periodic check moved in units of 1/12=0.083,
+                                # noisy enough that a single-point "peak" was hard to trust
+                                # (see the expert_100/auxphi/s0 case: peak landed on the last
+                                # checkpoint after a dip, indistinguishable from noise at n=12)
+rollout_eval_pair_seed: 424242
+
+# Live-rollout protocol, used both for the periodic in-training rollout checks (which
+# drive `select=success`) and by actor_rollout_eval.py. See actor_rollout_utils.py's
+# module docstring for the full definitions.
+#   same_episode  -- the LeWM paper's App. F.1 protocol: start = random dataset state, goal
+#                    = the state env.paper_goal_offset steps later in the SAME trajectory,
+#                    env.paper_eval_budget steps to reach it. This is what the paper's
+#                    Push-T policy numbers (GCIQL 20% / GCIVL 33% / GCBC 75% / Random 2%)
+#                    were measured under.
+#   cross_episode -- the original convention: arbitrary held-out (s,g) pairs from the
+#                    Spearman eval set, budget = the env's max_episode_steps. Every Push-T
+#                    actor scored 0.000 under it.
+eval_protocol: same_episode
+eval_pool: dataset   # same_episode only: dataset (full h5 minus the tier's train episodes)
+                     # | test_episodes (the tier's own held-out episodes only)
+
+tier: expert_10
+variant: auxphi   # baseline | auxphi | stitch (cross-episode HER via identification edges,
+                  # no Dijkstra/no aux loss -- pass phi_mode=none alongside it)
+seed: 0
+run_tag: ""       # optional suffix for hyperparameter variants of the same (tier, variant),
+                  # e.g. run_tag=_hg96 with her_goal_gamma=0.96 -> checkpoint
+                  # {tier}__baseline_hg96_actor__s{seed}.pt and matching result files,
+                  # so the default run's files are never overwritten
+
+# actor_rollout_eval.py only:
+n_episodes: 100
+eval_seed: 42     # the paper's eval seed (its Push-T eval uses seed 42, 50 episodes)
+select: success   # was rho -- rho-selection tracks a proxy shown to be structurally biased
+                  # (evaluated on ~96% cross-episode pairs the value function never trains
+                  # on) and success-vs-rho-selected actors scored within noise of each other
+                  # in practice anyway, so only success-selected actors get evaluated going
+                  # forward. rho | success | final (the raw actor as of the checkpoint's last
+                  # training step -- see actor_rollout_eval.py)
+policy: actor     # actor | random (the paper's uniform-random-action baseline; no checkpoint needed)
+
+# render_rollout_videos.py only:
+n_successes: 5
+n_failures: 5
+out_dir: outputs/rollout_videos
+goal_mode: same_episode  # same_episode = usual +paper_goal_offset-step lookahead goal per
+                         # episode | fixed = one constant goal (this tier's mean episode-END
+                         # state) reused for every rendered episode -- see script docstring
+pool_size: 0             # 0 = auto (max(4*(n_successes+n_failures), 40)); set explicitly to
+                         # search harder for a rare outcome (e.g. goal_mode=fixed successes)
+
+# render_compare_videos.py only:
+n_compare: 5             # number of baseline-vs-auxphi divergent-outcome pairs to render
+n_first: 0                # also render pairs 0..n_first-1 side-by-side regardless of
+                          # outcome (agree or diverge) -- separate from n_compare's search

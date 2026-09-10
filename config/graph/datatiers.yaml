@@ -1,0 +1,17 @@
+defaults:
+  - _self_
+  - env: pusht
+
+# B3 data-tier sweep (baseline vs. auxphi across expert_N/mixed/mixed_large). See
+# scripts/datatiers.py and scripts/worker.py.
+dataset_sizes: [10, 25, 50, 100]
+seeds: [0, 1, 2]
+aux_lambda: 0.3
+train_frac: 0.8
+n_eval_pairs: 1000
+
+# Set on the CLI for a single-combo worker invocation (worker.py), e.g.
+# `python scripts/worker.py env=pusht tier=mixed_large variant=auxphi seed=1`.
+tier: expert_10
+variant: auxphi   # baseline | auxphi
+seed: 0

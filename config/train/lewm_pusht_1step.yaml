@@ -1,0 +1,60 @@
+# 1-step Push-T predictor: (z_t, a_t) -> z_{t+1}, frozen pretrained encoder+projector,
+# small ARPredictor trained from scratch. See CLAUDE.md and notes.md for how this differs
+# from config/train/lewm.yaml (frameskip 5, encoder trained jointly, full-size predictor).
+#
+# Trains on frozen-encoder embeddings precomputed by precompute_embeddings.py, not raw
+# pixels -- the ViT-tiny forward pass otherwise dominates every step (measured ~2s/step at
+# batch 256 on a GTX 1080 Ti) even though the encoder is frozen and never needs gradients.
+# Fall back to `data=pusht data.dataset.name=pusht_expert_train.h5` (the raw-pixel path) if
+# no embeddings cache has been built yet.
+defaults:
+  - launcher: local
+  - data: pusht_emb
+  - model: lewm_predictor_1step_small
+  - _self_
+
+output_model_name: lewm_pusht_1step_predictor
+subdir: ${hydra:job.id}
+
+num_workers: 4
+train_split: 0.8
+split_mode: contiguous  # first 80% of the dataset (on-disk order) is train, not a random split
+seed: 3072
+img_size: 224
+embed_dim: 192
+history_size: 1  # just z_t as context -- no multi-frame history needed for a 1-step predictor
+
+trainer:
+  max_epochs: 20
+  devices: auto
+  accelerator: gpu
+  precision: bf16
+  gradient_clip_val: 1.0
+
+loader:
+  batch_size: 2048  # embeddings are cached in RAM (keys_to_cache in pusht_emb.yaml) and the
+                     # predictor is tiny, so there's no image-decode/ViT cost gating batch size
+  num_workers: ${num_workers}
+  persistent_workers: True
+  prefetch_factor: 3
+  pin_memory: True
+
+optimizer:
+  type: AdamW
+  lr: 3e-4
+  weight_decay: 1e-3
+
+num_preds: 1
+
+loss:
+  sigreg:
+    weight: 0.0  # encoder is frozen -- nothing to regularize into an isotropic Gaussian
+    kwargs:
+      knots: 17
+      num_proj: 1024
+
+# path to the pretrained quentinll/lewm-pusht checkpoint dir (config.json + weights.pt);
+# override on the CLI to the actual location on Ada, e.g.:
+#   pretrained_ckpt_dir=/home2/mayaank.ashok/lewm_research/data/checkpoints/models--quentinll--lewm-pusht
+pretrained_ckpt_dir: ???
+freeze_encoder: true

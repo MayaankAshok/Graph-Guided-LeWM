@@ -1,0 +1,12 @@
+data/
+outputs/
+__pycache__/
+docs/**/*.log
+docs/**/*.aux
+docs/**/*.out
+docs/**/*.fdb_latexmk
+docs/**/*.fls
+docs/**/*.synctex.gz
+docs/**/*.toc
+
+

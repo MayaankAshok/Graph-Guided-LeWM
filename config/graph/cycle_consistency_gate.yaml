@@ -1,0 +1,30 @@
+defaults:
+  - _self_
+  - env: tworoom
+
+# E2 (revised) -- IDM-predictor cycle consistency (docs/graph-proposal/predictor-stitching.tex).
+# See scripts/cycle_consistency_gate.py.
+n_episodes: 300
+train_frac: 0.8
+
+k_candidates: 20      # wide, UNFILTERED top-k cross-episode neighbor pool -- deliberately
+                      # looser than the calibrated k=4 identification-edge threshold, so the
+                      # verification step has real signal (a mix of true/false candidates)
+                      # to discriminate, unlike testing it on an already-92%-precision set
+# var_threshold is no longer a fixed quantile of one population -- see
+# common.graph_lib.calibrate_variance_threshold: geometric-mean separator between real
+# transitions and genuinely random pairs (docs/graph-proposal/latent-diagnostics.tex Fig 6).
+direction_threshold: 0.5   # accept iff the predicted displacement's cosine similarity to the
+                           # true target direction exceeds this -- replaces the old absolute
+                           # forward-error floor, which mis-scaled badly (see
+                           # [[tworoom-e2b-cycle-consistency-diagnosed]]); latent-diagnostics
+                           # Fig 4 shows real transitions cluster at median cosine 0.924, with
+                           # 97.2% above 0.5, while chance alignment in 192-d is near zero
+n_oracle_sample: 3000
+
+n_members: 6
+hidden: 256
+n_steps: 3000
+batch_size: 256
+lr: 1e-3
+seed: 0

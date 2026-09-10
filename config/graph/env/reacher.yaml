@@ -1,0 +1,29 @@
+# Per-environment tuning for the latent-graph pipeline -- see tworoom.yaml for field docs.
+name: reacher
+output_prefix: reacher
+id_edge_k: 4
+# capped: k-capped FAISS with calibrated/heuristic-fallback (common.graph_lib.
+# build_identification_edges). Two-Room's calibration formula is known to fail on at least
+# one other environment (Push-T, rho_hat>=1) and brute force is a scaling wall regardless --
+# starting from the same proven-safe default as Push-T rather than assuming Two-Room's
+# bruteforce path transfers. Sanity-check eps2 > 0 after calibration (see CLAUDE.md); if it
+# fails, the same capped builder falls back to the heuristic top-k construction automatically.
+id_edge_method: capped
+share_calibration_rng: false   # historical-accident flag, not a design choice for a new env
+                                 # -- see tworoom.yaml's comment. No prior Reacher numbers to
+                                 # reproduce, so this is arbitrary; false matches Push-T.
+
+n_episodes: 300   # B0 gate landmark count, matches Push-T's convention
+
+# Noisy-rollout collection (mixed/mixed_large tiers) is NOT implemented for Reacher --
+# common.envs.ReacherMechanics.collect_noisy_rollout raises NotImplementedError. Only
+# expert_N tiers are supported. Leave mixed_n_expert/mixed_n_noisy/rollout_policy_kwargs
+# unset (undefined) rather than guessing values for an unimplemented path.
+
+# LeWM paper live-eval protocol (App. F.1, stable-worldmodel scripts/plan/config/
+# reacher.yaml on github.com/galilai-group/stable-worldmodel): goal = the dataset state
+# paper_goal_offset timesteps later in the same trajectory, paper_eval_budget env steps to
+# reach it. Confirmed directly from the upstream config file (not assumed): goal_offset_
+# steps=25, eval_budget=50 -- identical to Push-T's own paper protocol values.
+paper_goal_offset: 25
+paper_eval_budget: 50

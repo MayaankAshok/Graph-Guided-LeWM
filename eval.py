@@ -85,7 +85,24 @@ def run(cfg: DictConfig):
     policy = cfg.get("policy", "random")
 
     if policy != "random":
-        model = swm.wm.utils.load_pretrained(cfg.policy)
+        try:
+            model = swm.wm.utils.load_pretrained(cfg.policy)
+        except RuntimeError:
+            # The published quentinll/lewm-<env> checkpoints were saved by an older
+            # transformers/stable_pretraining whose ViT block attributes have since been
+            # renamed, so load_pretrained's strict load_state_dict fails on every encoder
+            # block. scripts/common/lewm_loader.py carries the remap (verified to be a pure
+            # rename: zero missing/unexpected keys and zero shape mismatches after it). See
+            # CLAUDE.md, "Checkpoint health".
+            import sys as _sys
+
+            _sys.path.insert(0, str(Path(__file__).parent / "scripts"))
+            from common.lewm_loader import load_lewm
+
+            ckpt_dir = Path(swm.data.utils.get_cache_dir(sub_folder="checkpoints"), cfg.policy)
+            print(f"[eval] load_pretrained failed on renamed ViT keys; "
+                  f"retrying with the remapping loader on {ckpt_dir}")
+            model = load_lewm(ckpt_dir=ckpt_dir, device="cpu")
         model = model.to("cuda")
         model = model.eval()
         model.requires_grad_(False)

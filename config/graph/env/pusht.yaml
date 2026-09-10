@@ -1,0 +1,37 @@
+# Per-environment tuning for the latent-graph pipeline -- see tworoom.yaml for field docs.
+name: pusht
+output_prefix: pusht
+id_edge_k: 4
+# capped: k-capped FAISS with calibrated/heuristic-fallback (common.graph_lib.
+# build_identification_edges) -- Two-Room's calibration formula fails outright on Push-T
+# (rho_hat statistically >= 1), and brute force is a scaling wall at this size regardless.
+# See [[pusht-b5-b0-gate]].
+id_edge_method: capped
+share_calibration_rng: false   # see tworoom.yaml -- Push-T's original never shared this
+
+n_episodes: 300
+
+mixed_n_expert: 50
+mixed_n_noisy: 50
+mixed_large_n_expert: 50
+# ~1.6x mixed's frame count, matching Two-Room's own mixed->mixed_large scale-up ratio --
+# NOT sized to match expert_100's frame count the way Two-Room's is: Push-T's WeakPolicy
+# always runs the full 250-step budget (0% success), so a same-episode-count port would
+# make the dense phi_dist matrix computation take on the order of an hour. See
+# [[pusht-b5-b3-rl-training]] / pusht_b3_datatiers.py's module docstring.
+mixed_large_n_noisy: 100
+rollout_policy_kwargs:
+  dist_constraint: 100
+
+# LeWM paper live-eval protocol (App. F.1, stable-worldmodel scripts/plan/config/pusht.yaml):
+# goal = the dataset state paper_goal_offset timesteps later in the same trajectory,
+# paper_eval_budget env steps to reach it. Used when actor.yaml's eval_protocol=same_episode,
+# both for the periodic in-training rollout checks (drives select=success) and the final
+# actor_rollout_eval.py run (when not overridden per-call, as the goal=25/50/100 sweeps do).
+# Was 25/50 (paper) then 100/200 (to match her_goal_gamma=0.99's ~100-step mean HER horizon).
+# Now 50/100: the 25/50/100 sweep results showed goal=100 success rates near the noise floor
+# for every condition (both variants, all three tiers), too flat to usefully separate
+# baseline from auxphi during training-time checkpoint selection -- 50 sits in the range
+# where the sweep actually showed separation. Still a 2x budget:offset ratio.
+paper_goal_offset: 50
+paper_eval_budget: 100

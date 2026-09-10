@@ -1,12 +1,32 @@
 import numpy as np
 import torch
 from stable_pretraining import data as dt
+from torchvision.transforms import v2 as tv2
 from lightning.pytorch.callbacks import Callback
+
+
+class _ResizeFix:
+    """Drop-in replacement for stable_pretraining.data.transforms.Resize: that class's
+    __call__ calls self.transform(...), a torchvision-internal method name that got
+    renamed to self._transform(...) in the torchvision version pinned for this project
+    (0.20.1+cu121 on Ada) -- so it raises AttributeError on any real image, regardless
+    of dataset. Delegate to a plain torchvision v2.Resize instead, which dispatches
+    through its own (version-matched) internals correctly."""
+
+    def __init__(self, size, source="image", target="image"):
+        self._op = tv2.Resize(size, antialias=True)
+        self.source = source
+        self.target = target
+
+    def __call__(self, x):
+        x[self.target] = self._op(x[self.source])
+        return x
+
 
 def get_img_preprocessor(source: str, target: str, img_size: int = 224):
     imagenet_stats = dt.dataset_stats.ImageNet
     to_image = dt.transforms.ToImage(**imagenet_stats, source=source, target=target)
-    resize = dt.transforms.Resize(img_size, source=source, target=target)
+    resize = _ResizeFix(img_size, source=source, target=target)
     return dt.transforms.Compose(to_image, resize)
 
 

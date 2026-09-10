@@ -25,19 +25,37 @@ class JEPA(nn.Module):
         self.action_encoder = action_encoder
         self.projector = projector or nn.Identity()
         self.pred_proj = pred_proj or nn.Identity()
+        self._frozen_modules = []
+
+    def freeze(self, module_names):
+        """Freeze given submodules (by attribute name) in place: no grad, permanently
+        eval() even across the Lightning trainer's per-epoch model.train() calls."""
+        self._frozen_modules = list(module_names)
+        for name in self._frozen_modules:
+            module = getattr(self, name)
+            module.requires_grad_(False)
+            module.eval()
+
+    def train(self, mode=True):
+        super().train(mode)
+        for name in self._frozen_modules:
+            getattr(self, name).eval()
+        return self
 
     def encode(self, info):
         """Encode observations and actions into embeddings.
-        info: dict with pixels and action keys
+        info: dict with pixels and action keys, OR a precomputed "emb" key (skips the
+        encoder/projector forward entirely -- see precompute_embeddings.py).
         """
 
-        pixels = info['pixels'].float()
-        b = pixels.size(0)
-        pixels = rearrange(pixels, "b t ... -> (b t) ...") # flatten for encoding
-        output = self.encoder(pixels, interpolate_pos_encoding=True)
-        pixels_emb = output.last_hidden_state[:, 0]  # cls token
-        emb = self.projector(pixels_emb)
-        info["emb"] = rearrange(emb, "(b t) d -> b t d", b=b)
+        if "emb" not in info:
+            pixels = info['pixels'].float()
+            b = pixels.size(0)
+            pixels = rearrange(pixels, "b t ... -> (b t) ...") # flatten for encoding
+            output = self.encoder(pixels, interpolate_pos_encoding=True)
+            pixels_emb = output.last_hidden_state[:, 0]  # cls token
+            emb = self.projector(pixels_emb)
+            info["emb"] = rearrange(emb, "(b t) d -> b t d", b=b)
 
         if "action" in info:
             info["act_emb"] = self.action_encoder(info["action"])

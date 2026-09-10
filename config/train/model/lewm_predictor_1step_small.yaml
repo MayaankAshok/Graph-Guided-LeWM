@@ -1,0 +1,51 @@
+# Same JEPA/ARPredictor architecture as config/train/model/lewm.yaml, but sized for a much
+# simpler task: 1-step prediction (z_t, a_t) -> z_{t+1} instead of 5-step-block prediction.
+# encoder/projector are meant to be loaded from a pretrained checkpoint and frozen (see
+# pretrained_ckpt_dir/freeze_encoder in config/train/lewm_pusht_1step.yaml) -- their shapes
+# here must match that checkpoint's (vit tiny / patch14 / embed_dim 192) so the state dict
+# loads cleanly, even though they end up frozen rather than trained.
+_target_: jepa.JEPA
+
+encoder:
+  _target_: stable_pretraining.backbone.utils.vit_hf
+  size: tiny
+  patch_size: 14
+  image_size: ${img_size}
+  pretrained: false
+  use_mask_token: false
+
+predictor:
+  _target_: module.ARPredictor
+  num_frames: ${history_size}
+  input_dim: ${embed_dim}
+  hidden_dim: 96
+  output_dim: ${embed_dim}
+  depth: 2
+  heads: 4
+  mlp_dim: 384
+  dim_head: 24
+  dropout: 0.1
+  emb_dropout: 0.0
+
+action_encoder:
+  _target_: module.Embedder
+  input_dim: ???  # overwritten in train.py: frameskip(1) * real action_dim(2) = 2
+  emb_dim: ${embed_dim}
+
+projector:
+  _target_: module.MLP
+  input_dim: ${embed_dim}
+  output_dim: ${embed_dim}
+  hidden_dim: 2048
+  norm_fn:
+    _target_: torch.nn.BatchNorm1d
+    _partial_: true
+
+pred_proj:
+  _target_: module.MLP
+  input_dim: ${embed_dim}
+  output_dim: ${embed_dim}
+  hidden_dim: 2048
+  norm_fn:
+    _target_: torch.nn.BatchNorm1d
+    _partial_: true

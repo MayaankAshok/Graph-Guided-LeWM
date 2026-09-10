@@ -1,0 +1,25 @@
+defaults:
+  - _self_
+  - env: tworoom
+
+# E1 -- IDM ensemble sanity check (docs/experiment-plan-predictor-stitching.md).
+# See scripts/idm_gate.py.
+n_episodes: 300      # matches graph_gate.py's cached landmark set (outputs/b0_<prefix>),
+                     # reused here so this doesn't pay to re-encode from scratch
+train_frac: 0.8      # same episode-level split convention as datatiers.py's build_tier_setups
+n_members: 6
+hidden: 256
+n_steps: 3000
+batch_size: 256
+lr: 1e-3
+seed: 0
+
+# latent_diagnostics.py: which predictor to run the diagnostics against.
+# - block5 (default): the pretrained quentinll/lewm-<env> checkpoint, invoked with the real
+#   5-action-block/frame-skip-5 convention it was actually trained under (see
+#   [[lewm-predictor-action-block-convention]]).
+# - 1step: a genuinely-trained 1-step predictor (Push-T only) -- frozen quentinll/lewm-pusht
+#   encoder + a small ARPredictor/action_encoder/pred_proj trained from scratch on
+#   (z_t, a_t) -> z_{t+1}, no frame-skip hack needed at all. See
+#   data/checkpoints/lewm_pusht_1step_predictor and config/train/lewm_pusht_1step.yaml.
+predictor: block5
