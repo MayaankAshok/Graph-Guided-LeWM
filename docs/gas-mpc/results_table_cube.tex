@@ -1,0 +1,88 @@
+\subsection*{Fixed task set (200 tasks, first 50 used)}
+All tables in this block: the same 50 tasks for every configuration and every seed; a seed changes only CEM's random draws. Cells are success rates in \%, mean $\pm$ sd over the seeds tested (per-seed counts and values are in the appendix). Default settings unless a row says otherwise: lookahead 13.7 TDR units, $H_{\mathrm{TD}}=8$, TE 0.9, open-loop 25 steps, no retrieval.
+
+\begin{table}[H]
+\centering\small
+\caption{L2.}
+\label{tab:gas-mpc-l2-task200-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 56.8 $\pm$ 3.2 & 50.8 $\pm$ 1.6 & 62.0 $\pm$ 2.2 & 12.8 $\pm$ 2.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal\_tdr + critic.}
+\label{tab:gas-mpc-subgoal_tdr-crit-task200-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+$H_{\mathrm{TD}}$=7.49, lookahead=14.25, final@14.25, final L2, $\beta$=1, ET($h_{\mathrm{rem}}$) & 66.8 $\pm$ 5.2 & 56.4 $\pm$ 4.6 & 70.4 $\pm$ 0.8 & 37.6 $\pm$ 4.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+\subsection*{Per-seed results}
+Every test in the blocks above, broken down by seed.
+
+\begin{table}[H]
+\centering\small
+\caption{Fixed task set (200, first 50), same-ep 25, per seed (CEM repeats); `solved' = tasks solved in $\ge$1 seed / in every seed run.}
+\label{tab:gas-mpc-pooled-same25-task200-n50}
+\begin{tabular}{lrrrrrrr}
+\toprule
+configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
+\midrule
+l2 & 54 & 52 & 58 & 60 & 60 & 56.8 $\pm$ 3.2 & 36 / 19 \\
+subgoal\_tdr\_la14.25\_th7.49\_htd7.49\_te0.9\_ft14.25\_fl2\_crit1\_ccet & 68 & 68 & 74 & 66 & 58 & 66.8 $\pm$ 5.2 & 42 / 24 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Fixed task set (200, first 50), same-ep 50, per seed (CEM repeats); `solved' = tasks solved in $\ge$1 seed / in every seed run.}
+\label{tab:gas-mpc-pooled-same50-task200-n50}
+\begin{tabular}{lrrrrrrr}
+\toprule
+configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
+\midrule
+l2 & 50 & 50 & 50 & 50 & 54 & 50.8 $\pm$ 1.6 & 31 / 19 \\
+subgoal\_tdr\_la14.25\_th7.49\_htd7.49\_te0.9\_ft14.25\_fl2\_crit1\_ccet & 52 & 58 & 50 & 62 & 60 & 56.4 $\pm$ 4.6 & 34 / 20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Fixed task set (200, first 50), same-ep 100, per seed (CEM repeats); `solved' = tasks solved in $\ge$1 seed / in every seed run.}
+\label{tab:gas-mpc-pooled-same100-task200-n50}
+\begin{tabular}{lrrrrrrr}
+\toprule
+configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
+\midrule
+l2 & 62 & 60 & 66 & 60 & 62 & 62.0 $\pm$ 2.2 & 37 / 27 \\
+subgoal\_tdr\_la14.25\_th7.49\_htd7.49\_te0.9\_ft14.25\_fl2\_crit1\_ccet & 70 & 70 & 72 & 70 & 70 & 70.4 $\pm$ 0.8 & 40 / 31 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Fixed task set (200, first 50), cross-ep, per seed (CEM repeats); `solved' = tasks solved in $\ge$1 seed / in every seed run.}
+\label{tab:gas-mpc-pooled-cross-task200-n50}
+\begin{tabular}{lrrrrrrr}
+\toprule
+configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
+\midrule
+l2 & 16 & 8 & 12 & 14 & 14 & 12.8 $\pm$ 2.7 & 11 / 4 \\
+subgoal\_tdr\_la14.25\_th7.49\_htd7.49\_te0.9\_ft14.25\_fl2\_crit1\_ccet & 34 & 44 & 40 & 38 & 32 & 37.6 $\pm$ 4.3 & 29 / 9 \\
+\bottomrule
+\end{tabular}
+\end{table}

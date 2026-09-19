@@ -1,0 +1,131 @@
+Confirmed: current shared loader replaces task200 with held-out tasks
+same25
+task200u heldout_disjoint l2_matrix_newtasks [92.0, 92.0, 90.0, 92.0, 90.0] 91.2 1.10
+task200u heldout_disjoint B_matrix_newcritic_newtasks [90.0, 92.0, 92.0, 86.0, 92.0] 90.4 2.61
+task200u heldout_disjoint B_matrix_oldcritic_newtasks [92.0, 84.0, 90.0, 84.0, 90.0] 88.0 3.74
+task200 legacy B_matrix_oldcritic_oldtasks [90.0, 84.0, 90.0, 84.0, 90.0] 87.6 3.29
+task200 legacy l2 [90.0, 92.0, 86.0, 94.0, 94.0] 91.2 3.35
+task200 legacy B [96.0, 90.0, 90.0, 90.0, 88.0] 90.8 3.03
+  0 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  1 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  2 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  3 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  4 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  0 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  1 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  2 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  3 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  4 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  0 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  1 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  2 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  3 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  4 task200u ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  0 task200 ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  1 task200 ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  2 task200 ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  3 task200 ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  4 task200 ['pairs_same_episode_off25_task200.json', 'pairs_same_episode_off25_task200u.json'] True
+  0 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  0 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off25_task200.full_dataset.json'] True
+same50
+task200u heldout_disjoint l2_matrix_newtasks [38.0, 38.0, 46.0, 44.0, 44.0] 42.0 3.74
+task200u heldout_disjoint B_matrix_newcritic_newtasks [70.0, 70.0, 70.0, 66.0, 70.0] 69.2 1.79
+task200u heldout_disjoint B_matrix_oldcritic_newtasks [70.0, 68.0, 68.0, 74.0, 68.0] 69.6 2.61
+task200 legacy B_matrix_oldcritic_oldtasks [76.0, 72.0, 66.0, 78.0, 68.0] 72.0 5.10
+task200 legacy l2 [56.00000000000001, 46.0, 50.0, 42.0, 48.0] 48.4 5.18
+task200 legacy B [60.0, 70.0, 70.0, 62.0, 60.0] 64.4 5.18
+  0 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  1 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  2 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  3 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  4 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  0 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  1 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  2 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  3 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  4 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  0 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  1 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  2 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  3 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  4 task200u ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  0 task200 ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  1 task200 ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  2 task200 ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  3 task200 ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  4 task200 ['pairs_same_episode_off50_task200.json', 'pairs_same_episode_off50_task200u.json'] True
+  0 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  0 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off50_task200.full_dataset.json'] True
+same100
+task200u heldout_disjoint l2_matrix_newtasks [18.0, 12.0, 14.000000000000002, 10.0, 8.0] 12.4 3.85
+task200u heldout_disjoint B_matrix_newcritic_newtasks [42.0, 46.0, 50.0, 54.0, 52.0] 48.8 4.82
+task200u heldout_disjoint B_matrix_oldcritic_newtasks [57.99999999999999, 52.0, 48.0, 56.00000000000001, 57.99999999999999] 54.4 4.34
+task200 legacy B_matrix_oldcritic_oldtasks [52.0, 48.0, 56.00000000000001, 60.0, 56.00000000000001] 54.4 4.56
+task200 legacy l2 [10.0, 14.000000000000002, 12.0, 12.0, 8.0] 11.2 2.28
+task200 legacy B [44.0, 52.0, 46.0, 57.99999999999999, 52.0] 50.4 5.55
+  0 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  1 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  2 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  3 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  4 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  0 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  1 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  2 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  3 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  4 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  0 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  1 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  2 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  3 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  4 task200u ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  0 task200 ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  1 task200 ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  2 task200 ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  3 task200 ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  4 task200 ['pairs_same_episode_off100_task200.json', 'pairs_same_episode_off100_task200u.json'] True
+  0 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  0 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  1 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  2 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  3 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+  4 task200 ['pairs_same_episode_off100_task200.full_dataset.json'] True
+cross
+task200u heldout_disjoint l2_matrix_newtasks [14.000000000000002] 14.0 
+task200u heldout_disjoint B_matrix_oldcritic_newtasks [42.0] 42.0 
+task200 legacy B_matrix_oldcritic_oldtasks [40.0] 40.0 
+task200 legacy l2 [12.0, 16.0, 10.0, 8.0, 6.0] 10.4 3.85
+task200 legacy B [48.0, 40.0, 42.0, 42.0, 50.0] 44.4 4.34
+  0 task200u ['pairs_cross_episode_task200.json', 'pairs_cross_episode_task200u.json'] True
+  0 task200u ['pairs_cross_episode_task200.json', 'pairs_cross_episode_task200u.json'] True
+  0 task200 ['pairs_cross_episode_task200.json', 'pairs_cross_episode_task200u.json'] True
+  0 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  1 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  2 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  3 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  4 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  0 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  1 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  2 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  3 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True
+  4 task200 ['pairs_cross_episode_task200.full_dataset.json', 'pairs_cross_episode_task200u.full_dataset.json'] True

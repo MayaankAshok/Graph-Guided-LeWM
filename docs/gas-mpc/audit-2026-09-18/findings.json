@@ -1,0 +1,6482 @@
+{
+  "same25": {
+    "pools": {
+      "pairs_same_episode_off25_task200.full_dataset.json": {
+        "sha256": "e46664f4d916a4a8610dc39c905efd5e1dd6b6e63fd38a32b1cae0dfd96239bd",
+        "heldout": false,
+        "first_start_row": 11561,
+        "first_errors": [
+          150.58886629215823,
+          0.9708486795425415
+        ]
+      },
+      "pairs_same_episode_off25_task200.json": {
+        "sha256": "4bed7aaef50777fb3becd90b2006f80ccc348fe6544ed104c3c2594dae5dabe6",
+        "heldout": true,
+        "first_start_row": 13340,
+        "first_errors": [
+          107.586259032454,
+          0.017787516117095947
+        ]
+      },
+      "pairs_same_episode_off25_task200u.full_dataset.json": {
+        "sha256": "9ee1c78345223ca73b3ab896945ca086cf62d55b68f16f82d365a5ccb8680fb4",
+        "heldout": false,
+        "first_start_row": 1792,
+        "first_errors": [
+          122.00115319810949,
+          0.6019961833953857
+        ]
+      },
+      "pairs_same_episode_off25_task200u.json": {
+        "sha256": "4bed7aaef50777fb3becd90b2006f80ccc348fe6544ed104c3c2594dae5dabe6",
+        "heldout": true,
+        "first_start_row": 13340,
+        "first_errors": [
+          107.586259032454,
+          0.017787516117095947
+        ]
+      }
+    },
+    "pool_comparisons": [
+      {
+        "a": "pairs_same_episode_off25_task200.full_dataset.json",
+        "b": "pairs_same_episode_off25_task200.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off25_task200.full_dataset.json",
+        "b": "pairs_same_episode_off25_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off25_task200.full_dataset.json",
+        "b": "pairs_same_episode_off25_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off25_task200.json",
+        "b": "pairs_same_episode_off25_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off25_task200.json",
+        "b": "pairs_same_episode_off25_task200u.json",
+        "identical_all_200": true,
+        "shared_first50_pairs": 50
+      },
+      {
+        "a": "pairs_same_episode_off25_task200u.full_dataset.json",
+        "b": "pairs_same_episode_off25_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      }
+    ],
+    "config_comparisons": [
+      {
+        "seed": 0,
+        "differences": {}
+      },
+      {
+        "seed": 1,
+        "differences": {}
+      },
+      {
+        "seed": 2,
+        "differences": {}
+      },
+      {
+        "seed": 3,
+        "differences": {}
+      },
+      {
+        "seed": 4,
+        "differences": {}
+      }
+    ],
+    "summary": [
+      {
+        "method": "l2_matrix_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          92.0,
+          92.0,
+          90.0,
+          92.0,
+          90.0
+        ],
+        "mean": 91.2,
+        "sd": 1.0954451150103321,
+        "population_sd": 0.9797958971132712
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          90.0,
+          92.0,
+          92.0,
+          86.0,
+          92.0
+        ],
+        "mean": 90.4,
+        "sd": 2.6076809620810595,
+        "population_sd": 2.3323807579381204
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          92.0,
+          84.0,
+          90.0,
+          84.0,
+          90.0
+        ],
+        "mean": 88.0,
+        "sd": 3.7416573867739413,
+        "population_sd": 3.3466401061363023
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          90.0,
+          84.0,
+          90.0,
+          84.0,
+          90.0
+        ],
+        "mean": 87.6,
+        "sd": 3.286335345030997,
+        "population_sd": 2.939387691339814
+      },
+      {
+        "method": "l2",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          90.0,
+          92.0,
+          86.0,
+          94.0,
+          94.0
+        ],
+        "mean": 91.2,
+        "sd": 3.3466401061363023,
+        "population_sd": 2.9933259094191533
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          96.0,
+          90.0,
+          90.0,
+          90.0,
+          88.0
+        ],
+        "mean": 90.8,
+        "sd": 3.03315017762062,
+        "population_sd": 2.7129319932501073
+      }
+    ],
+    "records": [
+      {
+        "file": "l2_matrix_newtasks__same25__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same25__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same25__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 90.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same25__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same25__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 90.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same25__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 90.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same25__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same25__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same25__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 86.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same25__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same25__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 92.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same25__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 84.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same25__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 90.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same25__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 84.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same25__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 90.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same25__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same25__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 84.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same25__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same25__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 84.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same25__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.json",
+          "pairs_same_episode_off25_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            171.83373268930842,
+            2.0017166177379053
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2__same25__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same25__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 92.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same25__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 86.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same25__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 94.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same25__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 94.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same25__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 96.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same25__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same25__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same25__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 90.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same25__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 88.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off25_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off25_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off25_task200.json": [
+            210.41143891522935,
+            1.845337986946106
+          ],
+          "pairs_same_episode_off25_task200u.full_dataset.json": [
+            245.56363912280113,
+            1.9836803674697876
+          ],
+          "pairs_same_episode_off25_task200u.json": [
+            210.41143891522935,
+            1.845337986946106
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same25",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      }
+    ]
+  },
+  "same50": {
+    "pools": {
+      "pairs_same_episode_off50_task200.full_dataset.json": {
+        "sha256": "59c105c74b10734d95fab3decdbfaed32bc8a298786bb50f121bff07980991f9",
+        "heldout": false,
+        "first_start_row": 12203,
+        "first_errors": [
+          119.68824906673574,
+          1.362734317779541
+        ]
+      },
+      "pairs_same_episode_off50_task200.json": {
+        "sha256": "6bcd268ec807b9fe39f80bf896d5174c1694e6d826a797b5ede14259fca1cc77",
+        "heldout": true,
+        "first_start_row": 13303,
+        "first_errors": [
+          236.0782327225413,
+          0.5484495162963867
+        ]
+      },
+      "pairs_same_episode_off50_task200u.full_dataset.json": {
+        "sha256": "d4b867c09842491139c34f98ccd0fc7d6a9b0aa3b30357dd402773a555f0be8f",
+        "heldout": false,
+        "first_start_row": 12870,
+        "first_errors": [
+          249.84227129464878,
+          1.8219191431999207
+        ]
+      },
+      "pairs_same_episode_off50_task200u.json": {
+        "sha256": "6bcd268ec807b9fe39f80bf896d5174c1694e6d826a797b5ede14259fca1cc77",
+        "heldout": true,
+        "first_start_row": 13303,
+        "first_errors": [
+          236.0782327225413,
+          0.5484495162963867
+        ]
+      }
+    },
+    "pool_comparisons": [
+      {
+        "a": "pairs_same_episode_off50_task200.full_dataset.json",
+        "b": "pairs_same_episode_off50_task200.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off50_task200.full_dataset.json",
+        "b": "pairs_same_episode_off50_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off50_task200.full_dataset.json",
+        "b": "pairs_same_episode_off50_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off50_task200.json",
+        "b": "pairs_same_episode_off50_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off50_task200.json",
+        "b": "pairs_same_episode_off50_task200u.json",
+        "identical_all_200": true,
+        "shared_first50_pairs": 50
+      },
+      {
+        "a": "pairs_same_episode_off50_task200u.full_dataset.json",
+        "b": "pairs_same_episode_off50_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      }
+    ],
+    "config_comparisons": [
+      {
+        "seed": 0,
+        "differences": {}
+      },
+      {
+        "seed": 1,
+        "differences": {}
+      },
+      {
+        "seed": 2,
+        "differences": {}
+      },
+      {
+        "seed": 3,
+        "differences": {}
+      },
+      {
+        "seed": 4,
+        "differences": {}
+      }
+    ],
+    "summary": [
+      {
+        "method": "l2_matrix_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          38.0,
+          38.0,
+          46.0,
+          44.0,
+          44.0
+        ],
+        "mean": 42.0,
+        "sd": 3.7416573867739413,
+        "population_sd": 3.3466401061363023
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          70.0,
+          70.0,
+          70.0,
+          66.0,
+          70.0
+        ],
+        "mean": 69.2,
+        "sd": 1.7888543819998317,
+        "population_sd": 1.6
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          70.0,
+          68.0,
+          68.0,
+          74.0,
+          68.0
+        ],
+        "mean": 69.6,
+        "sd": 2.6076809620810595,
+        "population_sd": 2.3323807579381204
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          76.0,
+          72.0,
+          66.0,
+          78.0,
+          68.0
+        ],
+        "mean": 72.0,
+        "sd": 5.0990195135927845,
+        "population_sd": 4.560701700396552
+      },
+      {
+        "method": "l2",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          56.00000000000001,
+          46.0,
+          50.0,
+          42.0,
+          48.0
+        ],
+        "mean": 48.4,
+        "sd": 5.176871642217916,
+        "population_sd": 4.630334761116092
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          60.0,
+          70.0,
+          70.0,
+          62.0,
+          60.0
+        ],
+        "mean": 64.4,
+        "sd": 5.176871642217914,
+        "population_sd": 4.6303347611160905
+      }
+    ],
+    "records": [
+      {
+        "file": "l2_matrix_newtasks__same50__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 38.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same50__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 38.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same50__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 46.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same50__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 44.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same50__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 44.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same50__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 70.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same50__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 70.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same50__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 70.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same50__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 66.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same50__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 70.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same50__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 70.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same50__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 68.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same50__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 68.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same50__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 74.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same50__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 68.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same50__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 76.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same50__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 72.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same50__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 66.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same50__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 78.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same50__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 68.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.json",
+          "pairs_same_episode_off50_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            184.8915943018748,
+            2.180618703365326
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2__same50__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 56.00000000000001,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same50__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 46.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same50__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 50.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same50__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 42.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same50__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 48.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same50__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 60.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same50__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 70.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same50__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 70.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same50__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 62.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same50__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 60.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off50_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off50_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off50_task200.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ],
+          "pairs_same_episode_off50_task200u.full_dataset.json": [
+            336.14402840815154,
+            2.0587303082095545
+          ],
+          "pairs_same_episode_off50_task200u.json": [
+            369.5065966706384,
+            2.2745859066592615
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same50",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      }
+    ]
+  },
+  "same100": {
+    "pools": {
+      "pairs_same_episode_off100_task200.full_dataset.json": {
+        "sha256": "684656215f914cad5329a3d3bcd4b7912c86ba6341b76ddf23bb67eee96ecca6",
+        "heldout": false,
+        "first_start_row": 18375,
+        "first_errors": [
+          298.59137190718525,
+          2.1599324345588684
+        ]
+      },
+      "pairs_same_episode_off100_task200.json": {
+        "sha256": "990b5f0a5cb5ea2b8a313df1db82951366f9d72a20ce735119c394c0023feea5",
+        "heldout": true,
+        "first_start_row": 5125,
+        "first_errors": [
+          361.5844458619389,
+          2.2527849078178406
+        ]
+      },
+      "pairs_same_episode_off100_task200u.full_dataset.json": {
+        "sha256": "44a6d39c83e96c588cab9368d65573b1e2d9c40f8e8b2845fdea6fe883252a0f",
+        "heldout": false,
+        "first_start_row": 13498,
+        "first_errors": [
+          217.28756180810194,
+          2.0172311067581177
+        ]
+      },
+      "pairs_same_episode_off100_task200u.json": {
+        "sha256": "990b5f0a5cb5ea2b8a313df1db82951366f9d72a20ce735119c394c0023feea5",
+        "heldout": true,
+        "first_start_row": 5125,
+        "first_errors": [
+          361.5844458619389,
+          2.2527849078178406
+        ]
+      }
+    },
+    "pool_comparisons": [
+      {
+        "a": "pairs_same_episode_off100_task200.full_dataset.json",
+        "b": "pairs_same_episode_off100_task200.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off100_task200.full_dataset.json",
+        "b": "pairs_same_episode_off100_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off100_task200.full_dataset.json",
+        "b": "pairs_same_episode_off100_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off100_task200.json",
+        "b": "pairs_same_episode_off100_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_same_episode_off100_task200.json",
+        "b": "pairs_same_episode_off100_task200u.json",
+        "identical_all_200": true,
+        "shared_first50_pairs": 50
+      },
+      {
+        "a": "pairs_same_episode_off100_task200u.full_dataset.json",
+        "b": "pairs_same_episode_off100_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      }
+    ],
+    "config_comparisons": [
+      {
+        "seed": 0,
+        "differences": {}
+      },
+      {
+        "seed": 1,
+        "differences": {}
+      },
+      {
+        "seed": 2,
+        "differences": {}
+      },
+      {
+        "seed": 3,
+        "differences": {}
+      },
+      {
+        "seed": 4,
+        "differences": {}
+      }
+    ],
+    "summary": [
+      {
+        "method": "l2_matrix_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          18.0,
+          12.0,
+          14.000000000000002,
+          10.0,
+          8.0
+        ],
+        "mean": 12.4,
+        "sd": 3.847076812334269,
+        "population_sd": 3.440930106817051
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          42.0,
+          46.0,
+          50.0,
+          54.0,
+          52.0
+        ],
+        "mean": 48.8,
+        "sd": 4.8166378315169185,
+        "population_sd": 4.308131845707603
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          57.99999999999999,
+          52.0,
+          48.0,
+          56.00000000000001,
+          57.99999999999999
+        ],
+        "mean": 54.4,
+        "sd": 4.335896677735757,
+        "population_sd": 3.8781438859330613
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          52.0,
+          48.0,
+          56.00000000000001,
+          60.0,
+          56.00000000000001
+        ],
+        "mean": 54.400000000000006,
+        "sd": 4.560701700396553,
+        "population_sd": 4.079215610874229
+      },
+      {
+        "method": "l2",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          10.0,
+          14.000000000000002,
+          12.0,
+          12.0,
+          8.0
+        ],
+        "mean": 11.200000000000001,
+        "sd": 2.2803508501982765,
+        "population_sd": 2.0396078054371145
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          44.0,
+          52.0,
+          46.0,
+          57.99999999999999,
+          52.0
+        ],
+        "mean": 50.4,
+        "sd": 5.549774770204641,
+        "population_sd": 4.96386945839634
+      }
+    ],
+    "records": [
+      {
+        "file": "l2_matrix_newtasks__same100__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 18.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same100__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 12.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same100__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 14.000000000000002,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same100__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 10.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2_matrix_newtasks__same100__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 8.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same100__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 42.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same100__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 46.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same100__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 50.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same100__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 54.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_newcritic_newtasks__same100__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 52.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4_tdr/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same100__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 57.99999999999999,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same100__task200u__s1__n50__heldout_disjoint.json",
+        "seed": 1,
+        "rate": 52.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same100__task200u__s2__n50__heldout_disjoint.json",
+        "seed": 2,
+        "rate": 48.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same100__task200u__s3__n50__heldout_disjoint.json",
+        "seed": 3,
+        "rate": 56.00000000000001,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__same100__task200u__s4__n50__heldout_disjoint.json",
+        "seed": 4,
+        "rate": 57.99999999999999,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same100__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 52.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same100__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 48.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same100__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 56.00000000000001,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same100__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 60.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__same100__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 56.00000000000001,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.json",
+          "pairs_same_episode_off100_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            293.9152390460661,
+            2.4578336516963404
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2__same100__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 10.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same100__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 14.000000000000002,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same100__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 12.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same100__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 12.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__same100__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 8.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same100__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 44.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same100__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 52.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same100__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 46.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same100__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 57.99999999999999,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__same100__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 52.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_same_episode_off100_task200.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_same_episode_off100_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_same_episode_off100_task200.json": [
+            327.4723219543226,
+            2.375063478946686
+          ],
+          "pairs_same_episode_off100_task200u.full_dataset.json": [
+            373.9929425238862,
+            2.9232766032218933
+          ],
+          "pairs_same_episode_off100_task200u.json": [
+            327.4723219543226,
+            2.375063478946686
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "same100",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      }
+    ]
+  },
+  "cross": {
+    "pools": {
+      "pairs_cross_episode_task200.full_dataset.json": {
+        "sha256": "5a87c14b0aaa2f108e6245e27b7c1f2c17543eaa6baceb0cf69fa3a19997cb1e",
+        "heldout": false,
+        "first_start_row": 435092,
+        "first_errors": [
+          259.89323198911814,
+          0.13969337940216064
+        ]
+      },
+      "pairs_cross_episode_task200.json": {
+        "sha256": "7be78329bd29526cf66c7f2badf44111c30496b1229b4613b1ce5a4975de55b0",
+        "heldout": true,
+        "first_start_row": 1315379,
+        "first_errors": [
+          225.20018242159227,
+          1.1438144783126276
+        ]
+      },
+      "pairs_cross_episode_task200u.full_dataset.json": {
+        "sha256": "5a87c14b0aaa2f108e6245e27b7c1f2c17543eaa6baceb0cf69fa3a19997cb1e",
+        "heldout": false,
+        "first_start_row": 435092,
+        "first_errors": [
+          259.89323198911814,
+          0.13969337940216064
+        ]
+      },
+      "pairs_cross_episode_task200u.json": {
+        "sha256": "7be78329bd29526cf66c7f2badf44111c30496b1229b4613b1ce5a4975de55b0",
+        "heldout": true,
+        "first_start_row": 1315379,
+        "first_errors": [
+          225.20018242159227,
+          1.1438144783126276
+        ]
+      }
+    },
+    "pool_comparisons": [
+      {
+        "a": "pairs_cross_episode_task200.full_dataset.json",
+        "b": "pairs_cross_episode_task200.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_cross_episode_task200.full_dataset.json",
+        "b": "pairs_cross_episode_task200u.full_dataset.json",
+        "identical_all_200": true,
+        "shared_first50_pairs": 50
+      },
+      {
+        "a": "pairs_cross_episode_task200.full_dataset.json",
+        "b": "pairs_cross_episode_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_cross_episode_task200.json",
+        "b": "pairs_cross_episode_task200u.full_dataset.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      },
+      {
+        "a": "pairs_cross_episode_task200.json",
+        "b": "pairs_cross_episode_task200u.json",
+        "identical_all_200": true,
+        "shared_first50_pairs": 50
+      },
+      {
+        "a": "pairs_cross_episode_task200u.full_dataset.json",
+        "b": "pairs_cross_episode_task200u.json",
+        "identical_all_200": false,
+        "shared_first50_pairs": 0
+      }
+    ],
+    "config_comparisons": [
+      {
+        "seed": 0,
+        "differences": {}
+      }
+    ],
+    "summary": [
+      {
+        "method": "l2_matrix_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0
+        ],
+        "rates": [
+          14.000000000000002
+        ],
+        "mean": 14.000000000000002,
+        "sd": null,
+        "population_sd": 0.0
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks",
+        "label": "task200u",
+        "run_suffix": "heldout_disjoint",
+        "seeds": [
+          0
+        ],
+        "rates": [
+          42.0
+        ],
+        "mean": 42.0,
+        "sd": null,
+        "population_sd": 0.0
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0
+        ],
+        "rates": [
+          40.0
+        ],
+        "mean": 40.0,
+        "sd": null,
+        "population_sd": 0.0
+      },
+      {
+        "method": "l2",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          12.0,
+          16.0,
+          10.0,
+          8.0,
+          6.0
+        ],
+        "mean": 10.4,
+        "sd": 3.847076812334269,
+        "population_sd": 3.4409301068170506
+      },
+      {
+        "method": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet",
+        "label": "task200",
+        "run_suffix": "legacy",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "rates": [
+          48.0,
+          40.0,
+          42.0,
+          42.0,
+          50.0
+        ],
+        "mean": 44.4,
+        "sd": 4.33589667773576,
+        "population_sd": 3.878143885933063
+      }
+    ],
+    "records": [
+      {
+        "file": "l2_matrix_newtasks__cross__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 14.000000000000002,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_cross_episode_task200.json",
+          "pairs_cross_episode_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": null,
+          "final_metric": "same",
+          "critic_cost": "nlv",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_newtasks__cross__task200u__s0__n50__heldout_disjoint.json",
+        "seed": 0,
+        "rate": 42.0,
+        "pool_label": "task200u",
+        "matches": [
+          "pairs_cross_episode_task200.json",
+          "pairs_cross_episode_task200u.json"
+        ],
+        "run_suffix": "heldout_disjoint",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_newtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_matrix_oldcritic_oldtasks__cross__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 40.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.json",
+          "pairs_cross_episode_task200u.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.json": [
+            0.0,
+            0.0
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "_matrix_oldcritic_oldtasks",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0,
+          "budget": null,
+          "critic_final": true
+        }
+      },
+      {
+        "file": "l2__cross__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 12.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__cross__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 16.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__cross__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 10.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__cross__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 8.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "l2__cross__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 6.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "l2",
+          "protocol": "cross",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 0.0,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 0.0,
+          "critic": "/home2/mayaank.ashok/lewm_research/outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__cross__task200__s0__n50.json",
+        "seed": 0,
+        "rate": 48.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 0,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 0,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s0/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__cross__task200__s1__n50.json",
+        "seed": 1,
+        "rate": 40.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 1,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 1,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s1/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__cross__task200__s2__n50.json",
+        "seed": 2,
+        "rate": 42.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 2,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 2,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s2/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__cross__task200__s3__n50.json",
+        "seed": 3,
+        "rate": 42.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 3,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 3,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s3/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      },
+      {
+        "file": "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet__cross__task200__s4__n50.json",
+        "seed": 4,
+        "rate": 50.0,
+        "pool_label": "task200",
+        "matches": [
+          "pairs_cross_episode_task200.full_dataset.json",
+          "pairs_cross_episode_task200u.full_dataset.json"
+        ],
+        "run_suffix": "legacy",
+        "max_error_deltas": {
+          "pairs_cross_episode_task200.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200.json": [
+            357.61064750714246,
+            3.066181544457571
+          ],
+          "pairs_cross_episode_task200u.full_dataset.json": [
+            0.0,
+            0.0
+          ],
+          "pairs_cross_episode_task200u.json": [
+            357.61064750714246,
+            3.066181544457571
+          ]
+        },
+        "chunks_consistent": true,
+        "mpc": {
+          "method": "subgoal_tdr",
+          "protocol": "cross",
+          "seed": 4,
+          "chunk": 25,
+          "h_td": 8.0,
+          "te": 0.9,
+          "graph_seed": 4,
+          "subgoal_threshold": 8.0,
+          "lookahead": 13.7,
+          "step_units": null,
+          "support_lambda": 0.0,
+          "receding": 5,
+          "tag": "",
+          "force": false,
+          "retrieval": false,
+          "critic_beta": 1,
+          "critic": "outputs/viability/critic_full_s4/critic.pt",
+          "tasks": 200,
+          "final_thresh": 13.7,
+          "final_metric": "l2",
+          "critic_cost": "et",
+          "compose": "std",
+          "critic_filter": 0.0
+        }
+      }
+    ]
+  }
+}

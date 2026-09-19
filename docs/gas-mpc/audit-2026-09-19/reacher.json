@@ -1,0 +1,1169 @@
+[
+  {
+    "stage": "encode",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "encode",
+      "--heldout-frac",
+      "0.02"
+    ]
+  },
+  {
+    "stage": "tdr_s0",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "tdr",
+      "--seed",
+      "0",
+      "--heldout-frac",
+      "0.02",
+      "--tdr-steps",
+      "50000",
+      "--tdr-batch",
+      "1024"
+    ]
+  },
+  {
+    "stage": "tdr_s1",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "tdr",
+      "--seed",
+      "1",
+      "--heldout-frac",
+      "0.02",
+      "--tdr-steps",
+      "50000",
+      "--tdr-batch",
+      "1024"
+    ]
+  },
+  {
+    "stage": "tdr_s2",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "tdr",
+      "--seed",
+      "2",
+      "--heldout-frac",
+      "0.02",
+      "--tdr-steps",
+      "50000",
+      "--tdr-batch",
+      "1024"
+    ]
+  },
+  {
+    "stage": "tdr_s3",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "tdr",
+      "--seed",
+      "3",
+      "--heldout-frac",
+      "0.02",
+      "--tdr-steps",
+      "50000",
+      "--tdr-batch",
+      "1024"
+    ]
+  },
+  {
+    "stage": "tdr_s4",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "tdr",
+      "--seed",
+      "4",
+      "--heldout-frac",
+      "0.02",
+      "--tdr-steps",
+      "50000",
+      "--tdr-batch",
+      "1024"
+    ]
+  },
+  {
+    "stage": "calibration",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nimport json, numpy as np, torch\nfrom pathlib import Path\nfrom gas_mpc_prepare import OUT, ENV\nc=torch.load(OUT/'tdr_full_s0.pt',map_location='cpu',weights_only=False)\nassert c['cfg']['diagnostic_scope']=='training_only'\nm={int(k):float(v) for k,v in c['history'][-1]['median_by_gap'].items()}; g=sorted(m)\nh=8.0 if ENV=='pusht' else float(np.interp(12,g,[m[x] for x in g]))\n(OUT/'calib.json').write_text(json.dumps(dict(scope='training_only',h_td=round(h,2),lookahead=round(m[25],2),htd_steps=12,median_by_gap=m,xneg_min_dist=0.0),indent=2))\n"
+    ]
+  },
+  {
+    "stage": "psi_s0",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_prepare import ensure_psi; ensure_psi(0)"
+    ]
+  },
+  {
+    "stage": "gap_calibration_s0",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_eval import gap_calibration; gap_calibration(0)"
+    ]
+  },
+  {
+    "stage": "graph_s0",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "graph",
+      "--seed",
+      "0",
+      "--h-td",
+      "3.72",
+      "--te",
+      "0.9"
+    ]
+  },
+  {
+    "stage": "psi_s1",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_prepare import ensure_psi; ensure_psi(1)"
+    ]
+  },
+  {
+    "stage": "gap_calibration_s1",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_eval import gap_calibration; gap_calibration(1)"
+    ]
+  },
+  {
+    "stage": "graph_s1",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "graph",
+      "--seed",
+      "1",
+      "--h-td",
+      "3.72",
+      "--te",
+      "0.9"
+    ]
+  },
+  {
+    "stage": "psi_s2",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_prepare import ensure_psi; ensure_psi(2)"
+    ]
+  },
+  {
+    "stage": "gap_calibration_s2",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_eval import gap_calibration; gap_calibration(2)"
+    ]
+  },
+  {
+    "stage": "graph_s2",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "graph",
+      "--seed",
+      "2",
+      "--h-td",
+      "3.72",
+      "--te",
+      "0.9"
+    ]
+  },
+  {
+    "stage": "psi_s3",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_prepare import ensure_psi; ensure_psi(3)"
+    ]
+  },
+  {
+    "stage": "gap_calibration_s3",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_eval import gap_calibration; gap_calibration(3)"
+    ]
+  },
+  {
+    "stage": "graph_s3",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "graph",
+      "--seed",
+      "3",
+      "--h-td",
+      "3.72",
+      "--te",
+      "0.9"
+    ]
+  },
+  {
+    "stage": "psi_s4",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_prepare import ensure_psi; ensure_psi(4)"
+    ]
+  },
+  {
+    "stage": "gap_calibration_s4",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "-c",
+      "import sys; sys.path.insert(0,'scripts');\nfrom gas_mpc_eval import gap_calibration; gap_calibration(4)"
+    ]
+  },
+  {
+    "stage": "graph_s4",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_prepare.py",
+      "graph",
+      "--seed",
+      "4",
+      "--h-td",
+      "3.72",
+      "--te",
+      "0.9"
+    ]
+  },
+  {
+    "stage": "task200u_pools",
+    "action": "SKIP",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/gas_mpc_make_tasks.py",
+      "--tasks",
+      "200",
+      "--asset-seed",
+      "0"
+    ]
+  },
+  {
+    "stage": "critic_s0",
+    "action": "RUN",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/viability_train.py",
+      "--env",
+      "reacher",
+      "--cache",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/cache_train.npz",
+      "--out",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s0_tdr_holdout",
+      "--seed",
+      "0",
+      "--steps",
+      "60000",
+      "--log-every",
+      "200",
+      "--eval-every",
+      "2000",
+      "--label-source",
+      "tdr",
+      "--tdr",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/tdr_full_s0.pt",
+      "--xneg-tdr-factor",
+      "1.25",
+      "--exclude-tdr-holdout"
+    ]
+  },
+  {
+    "stage": "critic_s1",
+    "action": "RUN",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/viability_train.py",
+      "--env",
+      "reacher",
+      "--cache",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/cache_train.npz",
+      "--out",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s1_tdr_holdout",
+      "--seed",
+      "1",
+      "--steps",
+      "60000",
+      "--log-every",
+      "200",
+      "--eval-every",
+      "2000",
+      "--label-source",
+      "tdr",
+      "--tdr",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/tdr_full_s1.pt",
+      "--xneg-tdr-factor",
+      "1.25",
+      "--exclude-tdr-holdout"
+    ]
+  },
+  {
+    "stage": "critic_s2",
+    "action": "RUN",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/viability_train.py",
+      "--env",
+      "reacher",
+      "--cache",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/cache_train.npz",
+      "--out",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s2_tdr_holdout",
+      "--seed",
+      "2",
+      "--steps",
+      "60000",
+      "--log-every",
+      "200",
+      "--eval-every",
+      "2000",
+      "--label-source",
+      "tdr",
+      "--tdr",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/tdr_full_s2.pt",
+      "--xneg-tdr-factor",
+      "1.25",
+      "--exclude-tdr-holdout"
+    ]
+  },
+  {
+    "stage": "critic_s3",
+    "action": "RUN",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/viability_train.py",
+      "--env",
+      "reacher",
+      "--cache",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/cache_train.npz",
+      "--out",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s3_tdr_holdout",
+      "--seed",
+      "3",
+      "--steps",
+      "60000",
+      "--log-every",
+      "200",
+      "--eval-every",
+      "2000",
+      "--label-source",
+      "tdr",
+      "--tdr",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/tdr_full_s3.pt",
+      "--xneg-tdr-factor",
+      "1.25",
+      "--exclude-tdr-holdout"
+    ]
+  },
+  {
+    "stage": "critic_s4",
+    "action": "RUN",
+    "command": [
+      "/home2/mayaank.ashok/.venv/bin/python",
+      "scripts/viability_train.py",
+      "--env",
+      "reacher",
+      "--cache",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/cache_train.npz",
+      "--out",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s4_tdr_holdout",
+      "--seed",
+      "4",
+      "--steps",
+      "60000",
+      "--log-every",
+      "200",
+      "--eval-every",
+      "2000",
+      "--label-source",
+      "tdr",
+      "--tdr",
+      "/home2/mayaank.ashok/lewm_research/outputs/reacher/tdr_full_s4.pt",
+      "--xneg-tdr-factor",
+      "1.25",
+      "--exclude-tdr-holdout"
+    ]
+  },
+  {
+    "stage": "eval_l2_same25_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[1/40]",
+      "l2",
+      "same25",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_5e966dd478f274b8"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_5e966dd478f274b8__same25__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same25_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[2/40]",
+      "l2",
+      "same25",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_fd678966e664b857"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_fd678966e664b857__same25__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same25_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[3/40]",
+      "l2",
+      "same25",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_8078254eb05cc230"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_8078254eb05cc230__same25__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same25_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[4/40]",
+      "l2",
+      "same25",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_1f8abaab954f09bd"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_1f8abaab954f09bd__same25__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same25_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[5/40]",
+      "l2",
+      "same25",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_80f53b7cd5e1f7e3"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_80f53b7cd5e1f7e3__same25__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same50_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[6/40]",
+      "l2",
+      "same50",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_101cfaea899934d3"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_101cfaea899934d3__same50__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same50_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[7/40]",
+      "l2",
+      "same50",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_e5fa5878db1ae869"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_e5fa5878db1ae869__same50__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same50_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[8/40]",
+      "l2",
+      "same50",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_ae988c9773252996"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_ae988c9773252996__same50__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same50_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[9/40]",
+      "l2",
+      "same50",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_722e01e87e307891"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_722e01e87e307891__same50__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same50_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[10/40]",
+      "l2",
+      "same50",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_c369b4d384f24c7e"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_c369b4d384f24c7e__same50__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same100_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[11/40]",
+      "l2",
+      "same100",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_9b523f64dcf59d95"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_9b523f64dcf59d95__same100__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same100_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[12/40]",
+      "l2",
+      "same100",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_7945edd71961d654"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_7945edd71961d654__same100__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same100_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[13/40]",
+      "l2",
+      "same100",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_83bb8dcb392cf227"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_83bb8dcb392cf227__same100__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same100_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[14/40]",
+      "l2",
+      "same100",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_f0a03fd2970c5b2f"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_f0a03fd2970c5b2f__same100__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_same100_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[15/40]",
+      "l2",
+      "same100",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_6aef414d86348e63"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_6aef414d86348e63__same100__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_cross_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[16/40]",
+      "l2",
+      "cross",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_49b0d40cba6ac867"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_49b0d40cba6ac867__cross__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_cross_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[17/40]",
+      "l2",
+      "cross",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_eb0bc5e428fc056a"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_eb0bc5e428fc056a__cross__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_cross_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[18/40]",
+      "l2",
+      "cross",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_dad7a01d393c992d"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_dad7a01d393c992d__cross__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_cross_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[19/40]",
+      "l2",
+      "cross",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_07833d657c871ebb"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_07833d657c871ebb__cross__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_l2_cross_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[20/40]",
+      "l2",
+      "cross",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_9536505329b28802"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/l2_pipe_9536505329b28802__cross__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same25_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[21/40]",
+      "subgoal_tdr",
+      "same25",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_1e79a654f7e9c772",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s0_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_1e79a654f7e9c772__same25__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same25_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[22/40]",
+      "subgoal_tdr",
+      "same25",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_40bd376d2c10a34f",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s1_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_40bd376d2c10a34f__same25__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same25_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[23/40]",
+      "subgoal_tdr",
+      "same25",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_3b9694f23571829b",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s2_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_3b9694f23571829b__same25__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same25_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[24/40]",
+      "subgoal_tdr",
+      "same25",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_f62851dbb0e98b35",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s3_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_f62851dbb0e98b35__same25__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same25_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[25/40]",
+      "subgoal_tdr",
+      "same25",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_4161ef2af7177271",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s4_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_4161ef2af7177271__same25__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same50_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[26/40]",
+      "subgoal_tdr",
+      "same50",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_a73b234c2b757b63",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s0_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_a73b234c2b757b63__same50__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same50_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[27/40]",
+      "subgoal_tdr",
+      "same50",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_52d1d2175e514399",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s1_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_52d1d2175e514399__same50__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same50_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[28/40]",
+      "subgoal_tdr",
+      "same50",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_5484897ce723ea61",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s2_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_5484897ce723ea61__same50__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same50_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[29/40]",
+      "subgoal_tdr",
+      "same50",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_1971bb4eb381eff1",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s3_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_1971bb4eb381eff1__same50__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same50_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[30/40]",
+      "subgoal_tdr",
+      "same50",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_92b260b159636ba5",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s4_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_92b260b159636ba5__same50__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same100_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[31/40]",
+      "subgoal_tdr",
+      "same100",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_0af76f8fab7424e1",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s0_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_0af76f8fab7424e1__same100__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same100_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[32/40]",
+      "subgoal_tdr",
+      "same100",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_bb02007244e4102b",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s1_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_bb02007244e4102b__same100__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same100_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[33/40]",
+      "subgoal_tdr",
+      "same100",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_7e4dc95ed78ddede",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s2_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_7e4dc95ed78ddede__same100__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same100_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[34/40]",
+      "subgoal_tdr",
+      "same100",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_fd39fbae425ccf33",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s3_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_fd39fbae425ccf33__same100__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_same100_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[35/40]",
+      "subgoal_tdr",
+      "same100",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_fb475757da9ecbb3",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s4_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_fb475757da9ecbb3__same100__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_cross_s0",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[36/40]",
+      "subgoal_tdr",
+      "cross",
+      "+mpc.graph_seed=0",
+      "+mpc.tag=_pipe_ac7fe992c3f40ce8",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s0_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_ac7fe992c3f40ce8__cross__task200u__s0__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_cross_s1",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[37/40]",
+      "subgoal_tdr",
+      "cross",
+      "+mpc.graph_seed=1",
+      "+mpc.tag=_pipe_cff2accee29e4097",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s1_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_cff2accee29e4097__cross__task200u__s1__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_cross_s2",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[38/40]",
+      "subgoal_tdr",
+      "cross",
+      "+mpc.graph_seed=2",
+      "+mpc.tag=_pipe_764fd2247378f4ee",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s2_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_764fd2247378f4ee__cross__task200u__s2__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_cross_s3",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[39/40]",
+      "subgoal_tdr",
+      "cross",
+      "+mpc.graph_seed=3",
+      "+mpc.tag=_pipe_5e342ae365f2cbc9",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s3_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_5e342ae365f2cbc9__cross__task200u__s3__n50__heldout_disjoint__trainonly_assets.json"
+  },
+  {
+    "stage": "eval_OUR_cross_s4",
+    "action": "RUN",
+    "command": [
+      "bash",
+      "scripts/gas_mpc_run.sh",
+      "[40/40]",
+      "subgoal_tdr",
+      "cross",
+      "+mpc.graph_seed=4",
+      "+mpc.tag=_pipe_501334861964a4a6",
+      "+mpc.h_td=3.72",
+      "+mpc.te=0.9",
+      "+mpc.lookahead=5.83",
+      "+mpc.final_thresh=5.83",
+      "+mpc.final_metric=l2",
+      "+mpc.critic_beta=1",
+      "+mpc.critic_cost=et",
+      "+mpc.compose=std",
+      "+mpc.critic=/home2/mayaank.ashok/lewm_research/outputs/reacher/critic_s4_tdr_holdout/critic.pt"
+    ],
+    "result": "/home2/mayaank.ashok/lewm_research/outputs/reacher/eval/subgoal_tdr_la5.83_th3.72_htd3.72_te0.9_ft5.83_fl2_crit1_ccet_pipe_501334861964a4a6__cross__task200u__s4__n50__heldout_disjoint__trainonly_assets.json"
+  }
+]

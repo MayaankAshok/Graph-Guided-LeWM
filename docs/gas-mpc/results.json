@@ -1,0 +1,2132 @@
+{
+ "task200_n50": {
+  "algo": {
+   "l2": {
+    "same25": {
+     "mean": 91.2,
+     "sd": 2.993325909419153,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 48.4,
+     "sd": 4.630334761116092,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 11.2,
+     "sd": 2.0396078054371145,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 10.4,
+     "sd": 3.4409301068170506,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.99": {
+    "same25": {
+     "mean": 84.4,
+     "sd": 1.4966629547095764,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 54.4,
+     "sd": 8.522910301065007,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 21.2,
+     "sd": 2.0396078054371136,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 18.8,
+     "sd": 2.7129319932501073,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+    "same25": {
+     "mean": 86.8,
+     "sd": 2.7129319932501077,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 57.2,
+     "sd": 6.273754856543249,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 21.6,
+     "sd": 5.71314274283428,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 18.0,
+     "sd": 3.3466401061363023,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2": {
+    "same25": {
+     "mean": 90.8,
+     "sd": 2.7129319932501073,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 61.2,
+     "sd": 4.48998886412873,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 28.8,
+     "sd": 5.74108003776293,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 19.6,
+     "sd": 3.6660605559646724,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_flt0.5": {
+    "same25": {
+     "mean": 89.33333333333333,
+     "sd": 2.494438257849294,
+     "n_seeds": 3
+    },
+    "same50": {
+     "mean": 66.66666666666667,
+     "sd": 6.1824123303304725,
+     "n_seeds": 3
+    },
+    "same100": {
+     "mean": 44.0,
+     "sd": 4.320493798938574,
+     "n_seeds": 3
+    },
+    "cross": {
+     "mean": 33.333333333333336,
+     "sd": 4.1096093353126495,
+     "n_seeds": 3
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+    "same25": {
+     "mean": 82.0,
+     "sd": 4.1952353926806065,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 61.2,
+     "sd": 7.222188034107116,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 35.2,
+     "sd": 4.1182520563948,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 27.2,
+     "sd": 1.6000000000000003,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+    "same25": {
+     "mean": 78.8,
+     "sd": 6.013318551349163,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 62.4,
+     "sd": 4.630334761116088,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 41.6,
+     "sd": 7.310266752998826,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 30.8,
+     "sd": 3.4871191548325386,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet": {
+    "same25": {
+     "mean": 90.8,
+     "sd": 2.7129319932501077,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 64.4,
+     "sd": 4.6303347611160905,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 50.4,
+     "sd": 4.96386945839634,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 44.4,
+     "sd": 3.8781438859330635,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_steps": {
+    "same25": {
+     "mean": 90.0,
+     "sd": 2.5298221281347035,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 62.0,
+     "sd": 6.066300355241239,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 36.0,
+     "sd": 5.656854249492381,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 32.0,
+     "sd": 3.794733192202055,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+    "same25": {
+     "mean": 83.6,
+     "sd": 2.65329983228432,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 55.6,
+     "sd": 2.65329983228432,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 42.8,
+     "sd": 2.9933259094191533,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 34.4,
+     "sd": 5.571355310873647,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+    "same25": {
+     "mean": 74.8,
+     "sd": 6.523802572120036,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 57.2,
+     "sd": 3.919183588453084,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 41.6,
+     "sd": 4.079215610874227,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 34.4,
+     "sd": 3.8781438859330635,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit2_ccet": {
+    "same25": {
+     "mean": 90.0,
+     "sd": 1.632993161855452,
+     "n_seeds": 3
+    },
+    "same50": {
+     "mean": 65.33333333333333,
+     "sd": 4.109609335312651,
+     "n_seeds": 3
+    },
+    "same100": {
+     "mean": 40.0,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "cross": {
+     "mean": 38.0,
+     "sd": 3.265986323710904,
+     "n_seeds": 3
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+    "same25": {
+     "mean": 68.4,
+     "sd": 4.963869458396342,
+     "n_seeds": 5
+    },
+    "same50": {
+     "mean": 58.4,
+     "sd": 5.571355310873647,
+     "n_seeds": 5
+    },
+    "same100": {
+     "mean": 37.2,
+     "sd": 4.1182520563948,
+     "n_seeds": 5
+    },
+    "cross": {
+     "mean": 34.8,
+     "sd": 4.48998886412873,
+     "n_seeds": 5
+    }
+   }
+  },
+  "pooled": {
+   "same25": {
+    "l2": {
+     "per_seed": {
+      "0": 90.0,
+      "1": 92.0,
+      "2": 86.0,
+      "3": 94.0,
+      "4": 94.0
+     },
+     "hits": 228,
+     "total": 250,
+     "pooled": 91.2,
+     "mean": 91.2,
+     "sd": 2.993325909419153
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.99": {
+     "per_seed": {
+      "0": 84.0,
+      "1": 84.0,
+      "2": 86.0,
+      "3": 86.0,
+      "4": 82.0
+     },
+     "hits": 211,
+     "total": 250,
+     "pooled": 84.4,
+     "mean": 84.4,
+     "sd": 1.4966629547095764
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 86.0,
+      "1": 86.0,
+      "2": 92.0,
+      "3": 86.0,
+      "4": 84.0
+     },
+     "hits": 217,
+     "total": 250,
+     "pooled": 86.8,
+     "mean": 86.8,
+     "sd": 2.7129319932501077
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2": {
+     "per_seed": {
+      "0": 90.0,
+      "1": 94.0,
+      "2": 86.0,
+      "3": 92.0,
+      "4": 92.0
+     },
+     "hits": 227,
+     "total": 250,
+     "pooled": 90.8,
+     "mean": 90.8,
+     "sd": 2.7129319932501073
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_flt0.5": {
+     "per_seed": {
+      "0": 86.0,
+      "1": 90.0,
+      "2": 92.0
+     },
+     "hits": 134,
+     "total": 150,
+     "pooled": 89.33333333333333,
+     "mean": 89.33333333333333,
+     "sd": 2.494438257849294
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+     "per_seed": {
+      "0": 76.0,
+      "1": 86.0,
+      "2": 86.0,
+      "3": 84.0,
+      "4": 78.0
+     },
+     "hits": 205,
+     "total": 250,
+     "pooled": 82.0,
+     "mean": 82.0,
+     "sd": 4.1952353926806065
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 78.0,
+      "1": 90.0,
+      "2": 76.0,
+      "3": 72.0,
+      "4": 78.0
+     },
+     "hits": 197,
+     "total": 250,
+     "pooled": 78.8,
+     "mean": 78.8,
+     "sd": 6.013318551349163
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet": {
+     "per_seed": {
+      "0": 96.0,
+      "1": 90.0,
+      "2": 90.0,
+      "3": 90.0,
+      "4": 88.0
+     },
+     "hits": 227,
+     "total": 250,
+     "pooled": 90.8,
+     "mean": 90.8,
+     "sd": 2.7129319932501077
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_steps": {
+     "per_seed": {
+      "0": 94.0,
+      "1": 86.0,
+      "2": 90.0,
+      "3": 90.0,
+      "4": 90.0
+     },
+     "hits": 225,
+     "total": 250,
+     "pooled": 90.0,
+     "mean": 90.0,
+     "sd": 2.5298221281347035
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 84.0,
+      "1": 82.0,
+      "2": 84.0,
+      "3": 88.0,
+      "4": 80.0
+     },
+     "hits": 209,
+     "total": 250,
+     "pooled": 83.6,
+     "mean": 83.6,
+     "sd": 2.65329983228432
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 70.0,
+      "1": 86.0,
+      "2": 78.0,
+      "3": 72.0,
+      "4": 68.0
+     },
+     "hits": 187,
+     "total": 250,
+     "pooled": 74.8,
+     "mean": 74.8,
+     "sd": 6.523802572120036
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit2_ccet": {
+     "per_seed": {
+      "0": 92.0,
+      "1": 88.0,
+      "2": 90.0
+     },
+     "hits": 135,
+     "total": 150,
+     "pooled": 90.0,
+     "mean": 90.0,
+     "sd": 1.632993161855452
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 66.0,
+      "1": 76.0,
+      "2": 66.0,
+      "3": 72.0,
+      "4": 62.0
+     },
+     "hits": 171,
+     "total": 250,
+     "pooled": 68.4,
+     "mean": 68.4,
+     "sd": 4.963869458396342
+    }
+   },
+   "same50": {
+    "l2": {
+     "per_seed": {
+      "0": 56.00000000000001,
+      "1": 46.0,
+      "2": 50.0,
+      "3": 42.0,
+      "4": 48.0
+     },
+     "hits": 121,
+     "total": 250,
+     "pooled": 48.4,
+     "mean": 48.4,
+     "sd": 4.630334761116092
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.99": {
+     "per_seed": {
+      "0": 60.0,
+      "1": 60.0,
+      "2": 60.0,
+      "3": 38.0,
+      "4": 54.0
+     },
+     "hits": 136,
+     "total": 250,
+     "pooled": 54.4,
+     "mean": 54.4,
+     "sd": 8.522910301065007
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 62.0,
+      "1": 48.0,
+      "2": 66.0,
+      "3": 56.00000000000001,
+      "4": 54.0
+     },
+     "hits": 143,
+     "total": 250,
+     "pooled": 57.2,
+     "mean": 57.2,
+     "sd": 6.273754856543249
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2": {
+     "per_seed": {
+      "0": 60.0,
+      "1": 60.0,
+      "2": 66.0,
+      "3": 66.0,
+      "4": 54.0
+     },
+     "hits": 153,
+     "total": 250,
+     "pooled": 61.2,
+     "mean": 61.2,
+     "sd": 4.48998886412873
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_flt0.5": {
+     "per_seed": {
+      "0": 57.99999999999999,
+      "1": 72.0,
+      "2": 70.0
+     },
+     "hits": 100,
+     "total": 150,
+     "pooled": 66.66666666666667,
+     "mean": 66.66666666666667,
+     "sd": 6.1824123303304725
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+     "per_seed": {
+      "0": 64.0,
+      "1": 50.0,
+      "2": 72.0,
+      "3": 62.0,
+      "4": 57.99999999999999
+     },
+     "hits": 153,
+     "total": 250,
+     "pooled": 61.2,
+     "mean": 61.2,
+     "sd": 7.222188034107116
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 62.0,
+      "1": 56.00000000000001,
+      "2": 70.0,
+      "3": 60.0,
+      "4": 64.0
+     },
+     "hits": 156,
+     "total": 250,
+     "pooled": 62.4,
+     "mean": 62.4,
+     "sd": 4.630334761116088
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet": {
+     "per_seed": {
+      "0": 60.0,
+      "1": 70.0,
+      "2": 70.0,
+      "3": 62.0,
+      "4": 60.0
+     },
+     "hits": 161,
+     "total": 250,
+     "pooled": 64.4,
+     "mean": 64.4,
+     "sd": 4.6303347611160905
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_steps": {
+     "per_seed": {
+      "0": 66.0,
+      "1": 56.00000000000001,
+      "2": 54.0,
+      "3": 64.0,
+      "4": 70.0
+     },
+     "hits": 155,
+     "total": 250,
+     "pooled": 62.0,
+     "mean": 62.0,
+     "sd": 6.066300355241239
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 56.00000000000001,
+      "1": 52.0,
+      "2": 54.0,
+      "3": 56.00000000000001,
+      "4": 60.0
+     },
+     "hits": 139,
+     "total": 250,
+     "pooled": 55.6,
+     "mean": 55.6,
+     "sd": 2.65329983228432
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 64.0,
+      "1": 56.00000000000001,
+      "2": 57.99999999999999,
+      "3": 56.00000000000001,
+      "4": 52.0
+     },
+     "hits": 143,
+     "total": 250,
+     "pooled": 57.2,
+     "mean": 57.2,
+     "sd": 3.919183588453084
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit2_ccet": {
+     "per_seed": {
+      "0": 60.0,
+      "1": 66.0,
+      "2": 70.0
+     },
+     "hits": 98,
+     "total": 150,
+     "pooled": 65.33333333333333,
+     "mean": 65.33333333333333,
+     "sd": 4.109609335312651
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 66.0,
+      "1": 52.0,
+      "2": 52.0,
+      "3": 60.0,
+      "4": 62.0
+     },
+     "hits": 146,
+     "total": 250,
+     "pooled": 58.4,
+     "mean": 58.4,
+     "sd": 5.571355310873647
+    }
+   },
+   "same100": {
+    "l2": {
+     "per_seed": {
+      "0": 10.0,
+      "1": 14.000000000000002,
+      "2": 12.0,
+      "3": 12.0,
+      "4": 8.0
+     },
+     "hits": 28,
+     "total": 250,
+     "pooled": 11.2,
+     "mean": 11.2,
+     "sd": 2.0396078054371145
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.99": {
+     "per_seed": {
+      "0": 20.0,
+      "1": 18.0,
+      "2": 22.0,
+      "3": 22.0,
+      "4": 24.0
+     },
+     "hits": 53,
+     "total": 250,
+     "pooled": 21.2,
+     "mean": 21.2,
+     "sd": 2.0396078054371136
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 26.0,
+      "1": 14.000000000000002,
+      "2": 20.0,
+      "3": 18.0,
+      "4": 30.0
+     },
+     "hits": 54,
+     "total": 250,
+     "pooled": 21.6,
+     "mean": 21.6,
+     "sd": 5.71314274283428
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2": {
+     "per_seed": {
+      "0": 28.000000000000004,
+      "1": 26.0,
+      "2": 20.0,
+      "3": 34.0,
+      "4": 36.0
+     },
+     "hits": 72,
+     "total": 250,
+     "pooled": 28.8,
+     "mean": 28.8,
+     "sd": 5.74108003776293
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_flt0.5": {
+     "per_seed": {
+      "0": 38.0,
+      "1": 46.0,
+      "2": 48.0
+     },
+     "hits": 66,
+     "total": 150,
+     "pooled": 44.0,
+     "mean": 44.0,
+     "sd": 4.320493798938574
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+     "per_seed": {
+      "0": 32.0,
+      "1": 40.0,
+      "2": 40.0,
+      "3": 30.0,
+      "4": 34.0
+     },
+     "hits": 88,
+     "total": 250,
+     "pooled": 35.2,
+     "mean": 35.2,
+     "sd": 4.1182520563948
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 46.0,
+      "1": 48.0,
+      "2": 30.0,
+      "3": 36.0,
+      "4": 48.0
+     },
+     "hits": 104,
+     "total": 250,
+     "pooled": 41.6,
+     "mean": 41.6,
+     "sd": 7.310266752998826
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet": {
+     "per_seed": {
+      "0": 44.0,
+      "1": 52.0,
+      "2": 46.0,
+      "3": 57.99999999999999,
+      "4": 52.0
+     },
+     "hits": 126,
+     "total": 250,
+     "pooled": 50.4,
+     "mean": 50.4,
+     "sd": 4.96386945839634
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_steps": {
+     "per_seed": {
+      "0": 40.0,
+      "1": 34.0,
+      "2": 42.0,
+      "3": 26.0,
+      "4": 38.0
+     },
+     "hits": 90,
+     "total": 250,
+     "pooled": 36.0,
+     "mean": 36.0,
+     "sd": 5.656854249492381
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 40.0,
+      "1": 40.0,
+      "2": 42.0,
+      "3": 44.0,
+      "4": 48.0
+     },
+     "hits": 107,
+     "total": 250,
+     "pooled": 42.8,
+     "mean": 42.8,
+     "sd": 2.9933259094191533
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 36.0,
+      "1": 44.0,
+      "2": 40.0,
+      "3": 40.0,
+      "4": 48.0
+     },
+     "hits": 104,
+     "total": 250,
+     "pooled": 41.6,
+     "mean": 41.6,
+     "sd": 4.079215610874227
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit2_ccet": {
+     "per_seed": {
+      "0": 40.0,
+      "1": 40.0,
+      "2": 40.0
+     },
+     "hits": 60,
+     "total": 150,
+     "pooled": 40.0,
+     "mean": 40.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 38.0,
+      "1": 40.0,
+      "2": 36.0,
+      "3": 30.0,
+      "4": 42.0
+     },
+     "hits": 93,
+     "total": 250,
+     "pooled": 37.2,
+     "mean": 37.2,
+     "sd": 4.1182520563948
+    }
+   },
+   "cross": {
+    "l2": {
+     "per_seed": {
+      "0": 12.0,
+      "1": 16.0,
+      "2": 10.0,
+      "3": 8.0,
+      "4": 6.0
+     },
+     "hits": 26,
+     "total": 250,
+     "pooled": 10.4,
+     "mean": 10.4,
+     "sd": 3.4409301068170506
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.99": {
+     "per_seed": {
+      "0": 18.0,
+      "1": 22.0,
+      "2": 16.0,
+      "3": 16.0,
+      "4": 22.0
+     },
+     "hits": 47,
+     "total": 250,
+     "pooled": 18.8,
+     "mean": 18.8,
+     "sd": 2.7129319932501073
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 22.0,
+      "1": 18.0,
+      "2": 12.0,
+      "3": 20.0,
+      "4": 18.0
+     },
+     "hits": 45,
+     "total": 250,
+     "pooled": 18.0,
+     "mean": 18.0,
+     "sd": 3.3466401061363023
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2": {
+     "per_seed": {
+      "0": 16.0,
+      "1": 24.0,
+      "2": 18.0,
+      "3": 24.0,
+      "4": 16.0
+     },
+     "hits": 49,
+     "total": 250,
+     "pooled": 19.6,
+     "mean": 19.6,
+     "sd": 3.6660605559646724
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_flt0.5": {
+     "per_seed": {
+      "0": 34.0,
+      "1": 38.0,
+      "2": 28.000000000000004
+     },
+     "hits": 50,
+     "total": 150,
+     "pooled": 33.333333333333336,
+     "mean": 33.333333333333336,
+     "sd": 4.1096093353126495
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+     "per_seed": {
+      "0": 26.0,
+      "1": 30.0,
+      "2": 28.000000000000004,
+      "3": 26.0,
+      "4": 26.0
+     },
+     "hits": 68,
+     "total": 250,
+     "pooled": 27.2,
+     "mean": 27.2,
+     "sd": 1.6000000000000003
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 24.0,
+      "1": 32.0,
+      "2": 32.0,
+      "3": 32.0,
+      "4": 34.0
+     },
+     "hits": 77,
+     "total": 250,
+     "pooled": 30.8,
+     "mean": 30.8,
+     "sd": 3.4871191548325386
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet": {
+     "per_seed": {
+      "0": 48.0,
+      "1": 40.0,
+      "2": 42.0,
+      "3": 42.0,
+      "4": 50.0
+     },
+     "hits": 111,
+     "total": 250,
+     "pooled": 44.4,
+     "mean": 44.4,
+     "sd": 3.8781438859330635
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit1_ccet_steps": {
+     "per_seed": {
+      "0": 26.0,
+      "1": 32.0,
+      "2": 36.0,
+      "3": 36.0,
+      "4": 30.0
+     },
+     "hits": 80,
+     "total": 250,
+     "pooled": 32.0,
+     "mean": 32.0,
+     "sd": 3.794733192202055
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 32.0,
+      "1": 28.000000000000004,
+      "2": 42.0,
+      "3": 30.0,
+      "4": 40.0
+     },
+     "hits": 86,
+     "total": 250,
+     "pooled": 34.4,
+     "mean": 34.4,
+     "sd": 5.571355310873647
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 32.0,
+      "1": 30.0,
+      "2": 38.0,
+      "3": 32.0,
+      "4": 40.0
+     },
+     "hits": 86,
+     "total": 250,
+     "pooled": 34.4,
+     "mean": 34.4,
+     "sd": 3.8781438859330635
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ft13.7_fl2_crit2_ccet": {
+     "per_seed": {
+      "0": 34.0,
+      "1": 42.0,
+      "2": 38.0
+     },
+     "hits": 57,
+     "total": 150,
+     "pooled": 38.0,
+     "mean": 38.0,
+     "sd": 3.265986323710904
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 30.0,
+      "1": 36.0,
+      "2": 42.0,
+      "3": 36.0,
+      "4": 30.0
+     },
+     "hits": 87,
+     "total": 250,
+     "pooled": 34.8,
+     "mean": 34.8,
+     "sd": 4.48998886412873
+    }
+   }
+  }
+ },
+ "perseed_n50": {
+  "algo": {
+   "l2": {
+    "same25": {
+     "mean": 88.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 38.666666666666664,
+     "sd": 8.2192186706253,
+     "n_seeds": 3
+    },
+    "same100": {
+     "mean": 18.0,
+     "sd": 3.999999999999999,
+     "n_seeds": 2
+    },
+    "cross": {
+     "mean": 9.6,
+     "sd": 1.4966629547095764,
+     "n_seeds": 5
+    }
+   },
+   "l2_ret": {
+    "same50": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 10.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "l2_crit1": {
+    "same50": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 12.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "l2_crit2": {
+    "cross": {
+     "mean": 18.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "tdr": {
+    "same25": {
+     "mean": 84.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 48.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same100": {
+     "mean": 28.000000000000004,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 10.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "ctg_htd8_te0.9": {
+    "same25": {
+     "mean": 84.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same100": {
+     "mean": 28.000000000000004,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 10.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "ctg_htd8_te0.9_ret": {
+    "cross": {
+     "mean": 14.000000000000002,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_la13.7_th8_htd8_te0.9": {
+    "same25": {
+     "mean": 88.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 56.00000000000001,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 16.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_la13.7_th8_htd8_te0.9_ret": {
+    "cross": {
+     "mean": 20.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_la13.7_th8_htd8_te0.9_crit1": {
+    "cross": {
+     "mean": 26.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la8_th8_htd8_te0.9": {
+    "same50": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_rh1": {
+    "cross": {
+     "mean": 14.000000000000002,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_rh2": {
+    "same50": {
+     "mean": 36.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 18.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_rh2_ret": {
+    "cross": {
+     "mean": 6.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+    "same25": {
+     "mean": 84.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 55.333333333333336,
+     "sd": 2.4944382578492923,
+     "n_seeds": 3
+    },
+    "same100": {
+     "mean": 30.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 10.0,
+     "sd": 1.632993161855452,
+     "n_seeds": 3
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret": {
+    "same50": {
+     "mean": 54.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 24.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la20_th8_htd8_te0.9": {
+    "same50": {
+     "mean": 56.00000000000001,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th12_htd12_te0.9": {
+    "same50": {
+     "mean": 64.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 8.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th16_htd16_te0.9": {
+    "same50": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+    "cross": {
+     "mean": 14.000000000000002,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+    "same50": {
+     "mean": 72.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same100": {
+     "mean": 57.99999999999999,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 28.0,
+     "sd": 5.513619500836088,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+    "same50": {
+     "mean": 64.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 32.4,
+     "sd": 12.86234815265082,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th12_htd12_te0.9_crit1": {
+    "same50": {
+     "mean": 56.00000000000001,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 22.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.999_crit2": {
+    "cross": {
+     "mean": 24.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.99_crit2": {
+    "cross": {
+     "mean": 22.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+    "same50": {
+     "mean": 66.66666666666667,
+     "sd": 7.542472332656503,
+     "n_seeds": 3
+    },
+    "same100": {
+     "mean": 46.0,
+     "sd": 6.0,
+     "n_seeds": 2
+    },
+    "cross": {
+     "mean": 33.6,
+     "sd": 5.122499389946279,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit2": {
+    "cross": {
+     "mean": 30.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+    "same50": {
+     "mean": 64.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same100": {
+     "mean": 50.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 27.2,
+     "sd": 8.997777503361593,
+     "n_seeds": 5
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit4": {
+    "cross": {
+     "mean": 30.0,
+     "sd": 2.8284271247461885,
+     "n_seeds": 3
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit8": {
+    "cross": {
+     "mean": 25.6,
+     "sd": 5.571355310873647,
+     "n_seeds": 5
+    }
+   },
+   "dir_la13.7_th8_htd8_te0.9": {
+    "same25": {
+     "mean": 78.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 26.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 8.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "path_sugap5_th8_htd8_te0.9": {
+    "same25": {
+     "mean": 86.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "same50": {
+     "mean": 42.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    },
+    "cross": {
+     "mean": 6.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   }
+  },
+  "pooled": {
+   "same25": {
+    "l2": {
+     "per_seed": {
+      "0": 88.0
+     },
+     "hits": 44,
+     "total": 50,
+     "pooled": 88.0,
+     "mean": 88.0,
+     "sd": 0.0
+    },
+    "tdr": {
+     "per_seed": {
+      "0": 84.0
+     },
+     "hits": 42,
+     "total": 50,
+     "pooled": 84.0,
+     "mean": 84.0,
+     "sd": 0.0
+    },
+    "ctg_htd8_te0.9": {
+     "per_seed": {
+      "0": 84.0
+     },
+     "hits": 42,
+     "total": 50,
+     "pooled": 84.0,
+     "mean": 84.0,
+     "sd": 0.0
+    },
+    "subgoal_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 88.0
+     },
+     "hits": 44,
+     "total": 50,
+     "pooled": 88.0,
+     "mean": 88.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 84.0
+     },
+     "hits": 42,
+     "total": 50,
+     "pooled": 84.0,
+     "mean": 84.0,
+     "sd": 0.0
+    },
+    "dir_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 78.0
+     },
+     "hits": 39,
+     "total": 50,
+     "pooled": 78.0,
+     "mean": 78.0,
+     "sd": 0.0
+    },
+    "path_sugap5_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 86.0
+     },
+     "hits": 43,
+     "total": 50,
+     "pooled": 86.0,
+     "mean": 86.0,
+     "sd": 0.0
+    }
+   },
+   "same50": {
+    "l2": {
+     "per_seed": {
+      "0": 40.0,
+      "1": 28.000000000000004,
+      "2": 48.0
+     },
+     "hits": 58,
+     "total": 150,
+     "pooled": 38.666666666666664,
+     "mean": 38.666666666666664,
+     "sd": 8.2192186706253
+    },
+    "l2_ret": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    },
+    "l2_crit1": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    },
+    "tdr": {
+     "per_seed": {
+      "0": 48.0
+     },
+     "hits": 24,
+     "total": 50,
+     "pooled": 48.0,
+     "mean": 48.0,
+     "sd": 0.0
+    },
+    "ctg_htd8_te0.9": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    },
+    "subgoal_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 56.00000000000001
+     },
+     "hits": 28,
+     "total": 50,
+     "pooled": 56.0,
+     "mean": 56.00000000000001,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la8_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_rh2": {
+     "per_seed": {
+      "0": 36.0
+     },
+     "hits": 18,
+     "total": 50,
+     "pooled": 36.0,
+     "mean": 36.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 57.99999999999999,
+      "1": 52.0,
+      "2": 56.00000000000001
+     },
+     "hits": 83,
+     "total": 150,
+     "pooled": 55.333333333333336,
+     "mean": 55.333333333333336,
+     "sd": 2.4944382578492923
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret": {
+     "per_seed": {
+      "0": 54.0
+     },
+     "hits": 27,
+     "total": 50,
+     "pooled": 54.0,
+     "mean": 54.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la20_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 56.00000000000001
+     },
+     "hits": 28,
+     "total": 50,
+     "pooled": 56.0,
+     "mean": 56.00000000000001,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th12_htd12_te0.9": {
+     "per_seed": {
+      "0": 64.0
+     },
+     "hits": 32,
+     "total": 50,
+     "pooled": 64.0,
+     "mean": 64.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th16_htd16_te0.9": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 72.0
+     },
+     "hits": 36,
+     "total": 50,
+     "pooled": 72.0,
+     "mean": 72.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 64.0
+     },
+     "hits": 32,
+     "total": 50,
+     "pooled": 64.0,
+     "mean": 64.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th12_htd12_te0.9_crit1": {
+     "per_seed": {
+      "0": 56.00000000000001
+     },
+     "hits": 28,
+     "total": 50,
+     "pooled": 56.0,
+     "mean": 56.00000000000001,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 72.0,
+      "1": 72.0,
+      "2": 56.00000000000001
+     },
+     "hits": 100,
+     "total": 150,
+     "pooled": 66.66666666666667,
+     "mean": 66.66666666666667,
+     "sd": 7.542472332656503
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 64.0
+     },
+     "hits": 32,
+     "total": 50,
+     "pooled": 64.0,
+     "mean": 64.0,
+     "sd": 0.0
+    },
+    "dir_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 26.0
+     },
+     "hits": 13,
+     "total": 50,
+     "pooled": 26.0,
+     "mean": 26.0,
+     "sd": 0.0
+    },
+    "path_sugap5_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 42.0
+     },
+     "hits": 21,
+     "total": 50,
+     "pooled": 42.0,
+     "mean": 42.0,
+     "sd": 0.0
+    }
+   },
+   "same100": {
+    "l2": {
+     "per_seed": {
+      "0": 22.0,
+      "1": 14.000000000000002
+     },
+     "hits": 18,
+     "total": 100,
+     "pooled": 18.0,
+     "mean": 18.0,
+     "sd": 3.999999999999999
+    },
+    "tdr": {
+     "per_seed": {
+      "0": 28.000000000000004
+     },
+     "hits": 14,
+     "total": 50,
+     "pooled": 28.0,
+     "mean": 28.000000000000004,
+     "sd": 0.0
+    },
+    "ctg_htd8_te0.9": {
+     "per_seed": {
+      "0": 28.000000000000004
+     },
+     "hits": 14,
+     "total": 50,
+     "pooled": 28.0,
+     "mean": 28.000000000000004,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 30.0
+     },
+     "hits": 15,
+     "total": 50,
+     "pooled": 30.0,
+     "mean": 30.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 57.99999999999999
+     },
+     "hits": 29,
+     "total": 50,
+     "pooled": 58.0,
+     "mean": 57.99999999999999,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 52.0,
+      "1": 40.0
+     },
+     "hits": 46,
+     "total": 100,
+     "pooled": 46.0,
+     "mean": 46.0,
+     "sd": 6.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 50.0
+     },
+     "hits": 25,
+     "total": 50,
+     "pooled": 50.0,
+     "mean": 50.0,
+     "sd": 0.0
+    }
+   },
+   "cross": {
+    "l2": {
+     "per_seed": {
+      "0": 8.0,
+      "1": 12.0,
+      "2": 10.0,
+      "3": 8.0,
+      "4": 10.0
+     },
+     "hits": 24,
+     "total": 250,
+     "pooled": 9.6,
+     "mean": 9.6,
+     "sd": 1.4966629547095764
+    },
+    "l2_ret": {
+     "per_seed": {
+      "0": 10.0
+     },
+     "hits": 5,
+     "total": 50,
+     "pooled": 10.0,
+     "mean": 10.0,
+     "sd": 0.0
+    },
+    "l2_crit1": {
+     "per_seed": {
+      "0": 12.0
+     },
+     "hits": 6,
+     "total": 50,
+     "pooled": 12.0,
+     "mean": 12.0,
+     "sd": 0.0
+    },
+    "l2_crit2": {
+     "per_seed": {
+      "0": 18.0
+     },
+     "hits": 9,
+     "total": 50,
+     "pooled": 18.0,
+     "mean": 18.0,
+     "sd": 0.0
+    },
+    "tdr": {
+     "per_seed": {
+      "0": 10.0
+     },
+     "hits": 5,
+     "total": 50,
+     "pooled": 10.0,
+     "mean": 10.0,
+     "sd": 0.0
+    },
+    "ctg_htd8_te0.9": {
+     "per_seed": {
+      "0": 10.0
+     },
+     "hits": 5,
+     "total": 50,
+     "pooled": 10.0,
+     "mean": 10.0,
+     "sd": 0.0
+    },
+    "ctg_htd8_te0.9_ret": {
+     "per_seed": {
+      "0": 14.000000000000002
+     },
+     "hits": 7,
+     "total": 50,
+     "pooled": 14.0,
+     "mean": 14.000000000000002,
+     "sd": 0.0
+    },
+    "subgoal_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 16.0
+     },
+     "hits": 8,
+     "total": 50,
+     "pooled": 16.0,
+     "mean": 16.0,
+     "sd": 0.0
+    },
+    "subgoal_la13.7_th8_htd8_te0.9_ret": {
+     "per_seed": {
+      "0": 20.0
+     },
+     "hits": 10,
+     "total": 50,
+     "pooled": 20.0,
+     "mean": 20.0,
+     "sd": 0.0
+    },
+    "subgoal_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 26.0
+     },
+     "hits": 13,
+     "total": 50,
+     "pooled": 26.0,
+     "mean": 26.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_rh1": {
+     "per_seed": {
+      "0": 14.000000000000002
+     },
+     "hits": 7,
+     "total": 50,
+     "pooled": 14.0,
+     "mean": 14.000000000000002,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_rh2": {
+     "per_seed": {
+      "0": 18.0
+     },
+     "hits": 9,
+     "total": 50,
+     "pooled": 18.0,
+     "mean": 18.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_rh2_ret": {
+     "per_seed": {
+      "0": 6.0
+     },
+     "hits": 3,
+     "total": 50,
+     "pooled": 6.0,
+     "mean": 6.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 10.0,
+      "1": 12.0,
+      "2": 8.0
+     },
+     "hits": 15,
+     "total": 150,
+     "pooled": 10.0,
+     "mean": 10.0,
+     "sd": 1.632993161855452
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret": {
+     "per_seed": {
+      "0": 24.0
+     },
+     "hits": 12,
+     "total": 50,
+     "pooled": 24.0,
+     "mean": 24.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th12_htd12_te0.9": {
+     "per_seed": {
+      "0": 8.0
+     },
+     "hits": 4,
+     "total": 50,
+     "pooled": 8.0,
+     "mean": 8.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit0.5": {
+     "per_seed": {
+      "0": 14.000000000000002
+     },
+     "hits": 7,
+     "total": 50,
+     "pooled": 14.0,
+     "mean": 14.000000000000002,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit1": {
+     "per_seed": {
+      "0": 26.0,
+      "1": 36.0,
+      "2": 20.0,
+      "3": 26.0,
+      "4": 32.0
+     },
+     "hits": 70,
+     "total": 250,
+     "pooled": 28.0,
+     "mean": 28.0,
+     "sd": 5.513619500836088
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 44.0,
+      "1": 30.0,
+      "2": 22.0,
+      "3": 50.0,
+      "4": 16.0
+     },
+     "hits": 81,
+     "total": 250,
+     "pooled": 32.4,
+     "mean": 32.4,
+     "sd": 12.86234815265082
+    },
+    "subgoal_tdr_la13.7_th12_htd12_te0.9_crit1": {
+     "per_seed": {
+      "0": 22.0
+     },
+     "hits": 11,
+     "total": 50,
+     "pooled": 22.0,
+     "mean": 22.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.999_crit2": {
+     "per_seed": {
+      "2": 24.0
+     },
+     "hits": 12,
+     "total": 50,
+     "pooled": 24.0,
+     "mean": 24.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.99_crit2": {
+     "per_seed": {
+      "2": 22.0
+     },
+     "hits": 11,
+     "total": 50,
+     "pooled": 22.0,
+     "mean": 22.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit2": {
+     "per_seed": {
+      "0": 38.0,
+      "1": 40.0,
+      "2": 26.0,
+      "3": 34.0,
+      "4": 30.0
+     },
+     "hits": 84,
+     "total": 250,
+     "pooled": 33.6,
+     "mean": 33.6,
+     "sd": 5.122499389946279
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit2": {
+     "per_seed": {
+      "0": 30.0
+     },
+     "hits": 15,
+     "total": 50,
+     "pooled": 30.0,
+     "mean": 30.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 44.0,
+      "1": 28.000000000000004,
+      "2": 18.0,
+      "3": 22.0,
+      "4": 24.0
+     },
+     "hits": 68,
+     "total": 250,
+     "pooled": 27.2,
+     "mean": 27.2,
+     "sd": 8.997777503361593
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit4": {
+     "per_seed": {
+      "0": 34.0,
+      "1": 28.000000000000004,
+      "2": 28.000000000000004
+     },
+     "hits": 45,
+     "total": 150,
+     "pooled": 30.0,
+     "mean": 30.0,
+     "sd": 2.8284271247461885
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit8": {
+     "per_seed": {
+      "0": 32.0,
+      "1": 24.0,
+      "2": 18.0,
+      "3": 32.0,
+      "4": 22.0
+     },
+     "hits": 64,
+     "total": 250,
+     "pooled": 25.6,
+     "mean": 25.6,
+     "sd": 5.571355310873647
+    },
+    "dir_la13.7_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 8.0
+     },
+     "hits": 4,
+     "total": 50,
+     "pooled": 8.0,
+     "mean": 8.0,
+     "sd": 0.0
+    },
+    "path_sugap5_th8_htd8_te0.9": {
+     "per_seed": {
+      "0": 6.0
+     },
+     "hits": 3,
+     "total": 50,
+     "pooled": 6.0,
+     "mean": 6.0,
+     "sd": 0.0
+    }
+   }
+  }
+ },
+ "perseed_n100": {
+  "algo": {
+   "l2": {
+    "cross": {
+     "mean": 10.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+    "cross": {
+     "mean": 36.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   },
+   "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+    "cross": {
+     "mean": 36.0,
+     "sd": 0.0,
+     "n_seeds": 1
+    }
+   }
+  },
+  "pooled": {
+   "cross": {
+    "l2": {
+     "per_seed": {
+      "0": 10.0
+     },
+     "hits": 10,
+     "total": 100,
+     "pooled": 10.0,
+     "mean": 10.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit1": {
+     "per_seed": {
+      "0": 36.0
+     },
+     "hits": 36,
+     "total": 100,
+     "pooled": 36.0,
+     "mean": 36.0,
+     "sd": 0.0
+    },
+    "subgoal_tdr_la13.7_th8_htd8_te0.9_crit4": {
+     "per_seed": {
+      "0": 36.0
+     },
+     "hits": 36,
+     "total": 100,
+     "pooled": 36.0,
+     "mean": 36.0,
+     "sd": 0.0
+    }
+   }
+  }
+ }
+}

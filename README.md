@@ -1,5 +1,20 @@
 
 # LeWorldModel
+
+## Current research in this checkout
+
+This checkout focuses on **graph-assisted planning inside LeWM's CEM planner**: frozen LeWM
+dynamics, learned temporal distance, GAS graph subgoals/cost-to-go, and supporting viability
+or expected-hitting-time objectives. Push-T is the primary study; Reacher is the current
+transfer study. IQL/GCIQL actors, `auxphi` value/reward shaping, and GAS with a learned
+low-level policy are historical approaches outside the active scope.
+
+Start with [project guidance](AGENTS.md) and the [working writeup](docs/gas-mpc/main.tex).
+Main entry points: `scripts/gas_mpc_prepare.py`, `scripts/gas_mpc_eval.py`, and
+`scripts/gas_mpc_report.py`. Cluster details are in [notes.md](notes.md).
+The original LeWM paper and base training/evaluation instructions follow below; they describe
+the upstream model. Graph-assisted CEM experiments have their own assets and output directories.
+
 ### Stable End-to-End Joint-Embedding Predictive Architecture from Pixels
 
 [Lucas Maes*](https://x.com/lucasmaes_), [Quentin Le Lidec*](https://quentinll.github.io/), [Damien Scieur](https://scholar.google.com/citations?user=hNscQzgAAAAJ&hl=fr), [Yann LeCun](https://yann.lecun.com/) and [Randall Balestriero](https://randallbalestriero.github.io/)

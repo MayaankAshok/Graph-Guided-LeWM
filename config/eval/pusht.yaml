@@ -3,6 +3,13 @@ defaults:
   - solver: cem
   - _self_
 
+hydra:
+  run:
+    dir: outputs/pusht/hydra_runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/pusht/hydra_runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+
 world:
   env_name: swm/PushT-v1
   num_envs: ${eval.num_eval}

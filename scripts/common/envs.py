@@ -48,6 +48,47 @@ class EnvMechanics:
         default = root / "data" / "checkpoints" / f"models--{self.ckpt_repo.replace('/', '--')}"
         return Path(os.environ.get(self.ckpt_dir_env_var, str(default)))
 
+    # ---- hooks used by the GAS-MPC / viability pipeline (scripts/gas_mpc_*.py,
+    # viability_train.py, viability_cross_episode_baseline.evaluate_pairs) ----
+    eval_config_name: str = None     # config/eval/<name>.yaml used by gas_mpc_eval.py
+    world_kwargs: dict = {}          # extra kwargs for swm.World(...) (e.g. the dm_control task)
+
+    def state_column(self, dataset):
+        """The (n, state_dim) float32 array the pair files store as start/goal state, from a
+        swm HDF5Dataset -- the h5's own `state` column when it has one, else qpos|qvel."""
+        if "state" in dataset.column_names:
+            return dataset.get_col_data("state")
+        return np.concatenate([dataset.get_col_data("qpos"), dataset.get_col_data("qvel")], axis=-1).astype(np.float32)
+
+    def state_from_row(self, row):
+        """Same vector from an extract_rows() dict (one dataset row per env)."""
+        if "state" in row:
+            return row["state"]
+        return np.concatenate([row["qpos"], row["qvel"]], axis=-1).astype(np.float32)
+
+    def state_from_infos(self, infos):
+        """Same vector for every live env from World.infos (last frame of the history axis)."""
+        if "state" in infos:
+            return infos["state"][:, -1].copy()
+        return np.concatenate([infos["qpos"][:, -1], infos["qvel"][:, -1]], axis=-1).astype(np.float32)
+
+    @staticmethod
+    def goal_reached(state, goal):
+        """The env's own success predicate on (state, goal) vectors, vectorised, numpy or torch."""
+        raise NotImplementedError
+
+    @staticmethod
+    def goal_errors(traj, goal):
+        """(primary, secondary) per-step error arrays against the goal for reporting; the
+        primary is what the success predicate thresholds first."""
+        raise NotImplementedError
+
+    @staticmethod
+    def xneg_distance(state_a, state_b):
+        """Distance used to filter cross-episode critic negatives (viability_train.py
+        --xneg-min-dist): pairs closer than the threshold are not assumed unreachable."""
+        raise NotImplementedError
+
     def read_state_slice(self, f, s, L):
         if hasattr(self, "state_h5_key") and self.state_h5_key in f:
             return f[self.state_h5_key][s: s + L]
@@ -259,6 +300,35 @@ class PushTMechanics(EnvMechanics):
             np.cos(state[:, 4]), np.sin(state[:, 4]),        # block angle, wrap-free
         ], axis=1).astype(np.float64)
 
+    @staticmethod
+    def goal_reached(state, goal):
+        """The env's own success predicate (PushT.eval_state), vectorised over leading dims
+        and dtype-agnostic (numpy or torch): agent+block position error < 20 px and block
+        angle error < pi/9. Used to turn logged trajectory pairs into viability labels
+        (common.viability.first_hit_time) without stepping a simulator."""
+        xp = torch if torch.is_tensor(state) else np
+        pos = xp.linalg.norm(state[..., :4] - goal[..., :4], axis=-1) if xp is np else \
+            torch.linalg.norm(state[..., :4] - goal[..., :4], dim=-1)
+        ang = xp.abs(state[..., 4] - goal[..., 4])
+        ang = xp.minimum(ang, 2 * np.pi - ang)
+        return (pos < 20) & (ang < np.pi / 9)
+
+    eval_config_name = "pusht"
+
+    @staticmethod
+    def goal_errors(traj, goal):
+        """Per-step components of PushT.eval_state: agent+block position error (px, success
+        needs < 20) and block angle error (rad, success needs < pi/9)."""
+        g = np.asarray(goal, dtype=np.float64)[:, None, :]
+        pos = np.linalg.norm(traj[..., :4] - g[..., :4], axis=-1)
+        ang = np.abs(traj[..., 4] - g[..., 4])
+        ang = np.minimum(ang, 2 * np.pi - ang)
+        return pos, ang
+
+    @staticmethod
+    def xneg_distance(state_a, state_b):
+        return torch.linalg.norm(state_a[..., 2:4] - state_b[..., 2:4], dim=-1)   # block position, px
+
     def build_true_distance_oracle(self, reference_state):
         proj = self._project_state
         mean, std = proj(reference_state).mean(0, keepdims=True), proj(reference_state).std(0, keepdims=True)
@@ -389,6 +459,31 @@ class ReacherMechanics(EnvMechanics):
     NQ = 2  # qpos-only prefix of the (nq+nv,) state vector -- qvel is irrelevant to the
             # qpos_match task's termination check, same reasoning as Push-T dropping fields
             # its oracle doesn't need.
+    QPOS_THRESHOLD = 0.05   # stable_worldmodel custom_tasks/reacher.py _DEFAULT_QPOS_THRESHOLD:
+                            # success iff every joint is within 0.05 rad of target_qpos (raw
+                            # difference, no angle wrap -- exactly what the env checks)
+    eval_config_name = "reacher"
+    world_kwargs = {"task": "qpos_match"}
+
+    @staticmethod
+    def goal_reached(state, goal):
+        """ReacherQPosMatchTask.get_termination on (state, goal) vectors: all |qpos - target|
+        < QPOS_THRESHOLD, vectorised over leading dims, numpy or torch."""
+        xp = torch if torch.is_tensor(state) else np
+        diff = xp.abs(state[..., :2] - goal[..., :2])
+        return (diff < ReacherMechanics.QPOS_THRESHOLD).all(-1) if xp is torch else np.all(diff < ReacherMechanics.QPOS_THRESHOLD, axis=-1)
+
+    @staticmethod
+    def goal_errors(traj, goal):
+        """Per-step (max-abs joint error in rad -- success needs < 0.05 -- , joint-speed norm)."""
+        g = np.asarray(goal, dtype=np.float64)[:, None, :]
+        qerr = np.abs(traj[..., :2] - g[..., :2]).max(-1)
+        qvel = np.linalg.norm(traj[..., 2:4], axis=-1)
+        return qerr, qvel
+
+    @staticmethod
+    def xneg_distance(state_a, state_b):
+        return torch.linalg.norm(state_a[..., :2] - state_b[..., :2], dim=-1)     # joint-space, rad
 
     @staticmethod
     def _project_qpos(qpos):
@@ -441,8 +536,131 @@ class ReacherMechanics(EnvMechanics):
         )
 
 
+# ============================================================
+# OGBench Cube (single cube pick-and-place, quentinll/lewm-cube)
+# ============================================================
+
+class CubeMechanics(EnvMechanics):
+    """swm/OGBCube-v0, env_type='single'. Success (CubeEnv._compute_successes, terminate_at_goal)
+    is the cube within 0.04 m of its target position -- position only, no orientation, and the
+    arm's own pose is irrelevant. The state vector this pipeline stores is therefore
+    [block_0 xyz (3), effector xyz (3)] in metres: the block part is what the success predicate
+    reads, the effector part is for reporting / the TDR diagnostic oracle. Both come straight
+    from the h5's privileged / proprio columns (written flat, '/' -> '_'), and from the live
+    env's info dict (keys still carry the '/'); the eval config's callables restore the full
+    simulator state from the h5's qpos/qvel columns, so nothing here needs the arm joints."""
+    name = "cube"
+    state_dim = 6
+    action_dim = 5              # ogbench manipspace: xyz delta, gripper yaw, gripper; [-1, 1].
+                                # The checkpoint's action_encoder input_dim=25 = 5 of these
+                                # per predictor block (frame-skip 5), confirmed from its config.json
+    max_episode_steps = 200     # only used as a default cap; gas_mpc_eval sizes World by budget
+    h5_path_env_var = "CUBE_H5_PATH"
+    h5_path_default = "data/datasets/ogbench/cube_single_expert.h5"
+    ckpt_repo = "quentinll/lewm-cube"
+    SUCCESS_DIST = 0.04         # CubeEnv._compute_successes: ||obj_pos - target_pos|| <= 0.04 m
+    eval_config_name = "cube"
+    # everything config/eval/cube.yaml's `world` block passes to CubeEnv besides env_name /
+    # num_envs / max_episode_steps (gas_mpc_eval supplies those)
+    world_kwargs = {"env_type": "single", "ob_type": "states", "multiview": False,
+                    "width": 224, "height": 224, "visualize_info": False, "terminate_at_goal": True}
+
+    # (h5 column, live-info key) for each part of the state vector
+    BLOCK_KEYS = ("privileged_block_0_pos", "privileged/block_0_pos")
+    EFFECTOR_KEYS = ("proprio_effector_pos", "proprio/effector_pos")
+
+    @staticmethod
+    def _get(src, keys, what):
+        for k in keys:
+            if k in src:
+                return src[k]
+        names = list(src.column_names) if hasattr(src, "column_names") else list(src.keys())
+        raise KeyError(f"cube {what}: none of {keys} present; available: {names}")
+
+    def _assemble(self, block, eff):
+        return np.concatenate([np.asarray(block), np.asarray(eff)], axis=-1).astype(np.float32)
+
+    def state_column(self, dataset):
+        cols = set(dataset.column_names)
+        b = next(k for k in self.BLOCK_KEYS if k in cols)
+        e = next(k for k in self.EFFECTOR_KEYS if k in cols)
+        return self._assemble(dataset.get_col_data(b), dataset.get_col_data(e))
+
+    def state_from_row(self, row):
+        return self._assemble(self._get(row, self.BLOCK_KEYS, "row"), self._get(row, self.EFFECTOR_KEYS, "row"))
+
+    def state_from_infos(self, infos):
+        b = self._get(infos, self.BLOCK_KEYS, "infos")
+        e = self._get(infos, self.EFFECTOR_KEYS, "infos")
+        return self._assemble(b[:, -1], e[:, -1])
+
+    def read_state_slice(self, f, s, L):
+        b = self._get(f, self.BLOCK_KEYS, "h5")
+        e = self._get(f, self.EFFECTOR_KEYS, "h5")
+        return self._assemble(b[s: s + L], e[s: s + L])
+
+    def read_state_rows(self, f, rows):
+        b = self._get(f, self.BLOCK_KEYS, "h5")
+        e = self._get(f, self.EFFECTOR_KEYS, "h5")
+        return self._assemble(b[rows], e[rows])
+
+    @staticmethod
+    def goal_reached(state, goal):
+        """CubeEnv._compute_successes on (state, goal) vectors: block within 0.04 m of the
+        goal frame's block position, vectorised, numpy or torch."""
+        d = state[..., :3] - goal[..., :3]
+        if torch.is_tensor(state):
+            return torch.linalg.norm(d, dim=-1) <= CubeMechanics.SUCCESS_DIST
+        return np.linalg.norm(d, axis=-1) <= CubeMechanics.SUCCESS_DIST
+
+    @staticmethod
+    def goal_errors(traj, goal):
+        """Per-step (block position error in m -- success needs <= 0.04 --, effector position error)."""
+        g = np.asarray(goal, dtype=np.float64)[:, None, :]
+        return (np.linalg.norm(traj[..., :3] - g[..., :3], axis=-1),
+                np.linalg.norm(traj[..., 3:6] - g[..., 3:6], axis=-1))
+
+    @staticmethod
+    def xneg_distance(state_a, state_b):
+        return torch.linalg.norm(state_a[..., :3] - state_b[..., :3], dim=-1)     # block, metres
+
+    def build_true_distance_oracle(self, reference_state):
+        """Z-scored L2 over [block xyz, effector xyz] -- the TDR training diagnostic only."""
+        ref = np.asarray(reference_state, dtype=np.float64)
+        mean, std = ref.mean(0, keepdims=True), ref.std(0, keepdims=True)
+        std[std < 1e-6] = 1.0
+
+        def true_dist_from_states(source_state, target_state):
+            a = (np.asarray(source_state, dtype=np.float64) - mean) / std
+            b = (np.asarray(target_state, dtype=np.float64) - mean) / std
+            return np.linalg.norm(a[:, None, :] - b[None, :, :], axis=-1)
+
+        return true_dist_from_states
+
+    def make_env(self):
+        import os
+        os.environ.setdefault("MUJOCO_GL", "egl")
+        import gymnasium as gym
+        import stable_worldmodel  # noqa: F401 -- registers swm/OGBCube-v0
+        return gym.make("swm/OGBCube-v0", render_mode="rgb_array", **self.world_kwargs)
+
+    def reset_options(self, start_state, goal_state):
+        raise NotImplementedError("cube start/goal are set through config/eval/cube.yaml's callables "
+                                  "(qpos/qvel + set_target_pos), not reset options")
+
+    def step_result(self, obs, reward, terminated, truncated, info):
+        block = self._get(info, self.BLOCK_KEYS, "info")
+        tgt = info.get("privileged/target_block_pos", None)
+        d = float(np.linalg.norm(np.asarray(block) - np.asarray(tgt))) if tgt is not None else float("nan")
+        return bool(terminated), d
+
+    def collect_noisy_rollout(self, n_episodes, seed, max_steps=None, **policy_kwargs):
+        raise NotImplementedError("cube noisy-rollout collection is not implemented (expert_N tiers only)")
+
+
 ENV_MECHANICS = {
     "tworoom": TwoRoomMechanics(),
     "pusht": PushTMechanics(),
     "reacher": ReacherMechanics(),
+    "cube": CubeMechanics(),
 }

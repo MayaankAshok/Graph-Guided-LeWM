@@ -1,23 +1,109 @@
-# LEWM
+# LEWM — graph-assisted CEM planning
 
-Research repo for LeWM (Latent World Models) and a downstream "latent graph shaping" offline-RL
-project built on top of it. Two mostly-separate codepaths live here:
+## Current research scope (2026-09-17)
 
-- **`train.py`/`jepa.py`/`eval.py`** — the base LeWM training/eval pipeline (Hydra configs under
-  `config/`), operating on `stable_worldmodel`'s own dataset/checkpoint conventions.
-- **`scripts/tworoom_*.py`, `scripts/pusht_*.py`** — the latent-graph research project (see
-  `docs/graph-proposal/main.tex` for the full writeup). Own data loading (`H5_PATH`/`CKPT_DIR`
-  module constants, not `swm.data.load_dataset`), own checkpoint/resume system, own output dirs
-  (`outputs/b0_tworoom/`, `outputs/b3_pusht/`, etc.). Do not confuse this with the `train.py`
-  pipeline's conventions below — they differ in several places (see the dedicated section below).
+The active project improves long-horizon and cross-episode goal reaching through graph-assisted
+planning inside LeWM's CEM planner. The LeWM encoder and predictor stay frozen; CEM is the
+low-level controller. Learn a Temporal Distance Representation (TDR), build a GAS-style graph,
+and use shortest paths to supply subgoals or cost-to-go. Supporting experiments evaluate
+viability/expected-hitting-time costs and switching to direct goal L2 in the final horizon.
 
+IQL/GCIQL actor training, graph-derived auxiliary-value (`auxphi`) regression, potential-based
+reward shaping, and GAS with a learned low-level policy are historical and outside active scope.
+Do not launch or extend those pipelines unless explicitly requested. Shared helpers remain usable
+by planning code; their presence does not make actor training active. Preserve historical results.
+
+Push-T is the primary study; Reacher is the current transfer study. Cube evaluation scripts exist,
+but availability alone does not establish validated transfer results. Two-Room supplies historical
+diagnostics. Base `train.py`/`jepa.py`/`eval.py` is the upstream LeWM pipeline with separate configs
+and dataset/checkpoint conventions.
+
+## Active workflow
+
+- `docs/gas-mpc/main.tex`: current methodology, findings, and results log. Compile from
+  `docs/gas-mpc/` with `latexmk -pdf -interaction=nonstopmode main.tex`.
+- `scripts/gas_mpc_prepare.py`: full-dataset encoding, TDR training, and graph preparation;
+  resumable stages `encode`, `tdr`, `graph`, and `all`.
+- `scripts/gas_mpc_eval.py`: CEM evaluation, using base eval configs with `+mpc.*` overrides.
+  `l2` is the LeWM baseline; `tdr`, `ctg`, `subgoal`, `subgoal_tdr`, `dir`, and `path`
+  separate planning mechanisms. Critic, retrieval, and final-phase options are in its header.
+- `scripts/gas_mpc_make_tasks.py`: shared tasks; `gas_mpc_report.py`: result tables;
+  `gas_mpc_pair_diag.py` and `l2_single_pass_diagnostic.py`: mechanism/prediction audits.
+- `scripts/gas_mpc_run.sh` and `scripts/ada_gas_mpc*.sh`: resumable drivers and Ada sweeps.
+  Inspect each driver's queue before running it.
+  Parallel drivers should invoke the shared runner as
+  `bash scripts/gas_mpc_run.sh "[<current>/<total>]" <method> <protocol> ...`.
+  The bracketed first argument is deliberately ignored by `gas_mpc_run.sh`, but remains in
+  the Bash command line for `htop` progress tracking. Assign GPU slots explicitly and keep
+  `slot` and its derived `gpu` in separate Bash `local` declarations.
+- `scripts/common/gas.py`: shared TDR/graph implementation, also containing historical policy
+  code. `scripts/common/viability.py` and `scripts/viability_*.py` support critic training and
+  audits. Continuation-cost scripts are an experimental branch.
+
+`GAS_MPC_ENV` selects the environment. Default output roots are `outputs/pusht/` for Push-T
+and `outputs/<env>/` otherwise; `GAS_MPC_OUT` overrides the root for isolated diagnostics.
+Preparation and several critic scripts use argparse.
+
+Final evaluation episodes must be absent from learned-asset preparation, including diagnostics,
+feature inference, retrieval, and threshold calibration. `cache_train.npz` is the physically
+filtered training cache; `psi_train_s*.npy` contains only its frames. `cache_full.npz` remains
+an evaluation/legacy artifact; preparation may read only its pre-existing action-normalization
+metadata, never its frame arrays. On Ada, `ada_prepare_trainonly.sh` builds training caches
+under `/ssd_scratch/mayaank.ashok/planning_trainonly/<env>/` and links them into each output
+folder. Rebuild these caches when scratch is purged or the allocation changes nodes.
+TDR and calibration assets require training-only provenance; old diagnostics/calibrations are
+archived. Internal validation episodes are selected only from non-evaluation episodes.
+
+Example baseline (requires the dataset and pretrained checkpoint):
+```bash
+python scripts/gas_mpc_eval.py +mpc.method=l2 +mpc.protocol=same25 eval.num_eval=50
+```
+Graph objectives require prepared TDR/graph assets; critic terms require a trained critic.
+Use the current writeup and sweep scripts for complete configurations and environment-specific
+scales. Do not transfer Push-T thresholds blindly.
+
+## Evaluation requirements
+
+Call the former configuration B **OUR method**: `subgoal_tdr`, final switch to goal L2
+at one environment-calibrated lookahead, budget-capped ET critic, beta 1, std composition.
+Default evaluation uses the first 50 tasks of each fixed 200-task `task200u` pool;
+evaluate seeds 0--4 on same25, same50, same100, cross for L2 and OUR.
+Use a different task prefix only when explicitly requested.
+
+Compare methods on the fixed 200-task pool per protocol; `eval.num_eval` selects a prefix.
+Record task identity/count, CEM seed, and learned-asset seed separately. `mpc.tasks` is not
+supported.
+
+Protocols: `same25`, `same50`, `same100`, and `cross`. Same-episode goals are at that
+trajectory offset, with default budget twice the offset capped at 250. Cross-episode budgets
+are environment-specific (Push-T 250, Reacher 200). Success is the environment's own predicate.
+Separate budget overrides and single-pass diagnostics from headline runs, screening from
+multi-seed validation, and predictor-imagined costs from realized environment outcomes.
+
+Verify action normalization, real 5-action blocks, predictor history, checkpoint health,
+rendering, and remaining-budget conventions before interpreting results. Graph-distance
+correlation or critic accuracy alone does not establish improved live control.
+
+Preserve shared dependencies and archived results.
 ## Ada cluster (IIIT-H)
+
+### GPU assignment (2026-09-19)
+
+The current compute node, `gnode003`, has four GPUs (physical IDs 0–3), and the user
+has authorized access to all four. This is specific to the current node; verify availability
+again when the allocation changes. `ada_planning_pipeline.py` defaults to four GPU queues.
+For every GPU worker, set both `CUDA_VISIBLE_DEVICES` and `MUJOCO_EGL_DEVICE_ID`
+to its assigned physical GPU ID before importing MuJoCo or creating render contexts.
+CUDA exposes that single device as logical GPU 0; EGL still uses the physical index.
+This keeps Reacher and Cube rendering on the same GPU as their model computation
+with the installed MuJoCo 3.5.0. Smoke workers require the same mapping before imports.
 
 ### Storage layout — the one thing that's easy to get backwards
 
 | What | Where | Node access |
 |---|---|---|
-| Code + venv (research scripts) | `/home2/mayaank.ashok/lewm_research/` | Both login (`ada`) and compute (`adag`) |
+| Code (research scripts) | `/home2/mayaank.ashok/lewm_research/` | Both login (`ada`) and compute (`adag`) |
+| venv (research scripts) | `/home2/mayaank.ashok/.venv/` | Both — activate with `source /home2/mayaank.ashok/.venv/bin/activate` |
 | Code + venv (base `train.py` repo) | `/home/mayaank.ashok/LEWM` | Both — but 25GB quota, NFS, never put data/checkpoints here |
 | Dataset master copies (compressed `.zst`) | `/share1/mayaank.ashok/lewm_data/` | **Login node (`ada`) ONLY** — not mounted on compute nodes at all |
 | Per-job dataset staging (decompressed) | `/ssd_scratch/mayaank.ashok/` | **Compute nodes ONLY** — fast, purged after ~7 days; not present on login node |
@@ -61,8 +147,30 @@ sinteractive -c16 -g2 -w <NODE_NAME>
 Partition `u22` (26+ idle nodes at last check); no `--account` flag needed. Python module:
 `u22/python/3.12.4`.
 
+### Interactive-allocation operations (Ada job facts, 2026-09-12)
+
+Find the active allocation's job ID before running a command through Slurm:
+```bash
+squeue -u mayaank.ashok -o "%.18i %.9P %.24j %.8T %.10M %.20R"
+```
+Use the numeric value in the first column as `<jobid>`. The interactive allocation has
+`mem=20G` per job. A FAISS build over the 2.3M-frame cache run alongside training is
+cgroup-OOM-killed without a Python traceback, so run graph builds alone.
+
+If direct compute-node SSH is unavailable because FAISS has starved `sshd` (load can exceed
+200) or `pam_slurm_adopt` rejects the session, run work through the login node:
+```bash
+ssh ada "srun --jobid=<jobid> --overlap bash -c '... '"
+```
+Start background work from the login node, not inside an existing `srun` step:
+```bash
+nohup srun --overlap bash script.sh &
+```
+Backgrounding from inside an `srun` step dies when that step ends. NFS can make live logs
+read through `ada` stale; read them through `srun` or `adag` for current output.
+
 ### Python environment setup, in order (order matters for torch)
-1. `module load u22/python/3.12.4 && python3 -m venv .venv && source .venv/bin/activate`
+1. For research scripts: `module load u22/python/3.12.4 && python3 -m venv /home2/mayaank.ashok/.venv && source /home2/mayaank.ashok/.venv/bin/activate`
 2. Run `pip install` from the **login node** (`ssh ada`, not a compute-node job) — package
    installation doesn't need a GPU, and `/share1` (a sane pip-cache location, 100GB quota vs
    `/home2`'s 30GB) isn't reachable from compute nodes anyway:
@@ -158,20 +266,6 @@ Push-T's action std (0.206) makes raw actions ~4.8x too small (catastrophic); Tw
    paper's reported Push-T success rate (96.0 ± 2.83; this repo reproduced 94.0%). Don't trust
    a new predictor pipeline until it clears this bar.
 
-A second, separate defect used to compound with this one in the `scripts/*.py` E2 gates: they
-called the predictor via `common.lewm_loader.pad_action`, the superseded single-action
-zero-padding convention, instead of the real 5-action block (frame-skip=5) the checkpoint was
-actually trained on. Normalizing scale does not fix that mismatch on its own — **as of
-2026-09-09 this is fixed**: `common.graph_lib.predictor_error_floor`, `discover_predicted_edges`,
-and `cycle_consistency_filter` (used by `edge_discovery_gate.py`, `cycle_consistency_gate.py`,
-`env_verified_buckets.py`) now use `find_block_transition_edges`/`action_continuation_lookup`
-to build real 5-action blocks instead of `pad_action`. `pad_action` itself is still in
-`common/lewm_loader.py` for reference but nothing in `scripts/common/graph_lib.py` calls it
-anymore — grep for `pad_action` before trusting any NEW predictor-facing code that still uses
-it. See [[lewm-predictor-action-block-convention]] and [[e2-idm-rerun-normalized-actions]] for
-what changed numerically (Push-T's E2 discovery precision dropped from a saturated-looking
-0.993 to a real 0.429/0.787 once the block convention was corrected).
-
 ### Checkpoint health — verify before trusting any result
 
 A checkpoint that loads without error is not necessarily a *trained* one. Before running any
@@ -180,212 +274,13 @@ collapsed: off-diagonal cosine similarity between different frames' embeddings s
 (~0.02–0.06 measured so far, not ~1.0), and the participation ratio of the embedding covariance
 (measured on a large, genuinely-random — not temporally-correlated — sample; small/correlated
 batches understate it badly) should be a healthy fraction of the embedding dim, not single
-digits. `scripts/diag_collapse.py` / `scripts/pusht_diag_collapse.py` do this check. A
+digits. `scripts/investigations/misc/diag_collapse.py` / `scripts/investigations/misc/pusht_diag_collapse.py` do this check. A
 from-scratch, few-epoch local checkpoint (e.g. `data/checkpoints/lewm/weights_epoch_1.pt`) is
 **not** the same thing as the real pretrained HF checkpoint — download the latter explicitly
 (see above) rather than pointing scripts at whatever's already sitting in `data/checkpoints/lewm/`.
 
 Loading an externally-produced HF checkpoint (not one trained locally with the currently-installed
-`stable_pretraining`) needs `scripts/tworoom_lewm_loader.py`'s `load_tworoom_lewm(ckpt_dir=...)`
+`stable_pretraining`) needs `scripts/common/lewm_loader.py`'s `load_lewm` remapping path
 — it remaps ViT block attribute names that changed between the checkpoint's original library
 version and what's installed now. `swm.wm.utils.load_pretrained()` lacks this remap and will only
 work for a checkpoint trained fresh with the current library version.
-
-## Unified config-driven pipeline (`scripts/common/`, `config/graph/`) -- use this for new work
-
-The `tworoom_*.py`/`pusht_*.py` pairs below were consolidated into one config-driven layer:
-`scripts/common/` (`lewm_loader.py`, `graph_lib.py`, `training.py`, `checkpoint_io.py`,
-`envs.py`) holds everything environment-agnostic, plus one `EnvMechanics` class per
-environment in `envs.py` for the genuinely irreducible per-environment control flow (oracle,
-live-env reset/step, noisy-rollout policy). Unified entry points live directly in `scripts/`
-with no environment prefix: `graph_gate.py` (B0 gate), `datatiers.py`/`worker.py` (B3 tier
-sweep), `rollout_collector.py`, `actor_train.py`/`actor_rollout_eval.py`/
-`actor_rollout_utils.py`, `ada_sweep.py`, `aggregate_sweep.py`. Config lives in
-`config/graph/` (its own subtree, deliberately separate from `config/train/`/`config/eval/`
-which belong to the unrelated `train.py` pipeline) -- `env=tworoom`/`env=pusht` selects the
-environment via Hydra override, e.g. `python scripts/graph_gate.py env=pusht`.
-
-**Adding a third environment** means: one `config/graph/env/<name>.yaml`, one
-`EnvMechanics` subclass in `common/envs.py` implementing `build_true_distance_oracle`,
-`make_env`, `reset_options`, `step_result`, `collect_noisy_rollout` -- no new script files.
-
-**Validated bit-exact** against the original `tworoom_*.py`/`pusht_*.py` scripts before this
-layer was trusted for anything: `graph_gate.py env=tworoom` reproduces the historical B0
-result to full float precision (0.9515333078449236/0.43939877995042154), `env=pusht`
-reproduces it to 5-6 significant figures (the tiny residual is FAISS's own run-to-run
-non-determinism, not the extraction). One real subtlety hit during validation: Two-Room's
-original B0 script shared ONE module-level `rng` between `calibrate()` and `evaluate()`
-(both lived in the same file), while Push-T's never did (different file, different `rng`) --
-an accident of file structure, not a design choice, but reproducing the exact historical
-numbers required preserving it via `env.share_calibration_rng` in each env's config rather
-than picking one behavior for both.
-
-**The old Two-Room library files are NOT deleted** -- 6 of them (`tworoom_b0_graph_gate.py`,
-`tworoom_graph_variants.py`, `tworoom_b3_gciql_shaping.py`, `tworoom_b3_convergence.py`,
-`tworoom_b3_datatiers.py`, `tworoom_b3_mixed_auxphi.py`) are now re-export shims (e.g.
-`tworoom_b0_graph_gate.calibrate` just re-exports `common.graph_lib.calibrate`) since ~24
-completed historical diagnostic scripts (`tworoom_b1_graph_diagnostics.py`,
-`tworoom_mechanism_probe.py`, `tworoom_edge_cap_sweep.py`, the whole mixed-tier investigation
-thread, etc.) still import from them and were deliberately left untouched -- they answered a
-specific question and are done, not part of the ongoing repeatable pipeline.
-`tworoom_rollout_collector.py` also stays for the same reason (`tworoom_b3_datatiers.py`'s
-still-live `_build_mixed_arrays` needs it directly, not through a shim).
-
-**13 fully-redundant scripts WERE deleted** (2026-09-01, verified zero remaining
-dependents first): the entire old Push-T pipeline (`pusht_b0_graph_gate.py`,
-`pusht_rollout_collector.py`, `pusht_actor_rollout_utils.py`, `pusht_b3_datatiers.py`,
-`pusht_b3_worker.py`, `pusht_b3_actor_train.py`, `pusht_b3_actor_rollout_eval.py`,
-`ada_pusht_b3_sweep.py`, `ada_pusht_actor_rollout_sweep.py` -- Push-T never had a
-distance-source ablation, so nothing there needed keeping) plus three Two-Room-side leaf
-scripts superseded with no capability loss (`ada_direct_sweep.py`, `ada_warm_caches.py`,
-`aggregate_actor_sweep.py`, `tworoom_b3_auxphi_sweep.py`).
-
-**NOT deleted, despite looking redundant at first glance:** `tworoom_b3_actor_train.py`,
-`tworoom_b3_actor_rollout_eval.py`, `tworoom_actor_rollout_utils.py`,
-`tworoom_b3_auxphi_worker.py`, `tworoom_b4_ablation_sweep.py`, `ada_b4_edge_ablation_sweep.py`,
-`ada_b4ext_actor_rollout_sweep.py` -- these support a `--distance-source` ablation
-(`graph`/`euclidean`/`oracle`/`transonly`/`k<N>`) that reproduces a published result
-(`sec:b4ext-actor-rollout` in `main.tex`) and has **no equivalent in the new unified layer**
-(`worker.py`/`actor_train.py` only ever train the default "graph" condition). Don't delete
-these, and don't assume the new layer can reproduce a B4-style ablation until that gap is
-actually closed.
-
-The new layer IS deployed to Ada (synced 2026-09-02 via `scp` of `scripts/common/`, the
-unprefixed entry points, and `config/graph/`; hydra/omegaconf were already in the venv).
-Re-sync any edited file with `scp` before running it there -- there is no git pull on Ada.
-
-### Live-rollout evaluation protocol (`eval_protocol` in `config/graph/actor.yaml`)
-
-The LeWM paper's Push-T policy numbers (Fig. 6: GCBC 75%, GCIVL 33%, GCIQL 20%, Random 2%)
-are measured under a specific protocol (paper App. F.1; stable-worldmodel
-`scripts/plan/eval_ff.py` + `World._evaluate_from_dataset`): start = a random dataset
-state, goal = the state exactly **25 timesteps later in the same trajectory**, **50 env
-steps** to reach it, success = the env's own `terminated` (`eval_state`: agent+block
-position error < 20 px and block angle error < pi/9). The policy is given the *dataset
-frame* at the goal row as its goal image. Their GCIQL (`scripts/train/gciql.py` in
-github.com/galilai-group/stable-worldmodel) is frozen DINOv2-small patch embeddings +
-6-layer transformer V/Q heads, expectile 0.9, gamma 0.99, AWR on V(s')-V(s) with
-alpha 10, trained on the full ~18.7k-episode dataset.
-
-Our original convention (`eval_protocol=cross_episode`) was much harder -- arbitrary
-held-out (s, g) pairs from *different* trajectories (the Spearman eval pairs) with a
-250-step budget -- and every Push-T actor scored exactly 0.000 under it (see
-`[[pusht-b5-b3-rl-training]]`). `eval_protocol=same_episode` (now the default) implements
-the paper's protocol; `eval_pool=dataset` draws pairs from the whole h5 minus the tier's
-train episodes (needs `PUSHT_H5_PATH` at eval time), `eval_pool=test_episodes` from the
-tier's held-out episodes only. `policy=random` in `actor_rollout_eval.py` runs the
-paper's Random baseline (measured at 4-9% on 100 episodes here vs the paper's 2% on 50).
-Result files now carry the protocol in their name
-(`{tier}__{variant}__s{seed}__sel-{rho|success}__{protocol}.json`); files without it
-predate this and are all `cross_episode`. `aggregate_sweep.py --protocol` filters
-accordingly. The success-selected actor is picked by the *training-time* rollout checks,
-which use the same `eval_protocol` -- a checkpoint records which one in its
-`eval_protocol` field, and `actor_rollout_eval.py select=success` warns on a mismatch.
-`ada_sweep.py --mode actor --eval-only --selects rho --protocol same_episode` re-scores an
-existing sweep's trained actors under a protocol without retraining.
-
-Related knobs added alongside: `her_goal_gamma` (HER future-goal offset ~ Geom(1-gamma);
-0.9 = the established default, mean 10-step goals; the paper's critic uses 0.99),
-`need_graph=false` (skip graph + the dense NxN `phi_dist` entirely -- baseline-only, for
-large `expert_N` tiers like `expert_1000` that would otherwise need an O(n^2) matrix;
-`variant=auxphi` refuses to run without it), and `run_tag` (suffix for hyperparameter
-variants so they get their own checkpoint/result files, e.g. `run_tag=_hg96`).
-
-### Scaling `auxphi` past the dense-matrix wall (`phi_mode=sparse`)
-
-The dense NxN `phi_dist` is what caps tier size: at `expert_1000`'s 124,479 landmarks it is
-62 GB as float32, and scipy's `dijkstra(indices=arange(n))` materialises its own float64
-copy (124 GB) before returning anything, so it OOMs rather than merely being slow.
-`phi_mode=sparse` (config/graph/actor.yaml) keeps the graph but skips the matrix:
-`actor_train.py` computes phi at *only* the HER pairs the aux loss actually reads, via
-`common.graph_lib.phi_for_pairs` (chunked bounded multi-source Dijkstra). This is exact,
-not an approximation -- HER pairs are same-episode, so a transition-edge path no longer than
-their step gap always exists, which both bounds the search radius and guarantees no pair is
-unreachable. `full_phi_dist_matrix` is also chunked now, so the dense path itself no longer
-OOMs at scale. `common.training.run_condition_resumable` (the Spearman-only B3 sweep path)
-still requires the dense matrix.
-
-### Two knobs from the Push-T underperformance investigation
-
-`aux_standardize` and `awr_normalize_adv` (both default **false** = exact historical
-behaviour, so no published Two-Room number moves). See
-`scripts/investigations/pusht_lowscore/` for the measurements that motivated them --
-in short, `pseudo_v` carries the graph's *behavioural* distance scale while IQL's expectile
-V learns the *optimal* cost-to-go, and those diverge exactly when the data is far from
-optimal.
-
-**The 15 remaining completed one-time investigations live under `scripts/investigations/`**,
-grouped by theme (moved 2026-09-02, verified zero remaining dependents outside the group
-first): `mixed_tier/` (the reward-shaping-on-noisy-data failure investigation --
-`tworoom_b3_mixed_diagnosis.py`, `_b1check.py`, `_distance_bins.py`, `_peak_probe.py`,
-`_fix.py`), `graph_scaling/` (`tworoom_graph_construction_bench.py`,
-`tworoom_edge_cap_sweep.py`, `tworoom_mechanism_probe.py`), `early_diagnostics/`
-(`tworoom_b1_graph_diagnostics.py`, `tworoom_b2_encoder_swap.py`), `misc/`
-(`tworoom_b3_multiseed.py`, `tworoom_distance_histograms.py`, `pilot_signals.py` -- the
-actual origin of this whole research line -- `diag_collapse.py`, `pusht_diag_collapse.py`).
-Each subfolder has an `__init__.py`; moved files' `sys.path.insert` was adjusted to still
-find `scripts/`'s main library files (now 3 `.parent`s up instead of 1, since they're 2
-levels deeper). One cross-dependency needed fixing at the time: `tworoom_b1_graph_
-diagnostics.py`'s `load_landmarks` is still imported by the active shims
-`tworoom_b3_convergence.py`/`tworoom_b3_datatiers.py`, now via
-`investigations.early_diagnostics.tworoom_b1_graph_diagnostics` -- if you ever move
-something new in or out of `investigations/`, grep for `from <filename> import` across all
-of `scripts/*.py` (not just other investigation scripts) before moving, the same way this
-move was checked.
-
-## Research scripts (`tworoom_*.py`, `pusht_*.py`) conventions
-
-- Full writeup, methodology, and results: `docs/graph-proposal/main.tex` (compile with `latexmk
-  -pdf -interaction=nonstopmode main.tex` from `docs/graph-proposal/`).
-- Each environment gets its own `<env>_b0_graph_gate.py` (checkpoint load, landmark encode,
-  calibration, graph construction, Spearman-vs-oracle gate check) and later
-  `<env>_b3_datatiers.py`/`<env>_b3_worker.py` (offline RL training tiers) — Two-Room's version is
-  the reference implementation; Push-T's is a direct port with documented deviations where
-  Two-Room's approach didn't transfer (see the B5 section of the doc).
-- Identification-edge construction should default to the k-capped FAISS-HNSW method
-  (`tworoom_graph_variants.build_id_edges_faiss_capped`, k=4), not the brute-force O(n²) scan —
-  this was a hard-won fix for a real scaling wall, confirmed to also *improve* quality on
-  Two-Room, not just enable scale. Do not reintroduce the brute-force scan for a new environment
-  without a specific reason.
-- The calibrated identification-edge threshold (rho_hat/eps² from one-step-displacement
-  correlation) is **not guaranteed to transfer** across environments — it failed outright on
-  Push-T (rho_hat statistically ≥ 1). Always sanity-check `eps2 > 0` after calibration before
-  trusting it; if it fails, fall back to the heuristic (uncalibrated) top-k construction by
-  passing `eps2=float("inf")` into the same capped-FAISS builder — no other code changes needed.
-- Offline RL training uses mode 2 (auxiliary regression toward a graph-derived pseudo-value),
-  not mode 3 (potential-based reward shaping) — mode 3 was tried first and found to mostly not
-  work (TD compounds reward-shaping noise); mode 2 is the established, reusable mechanism for any
-  new environment. `tworoom_b3_mixed_auxphi.run_condition_resumable` is written generically over
-  a `setup` dict and is reused unchanged across environments; only the `setup`-building code
-  (tier definitions, graph construction, oracle) needs to be written per environment.
-- Direct-SSH sweep orchestration (`ada_*.py` scripts) is used instead of SLURM `sbatch`/`srun`
-  arrays — a `subprocess.Popen` pool with an `N_PARALLEL` concurrency cap, `CUDA_VISIBLE_DEVICES`
-  cycled across `N_GPUS`, thread-limiting env vars, and skip-if-done via each combo's own
-  checkpoint `done` flag. Run these directly inside an existing interactive Ada allocation
-  (`adag`), not submitted as a separate job.
-- **Push-T's own generated caches (not just the dataset) can blow `/home2`'s 30GB quota too.**
-  `pusht_rollout_collector.py`'s per-tier rollout cache holds raw 224x224x3 pixel frames (up to
-  `n_episodes*250` of them for `mixed`/`mixed_large` — `mixed_large`'s alone is ~3.8GB), and
-  `pusht_b3_datatiers.py`'s per-tier `phi_dist` cache is a dense NxN float32 matrix
-  (`mixed_large`'s is ~4GB). These hit exactly this quota mid-sweep once already (`OSError:
-  [Errno 122] Disk quota exceeded`, home2 at 36GB/30GB). Both now take an env var override
-  (`PUSHT_ROLLOUT_CACHE_DIR`, `PUSHT_TIER_CACHE_DIR`) — set both to a compute-node-local
-  `/ssd_scratch` dir before running any Push-T sweep with `mixed`/`mixed_large` tiers involved,
-  same as `PUSHT_H5_PATH`:
-  ```bash
-  export PUSHT_TIER_CACHE_DIR=/ssd_scratch/mayaank.ashok/lewm_pusht_cache/tier_cache
-  export PUSHT_ROLLOUT_CACHE_DIR=/ssd_scratch/mayaank.ashok/lewm_pusht_cache/rollout_cache
-  ```
-  If quota is already blown, `outputs/b3_pusht/rollout_cache/*.npz` is safe to delete outright
-  (pure input cache, regenerates in ~1-2 min); `outputs/b3_pusht/tier_cache/*.npy` is expensive
-  to regenerate (`mixed_large`'s took ~4.4 min) so `mv` it to `/ssd_scratch` instead of deleting.
-- **The local dev machine has a recurring large-contiguous-allocation problem, not (necessarily)
-  Ada.** `np.stack`ing tens of thousands of frames, `IncrementalPCA` with a large `batch_size`,
-  and `scipy.sparse.csgraph.dijkstra`'s internal float64 all-pairs matrix (allocated at float64
-  regardless of what dtype the input graph or output cast uses — a ~30K-landmark tier needs
-  ~7.4GB just for that intermediate) have all hit `numpy._core._exceptions._ArrayMemoryError` on
-  this machine at sizes that should comfortably fit in reported free RAM. Don't take a local
-  failure at this specific error as evidence a large tier/landmark-count is infeasible in
-  general — validate correctness locally at a small, cheap size (e.g. override a noisy-episode
-  or landmark count for the check only) and confirm the real size on Ada, which has not shown
-  this failure mode.

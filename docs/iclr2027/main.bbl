@@ -1,0 +1,226 @@
+\begin{thebibliography}{33}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{ALPS authors}(2026)]{alps}
+{ALPS authors}.
+\newblock Laplacian representations for decision-time planning.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2026.
+\newblock verify authors; code at github.com/machado-research/ALPS.
+
+\bibitem[Assran et~al.(2025)]{vjepa2}
+Mahmoud Assran et~al.
+\newblock {V-JEPA 2}: Self-supervised video models enable understanding,
+  prediction and planning.
+\newblock \emph{arXiv preprint arXiv:2506.09985}, 2025.
+\newblock verify.
+
+\bibitem[Baek et~al.(2025)Baek, Park, Park, Oh, and Kim]{gas}
+Seungho Baek, Taegeon Park, Jongchan Park, Seungjun Oh, and Yusung Kim.
+\newblock Graph-assisted stitching for offline hierarchical reinforcement
+  learning.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2025.
+\newblock arXiv:2506.07744.
+
+\bibitem[Bai and Xiong(2026)]{tdjepa}
+Jiaxin Bai and Jiaxuan Xiong.
+\newblock Temporal-distance {JEPA}: Plan-aware representation learning for
+  latent world model predictive control.
+\newblock \emph{arXiv preprint arXiv:2607.25337}, 2026.
+
+\bibitem[Caselli et~al.(2026)Caselli, Massafra, Punzo, Sardo, Pantelidis, and
+  Bhethanabhotla]{hilewm}
+Caselli, Massafra, Punzo, Lo~Sardo, Pantelidis, and Bhethanabhotla.
+\newblock Mind the gap: Promises and pitfalls of hierarchical planning in
+  {LeWorldModel}.
+\newblock \emph{arXiv preprint arXiv:2607.12547}, 2026.
+\newblock verify author first names.
+
+\bibitem[Cheng et~al.(2026)Cheng, Zhang, and Wang]{sage}
+Letian Cheng, Qi~Zhang, and Yisen Wang.
+\newblock {SAGE}: Subgoal-conditioned action generation for latent world model
+  planning.
+\newblock \emph{arXiv preprint arXiv:2607.17973}, 2026.
+
+\bibitem[Destrade et~al.(2026)Destrade, Bounou, Le~Lidec, Ponce, and
+  LeCun]{valueguided}
+Matthieu Destrade, Oumayma Bounou, Quentin Le~Lidec, Jean Ponce, and Yann
+  LeCun.
+\newblock Value-guided action planning with {JEPA} world models.
+\newblock \emph{arXiv preprint arXiv:2601.00844}, 2026.
+\newblock World Modeling Workshop 2026.
+
+\bibitem[Emmons et~al.(2020)Emmons, Jain, Laskin, Kurutach, Abbeel, and
+  Pathak]{sgm}
+Scott Emmons, Ajay Jain, Michael Laskin, Thanard Kurutach, Pieter Abbeel, and
+  Deepak Pathak.
+\newblock Sparse graphical memory for robust planning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2020.
+
+\bibitem[Eysenbach et~al.(2019)Eysenbach, Salakhutdinov, and Levine]{sorb}
+Benjamin Eysenbach, Ruslan Salakhutdinov, and Sergey Levine.
+\newblock Search on the replay buffer: Bridging planning and reinforcement
+  learning.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2019.
+
+\bibitem[{GC terminal value authors}(2024)]{gcterminal}
+{GC terminal value authors}.
+\newblock Goal-conditioned terminal value estimation for real-time and
+  multi-task model predictive control.
+\newblock \emph{arXiv preprint}, 2024.
+\newblock verify: locate the arXiv id.
+
+\bibitem[Hafner et~al.(2019)Hafner, Lillicrap, Fischer, Villegas, Ha, Lee, and
+  Davidson]{planet}
+Danijar Hafner, Timothy Lillicrap, Ian Fischer, Ruben Villegas, David Ha,
+  Honglak Lee, and James Davidson.
+\newblock Learning latent dynamics for planning from pixels.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2019.
+
+\bibitem[Hafner et~al.(2022)Hafner, Lee, Fischer, and Abbeel]{director}
+Danijar Hafner, Kuang-Huei Lee, Ian Fischer, and Pieter Abbeel.
+\newblock Deep hierarchical planning from pixels.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022.
+
+\bibitem[Hafner et~al.(2023)Hafner, Pasukonis, Ba, and Lillicrap]{dreamerv3}
+Danijar Hafner, Jurgis Pasukonis, Jimmy Ba, and Timothy Lillicrap.
+\newblock Mastering diverse domains through world models.
+\newblock \emph{arXiv preprint arXiv:2301.04104}, 2023.
+
+\bibitem[Hansen et~al.(2022)Hansen, Wang, and Su]{tdmpc}
+Nicklas Hansen, Xiaolong Wang, and Hao Su.
+\newblock Temporal difference learning for model predictive control.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2022.
+
+\bibitem[Hansen et~al.(2024)Hansen, Su, and Wang]{tdmpc2}
+Nicklas Hansen, Hao Su, and Xiaolong Wang.
+\newblock {TD-MPC2}: Scalable, robust world models for continuous control.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2024.
+
+\bibitem[Hu et~al.(2026)Hu, Zheng, and Wang]{scale}
+Jiaming Hu, Yan Zheng, and Tian Wang.
+\newblock {SCALE}: State-calibrated latent embeddings for {JEPA} planning in
+  the right geometry.
+\newblock \emph{arXiv preprint arXiv:2608.16287}, 2026.
+
+\bibitem[Li et~al.(2026{\natexlab{a}})Li, Wang, Qiu, Xiong, and Liu]{trm}
+Liangyu Li, Shengzhi Wang, Libin Qiu, Mingliang Xiong, and Qingwen Liu.
+\newblock Beyond {Euclidean} proximity: Repairing latent world models with
+  horizon-matched trajectory reachability metrics.
+\newblock \emph{arXiv preprint arXiv:2605.22164}, 2026{\natexlab{a}}.
+
+\bibitem[Li et~al.(2026{\natexlab{b}})Li, Li, Maeda, Ogawa, and
+  Haseyama]{rcaux}
+Wenyuan Li, Guang Li, Keisuke Maeda, Takahiro Ogawa, and Miki Haseyama.
+\newblock Predictive but not plannable: {RC-aux} for latent world models.
+\newblock \emph{arXiv preprint arXiv:2605.07278}, 2026{\natexlab{b}}.
+
+\bibitem[Lowrey et~al.(2019)Lowrey, Rajeswaran, Kakade, Todorov, and
+  Mordatch]{polo}
+Kendall Lowrey, Aravind Rajeswaran, Sham Kakade, Emanuel Todorov, and Igor
+  Mordatch.
+\newblock Plan online, learn offline: Efficient learning and exploration via
+  model-based control.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2019.
+
+\bibitem[Maes et~al.(2026)Maes, Le~Lidec, Scieur, LeCun, and Balestriero]{lewm}
+Lucas Maes, Quentin Le~Lidec, Damien Scieur, Yann LeCun, and Randall
+  Balestriero.
+\newblock {LeWorldModel}: Stable end-to-end joint-embedding predictive
+  architecture from pixels.
+\newblock \emph{arXiv preprint arXiv:2603.19312}, 2026.
+
+\bibitem[Masip et~al.(2026)Masip, Swinnen, Hu, Detry, and Tuytelaars]{ffjepa}
+Sergi Masip, Jonathan Swinnen, Yutong Hu, Renaud Detry, and Tinne Tuytelaars.
+\newblock {FF-JEPA}: Long-horizon planning in world models with latent
+  planners.
+\newblock \emph{arXiv preprint arXiv:2606.09311}, 2026.
+
+\bibitem[Opryshko et~al.(2025)Opryshko, Quan, Voelcker, Du, and
+  Gilitschenski]{ttgs}
+Evgenii Opryshko, Junwei Quan, Claas Voelcker, Yilun Du, and Igor
+  Gilitschenski.
+\newblock Test-time graph search for goal-conditioned reinforcement learning.
+\newblock \emph{arXiv preprint arXiv:2510.07257}, 2025.
+
+\bibitem[Park et~al.(2024)Park, Kreiman, and Levine]{hilp}
+Seohong Park, Tobias Kreiman, and Sergey Levine.
+\newblock Foundation policies with {Hilbert} representations.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024.
+
+\bibitem[Park et~al.(2025)Park, Frans, Eysenbach, and Levine]{ogbench}
+Seohong Park, Kevin Frans, Benjamin Eysenbach, and Sergey Levine.
+\newblock {OGBench}: Benchmarking offline goal-conditioned {RL}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2025.
+
+\bibitem[Savinov et~al.(2018)Savinov, Dosovitskiy, and Koltun]{sptm}
+Nikolay Savinov, Alexey Dosovitskiy, and Vladlen Koltun.
+\newblock Semi-parametric topological memory for navigation.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}, 2018.
+
+\bibitem[Sobal et~al.(2025)Sobal, Zhang, Cho, Balestriero, Rodriguez, and
+  LeCun]{pldm}
+Vlad Sobal, Wancong Zhang, Kynghyun Cho, Randall Balestriero, Tim G.~J.
+  Rodriguez, and Yann LeCun.
+\newblock Learning from reward-free offline data: A case for planning with
+  latent dynamics models.
+\newblock \emph{arXiv preprint arXiv:2502.14819}, 2025.
+\newblock verify author list.
+
+\bibitem[{stable-worldmodel authors}(2026)]{stableworldmodel}
+{stable-worldmodel authors}.
+\newblock stable-worldmodel: A platform for reproducible world modeling
+  research and evaluation.
+\newblock \emph{arXiv preprint arXiv:2605.21800}, 2026.
+\newblock verify authors.
+
+\bibitem[{Temporal straightening authors}(2026)]{straightening}
+{Temporal straightening authors}.
+\newblock Temporal straightening for latent planning.
+\newblock \emph{arXiv preprint arXiv:2603.12231}, 2026.
+\newblock verify authors.
+
+\bibitem[Terver et~al.(2025)Terver, Yang, Ponce, Bardes, and
+  LeCun]{jepawm-study}
+Basile Terver, Tsung-Yen Yang, Jean Ponce, Adrien Bardes, and Yann LeCun.
+\newblock What drives success in physical planning with joint-embedding
+  predictive world models?
+\newblock \emph{arXiv preprint arXiv:2512.24497}, 2025.
+
+\bibitem[Wang et~al.(2026)Wang, Rui, Zuo, Feng, and Li]{dalewm}
+Jiawei Wang, Ke~Rui, Yushen Zuo, Yichun Feng, and Minglei Li.
+\newblock Decision-metric alignment in latent world models: Diagnostics and
+  action-conditioned objectives for {MPC} planning.
+\newblock \emph{arXiv preprint arXiv:2608.18746}, 2026.
+
+\bibitem[Wang et~al.(2023)Wang, Torralba, Isola, and Zhang]{qrl}
+Tongzhou Wang, Antonio Torralba, Phillip Isola, and Amy Zhang.
+\newblock Optimal goal-reaching reinforcement learning via quasimetric
+  learning.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2023.
+
+\bibitem[Zhang et~al.(2026)Zhang, Terver, Zholus, Chitnis, Sutaria, Assran,
+  Balestriero, Bar, Bardes, LeCun, and Ballas]{hwm}
+Wancong Zhang, Basile Terver, Artem Zholus, Soham Chitnis, Harsh Sutaria, Mido
+  Assran, Randall Balestriero, Amir Bar, Adrien Bardes, Yann LeCun, and Nicolas
+  Ballas.
+\newblock Hierarchical planning with latent world models.
+\newblock \emph{arXiv preprint arXiv:2604.03208}, 2026.
+
+\bibitem[Zhou et~al.(2024)Zhou, Pan, LeCun, and Pinto]{dinowm}
+Gaoyue Zhou, Hengkai Pan, Yann LeCun, and Lerrel Pinto.
+\newblock {DINO-WM}: World models on pre-trained visual features enable
+  zero-shot planning.
+\newblock \emph{arXiv preprint arXiv:2411.04983}, 2024.
+
+\end{thebibliography}

@@ -1,0 +1,29 @@
+"""Small neural-network and evaluation helpers shared by active diagnostics."""
+
+import numpy as np
+import torch.nn as nn
+
+
+class MLP(nn.Module):
+    def __init__(self, in_dim, hidden, out_dim=1):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden), nn.ReLU(),
+            nn.Linear(hidden, hidden), nn.ReLU(),
+            nn.Linear(hidden, out_dim),
+        )
+
+    def forward(self, x):
+        return self.net(x)
+
+
+def precompute_eval_set(row_pool, proprio, true_dist_oracle, n_pairs, seed):
+    """Sample fixed state-goal pairs and retain those with finite oracle distance."""
+    rng = np.random.default_rng(seed)
+    ei = rng.choice(row_pool, size=n_pairs, replace=True)
+    ej = rng.choice(row_pool, size=n_pairs, replace=True)
+    ei, ej = ei[ei != ej], ej[ei != ej]
+    uniq_src, src_row = np.unique(ei, return_inverse=True)
+    true_d = true_dist_oracle(proprio[uniq_src], proprio[ej])[src_row, np.arange(len(ei))]
+    finite = np.isfinite(true_d)
+    return ei[finite], ej[finite], true_d[finite]

@@ -1,5 +1,63 @@
 # Running LEWM on Ada (IIIT-H cluster)
 
+## Active graph-assisted CEM workflow (2026-09-17)
+
+Current research is graph-assisted planning in LeWM CEM. IQL/GCIQL actor and graph-shaping
+sweeps below are historical. Use `AGENTS.md` and `docs/gas-mpc/main.tex` for current scope.
+Code: `/home2/mayaank.ashok/lewm_research/`; activate
+`source /home2/mayaank.ashok/.venv/bin/activate`. Sync edited files before Ada runs (no git pull).
+Stage large datasets on compute-node `/ssd_scratch`, pulling compressed masters from login-node
+`/share1`; set `PUSHT_H5_PATH` to the staged Push-T dataset.
+
+Prepare with `scripts/gas_mpc_prepare.py`; evaluate with `scripts/gas_mpc_eval.py`.
+Inspect queues in `scripts/gas_mpc_run.sh` or `scripts/ada_gas_mpc*.sh` before launching.
+`GAS_MPC_ENV` selects the environment; `GAS_MPC_OUT` overrides the output root. Default roots:
+`outputs/pusht/` (Push-T), `outputs/<env>/` (other environments).
+Keep large assets within quota and back up scratch assets before the allocation ends.
+Node changes require restaging data and restoring/rebuilding scratch-local planning assets.
+Old tier/rollout-cache commands below apply to historical actor experiments.
+Regenerate current tables with `scripts/gas_mpc_report.py`.
+
+Evaluation preferences (2026-09-19): call the former configuration B **OUR method**.
+OUR is `subgoal_tdr` with a final switch to goal L2 at one calibrated lookahead,
+budget-capped expected-hitting-time critic cost, beta 1, and std composition.
+Default evaluation is the **first 50 tasks of each fixed 200-task `task200u` pool**,
+for CEM/learned-asset seeds 0--4 and protocols same25, same50, same100, cross.
+Do not silently increase this default to 200. `scripts/ada_planning_pipeline.py`
+implements the resumable Push-T/Reacher/Cube workflow and defaults to dry-run;
+`--run` executes missing work, `--n` explicitly changes the evaluated prefix.
+Superseded assets are in `outputs/<env>/bak/superseded_2026-09-19/` on Ada and locally.
+Corrected Push-T critics seeds 1--4 completed 60k steps; clean seed 0 remains to train.
+Pipeline rehearsal: `ada_planning_pipeline.py --smoke` executes preparation,
+five short TDR/critic trainings and L2/OUR evaluations for all four protocols in
+isolated `/ssd_scratch/mayaank.ashok/pipeline_smoke/<run>/<env>/` directories.
+Fixtures use only main-training episodes. Smoke evaluations have an explicit
+`smoke_test` marker, reduced task count/budget and separate paths; they must
+never count as preparation/training/evaluation success in the main run.
+2026-09-19 rehearsal passed on gnode003: five two-step TDRs and critics per
+environment, plus all 40 L2/OUR seed/protocol combinations per environment.
+The same evaluator is batched in smoke mode to avoid repeated imports; the
+actual Bash runner is exercised for both methods. Main mode uses the Bash
+runner for every job. Verified normal validation rejects every smoke result
+and every short critic; smoke mode rejects the canonical main output path.
+Main dry-run still schedules 11 critics and 120 first-50-task evaluations.
+
+Strict final-holdout isolation (2026-09-18): `scripts/ada_prepare_trainonly.sh` is rebuilding
+training-only caches, TDR diagnostics, features, gap calibration and graphs for Push-T,
+Reacher and Cube. It reuses the verified TDR weights and archives earlier diagnostic tables
+and preparation assets. It does not restart critic training. Active preparation loads
+`cache_train.npz`; `psi_train_s*.npy` has no final-evaluation frames. Training caches are
+symlinked from `/ssd_scratch/mayaank.ashok/planning_trainonly/<env>/` and require rebuilding
+after a scratch purge/node change. Frozen LeWM normalization is inherited from existing
+aggregate statistics; no evaluation-episode actions are read to recompute it. Earlier
+evaluation tables retain their original protocol and calibration and do not establish
+results for this stricter pipeline.
+
+## Earlier base-pipeline and actor setup notes
+
+The remaining sections retain earlier records; their actor sweeps, old code paths, and
+deployment statements do not define the current CEM workflow.
+
 ## Storage layout
 
 | What | Where |
@@ -176,7 +234,7 @@ wsl rsync -avz --progress /mnt/c/Mayaank/IIITH/CSTAR/LEWM/docs/ mayaank.ashok@ad
 wsl rsync -avz --progress /mnt/c/Mayaank/IIITH/CSTAR/LEWM/notes.md /mnt/c/Mayaank/IIITH/CSTAR/LEWM/requirements-ada.txt mayaank.ashok@ada.iiit.ac.in:/share1/mayaank.ashok/lewm/
 ```
 
-## Two-Room research scripts (B0-B4 + actor sweep) -- separate from the train.py/pusht setup above
+## Historical Two-Room research scripts (B0-B4 + actor sweep) -- separate from the train.py/pusht setup above
 
 The `tworoom_*.py` scripts (latent-graph analysis, GCIQL/actor training, live-rollout eval)
 are a different codepath from `train.py` above -- own data loading (`H5_PATH`/`CKPT_DIR` in
@@ -273,4 +331,4 @@ pip install ...
    ```
 3. Set up the Python env in `/home2/mayaank.ashok/lewm_research` per the "Python environment" section above (module load, venv, `pip install -r requirements-ada.txt`, torch from the matching CUDA wheel index).
 4. Run `scripts/ada_warm_caches.py` ONCE, sequentially (not as an array job) -- builds landmarks/graph/phi_dist for all 6 tiers up front. Needed because `scripts/ada_actor_sweep.sbatch` runs 60 array tasks (6 tiers x 2 variants x 5 seeds) that could land on different nodes at nearly the same time; letting each lazily build its own tier's cache on first touch would race multiple concurrent writers against the same `tier_cache/*.npy` file (`np.save` isn't atomic the way the checkpoint writer is). Building each tier's cache once, first, means every array task after that just does a safe read.
-5. Submit the sweep: `sbatch scripts/ada_actor_sweep.sbatch`, then `scripts/aggregate_actor_sweep.py` to pull results together (safe to run mid-sweep as a progress check too). 
+5. Submit the sweep: `sbatch scripts/ada_actor_sweep.sbatch`, then `scripts/aggregate_actor_sweep.py` to pull results together (safe to run mid-sweep as a progress check too).

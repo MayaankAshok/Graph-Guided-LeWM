@@ -3,6 +3,13 @@ defaults:
   - solver: cem
   - _self_
 
+hydra:
+  run:
+    dir: outputs/cube/hydra_runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/cube/hydra_runs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+
 world:
   env_name: swm/OGBCube-v0
   num_envs: ${eval.num_eval}

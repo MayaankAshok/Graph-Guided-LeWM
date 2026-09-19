@@ -1,0 +1,314 @@
+\subsection*{Per-seed pair sets (50 pairs per seed)}
+All tables in this block: each seed draws its own 50 (start, goal) pairs; within a seed every configuration sees the same pairs. Cells are success rates in \%, mean $\pm$ sd over the seeds tested (per-seed counts and values are in the appendix). Default settings unless a row says otherwise: lookahead 13.7 TDR units, $H_{\mathrm{TD}}=8$, TE 0.9, open-loop 25 steps, no retrieval.
+
+\begin{table}[H]
+\centering\small
+\caption{L2.}
+\label{tab:gas-mpc-l2-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 88.0 $\pm$ 0.0 & 38.7 $\pm$ 8.2 & 18.0 $\pm$ 4.0 & 9.6 $\pm$ 1.5 \\
+retrieval & -- & 50.0 $\pm$ 0.0 & -- & 10.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{L2 + critic.}
+\label{tab:gas-mpc-l2-crit-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+$\beta$=1 & -- & 50.0 $\pm$ 0.0 & -- & 12.0 $\pm$ 0.0 \\
+$\beta$=2 & -- & -- & -- & 18.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{TDR (no graph).}
+\label{tab:gas-mpc-tdr-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 84.0 $\pm$ 0.0 & 48.0 $\pm$ 0.0 & 28.0 $\pm$ 0.0 & 10.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{CTG (terminal).}
+\label{tab:gas-mpc-ctg-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 84.0 $\pm$ 0.0 & 50.0 $\pm$ 0.0 & 28.0 $\pm$ 0.0 & 10.0 $\pm$ 0.0 \\
+retrieval & -- & -- & -- & 14.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal.}
+\label{tab:gas-mpc-subgoal-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 88.0 $\pm$ 0.0 & 56.0 $\pm$ 0.0 & -- & 16.0 $\pm$ 0.0 \\
+retrieval & -- & -- & -- & 20.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal + critic.}
+\label{tab:gas-mpc-subgoal-crit-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+$\beta$=1 & -- & -- & -- & 26.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal\_tdr.}
+\label{tab:gas-mpc-subgoal_tdr-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+lookahead=8 & -- & 50.0 $\pm$ 0.0 & -- & -- \\
+replan=1 & -- & -- & -- & 14.0 $\pm$ 0.0 \\
+replan=2 & -- & 36.0 $\pm$ 0.0 & -- & 18.0 $\pm$ 0.0 \\
+replan=2, retrieval & -- & -- & -- & 6.0 $\pm$ 0.0 \\
+default & 84.0 $\pm$ 0.0 & 55.3 $\pm$ 2.5 & 30.0 $\pm$ 0.0 & 10.0 $\pm$ 1.6 \\
+retrieval & -- & 54.0 $\pm$ 0.0 & -- & 24.0 $\pm$ 0.0 \\
+lookahead=20 & -- & 56.0 $\pm$ 0.0 & -- & -- \\
+$H_{\mathrm{TD}}$=12 & -- & 64.0 $\pm$ 0.0 & -- & 8.0 $\pm$ 0.0 \\
+$H_{\mathrm{TD}}$=16 & -- & 50.0 $\pm$ 0.0 & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal\_tdr + critic.}
+\label{tab:gas-mpc-subgoal_tdr-crit-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+$\beta$=0.5 & -- & -- & -- & 14.0 $\pm$ 0.0 \\
+$\beta$=1 & -- & 72.0 $\pm$ 0.0 & 58.0 $\pm$ 0.0 & 28.0 $\pm$ 5.5 \\
+retrieval, $\beta$=1 & -- & 64.0 $\pm$ 0.0 & -- & 32.4 $\pm$ 12.9 \\
+$H_{\mathrm{TD}}$=12, $\beta$=1 & -- & 56.0 $\pm$ 0.0 & -- & 22.0 $\pm$ 0.0 \\
+TE=0.999, $\beta$=2 & -- & -- & -- & 24.0 $\pm$ 0.0 \\
+TE=0.99, $\beta$=2 & -- & -- & -- & 22.0 $\pm$ 0.0 \\
+$\beta$=2 & -- & 66.7 $\pm$ 7.5 & 46.0 $\pm$ 6.0 & 33.6 $\pm$ 5.1 \\
+retrieval, $\beta$=2 & -- & -- & -- & 30.0 $\pm$ 0.0 \\
+$\beta$=4 & -- & 64.0 $\pm$ 0.0 & 50.0 $\pm$ 0.0 & 27.2 $\pm$ 9.0 \\
+retrieval, $\beta$=4 & -- & -- & -- & 30.0 $\pm$ 2.8 \\
+$\beta$=8 & -- & -- & -- & 25.6 $\pm$ 5.6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Direction.}
+\label{tab:gas-mpc-dir-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 78.0 $\pm$ 0.0 & 26.0 $\pm$ 0.0 & -- & 8.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Waypoint path.}
+\label{tab:gas-mpc-path-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+variant & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+default & 86.0 $\pm$ 0.0 & 42.0 $\pm$ 0.0 & -- & 6.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection*{Per-seed pair sets (100 pairs per seed)}
+All tables in this block: each seed draws its own 100 (start, goal) pairs; within a seed every configuration sees the same pairs. Cells are success rates in \%, mean $\pm$ sd over the seeds tested (per-seed counts and values are in the appendix). Default settings unless a row says otherwise: lookahead 13.7 TDR units, $H_{\mathrm{TD}}=8$, TE 0.9, open-loop 25 steps, no retrieval.
+
+\begin{table}[H]
+\centering\small
+\caption{L2.}
+\label{tab:gas-mpc-l2-perseed-n100}
+\begin{tabular}{lr}
+\toprule
+variant & cross-ep \\
+\midrule
+default & 10.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{subgoal\_tdr + critic.}
+\label{tab:gas-mpc-subgoal_tdr-crit-perseed-n100}
+\begin{tabular}{lr}
+\toprule
+variant & cross-ep \\
+\midrule
+retrieval, $\beta$=1 & 36.0 $\pm$ 0.0 \\
+$\beta$=4 & 36.0 $\pm$ 0.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\clearpage
+\subsection*{Per-seed results}
+Every test in the blocks above, broken down by seed.
+
+\begin{table}[H]
+\centering\small
+\caption{Per-seed pair sets (50 pairs), same-ep 25, per seed, and pooled over the seeds each row has.}
+\label{tab:gas-mpc-pooled-same25-perseed-n50}
+\begin{tabular}{lrr}
+\toprule
+configuration & s0 & pooled \\
+\midrule
+l2 & 88 & 88.0 \\
+tdr & 84 & 84.0 \\
+ctg\_htd8\_te0.9 & 84 & 84.0 \\
+subgoal\_la13.7\_th8\_htd8\_te0.9 & 88 & 88.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9 & 84 & 84.0 \\
+dir\_la13.7\_th8\_htd8\_te0.9 & 78 & 78.0 \\
+path\_sugap5\_th8\_htd8\_te0.9 & 86 & 86.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Per-seed pair sets (50 pairs), same-ep 50, per seed, and pooled over the seeds each row has.}
+\label{tab:gas-mpc-pooled-same50-perseed-n50}
+\begin{tabular}{lrrrr}
+\toprule
+configuration & s0 & s1 & s2 & pooled \\
+\midrule
+l2 & 40 & 28 & 48 & 38.7 \\
+l2\_ret & 50 & -- & -- & 50.0 \\
+l2\_crit1 & 50 & -- & -- & 50.0 \\
+tdr & 48 & -- & -- & 48.0 \\
+ctg\_htd8\_te0.9 & 50 & -- & -- & 50.0 \\
+subgoal\_la13.7\_th8\_htd8\_te0.9 & 56 & -- & -- & 56.0 \\
+subgoal\_tdr\_la8\_th8\_htd8\_te0.9 & 50 & -- & -- & 50.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_rh2 & 36 & -- & -- & 36.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9 & 58 & 52 & 56 & 55.3 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret & 54 & -- & -- & 54.0 \\
+subgoal\_tdr\_la20\_th8\_htd8\_te0.9 & 56 & -- & -- & 56.0 \\
+subgoal\_tdr\_la13.7\_th12\_htd12\_te0.9 & 64 & -- & -- & 64.0 \\
+subgoal\_tdr\_la13.7\_th16\_htd16\_te0.9 & 50 & -- & -- & 50.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit1 & 72 & -- & -- & 72.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret\_crit1 & 64 & -- & -- & 64.0 \\
+subgoal\_tdr\_la13.7\_th12\_htd12\_te0.9\_crit1 & 56 & -- & -- & 56.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit2 & 72 & 72 & 56 & 66.7 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit4 & 64 & -- & -- & 64.0 \\
+dir\_la13.7\_th8\_htd8\_te0.9 & 26 & -- & -- & 26.0 \\
+path\_sugap5\_th8\_htd8\_te0.9 & 42 & -- & -- & 42.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Per-seed pair sets (50 pairs), same-ep 100, per seed, and pooled over the seeds each row has.}
+\label{tab:gas-mpc-pooled-same100-perseed-n50}
+\begin{tabular}{lrrr}
+\toprule
+configuration & s0 & s1 & pooled \\
+\midrule
+l2 & 22 & 14 & 18.0 \\
+tdr & 28 & -- & 28.0 \\
+ctg\_htd8\_te0.9 & 28 & -- & 28.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9 & 30 & -- & 30.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit1 & 58 & -- & 58.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit2 & 52 & 40 & 46.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit4 & 50 & -- & 50.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Per-seed pair sets (50 pairs), cross-ep, per seed, and pooled over the seeds each row has.}
+\label{tab:gas-mpc-pooled-cross-perseed-n50}
+\begin{tabular}{lrrrrrr}
+\toprule
+configuration & s0 & s1 & s2 & s3 & s4 & pooled \\
+\midrule
+l2 & 8 & 12 & 10 & 8 & 10 & 9.6 \\
+l2\_ret & 10 & -- & -- & -- & -- & 10.0 \\
+l2\_crit1 & 12 & -- & -- & -- & -- & 12.0 \\
+l2\_crit2 & 18 & -- & -- & -- & -- & 18.0 \\
+tdr & 10 & -- & -- & -- & -- & 10.0 \\
+ctg\_htd8\_te0.9 & 10 & -- & -- & -- & -- & 10.0 \\
+ctg\_htd8\_te0.9\_ret & 14 & -- & -- & -- & -- & 14.0 \\
+subgoal\_la13.7\_th8\_htd8\_te0.9 & 16 & -- & -- & -- & -- & 16.0 \\
+subgoal\_la13.7\_th8\_htd8\_te0.9\_ret & 20 & -- & -- & -- & -- & 20.0 \\
+subgoal\_la13.7\_th8\_htd8\_te0.9\_crit1 & 26 & -- & -- & -- & -- & 26.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_rh1 & 14 & -- & -- & -- & -- & 14.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_rh2 & 18 & -- & -- & -- & -- & 18.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_rh2\_ret & 6 & -- & -- & -- & -- & 6.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9 & 10 & 12 & 8 & -- & -- & 10.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret & 24 & -- & -- & -- & -- & 24.0 \\
+subgoal\_tdr\_la13.7\_th12\_htd12\_te0.9 & 8 & -- & -- & -- & -- & 8.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit0.5 & 14 & -- & -- & -- & -- & 14.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit1 & 26 & 36 & 20 & 26 & 32 & 28.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret\_crit1 & 44 & 30 & 22 & 50 & 16 & 32.4 \\
+subgoal\_tdr\_la13.7\_th12\_htd12\_te0.9\_crit1 & 22 & -- & -- & -- & -- & 22.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.999\_crit2 & -- & -- & 24 & -- & -- & 24.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.99\_crit2 & -- & -- & 22 & -- & -- & 22.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit2 & 38 & 40 & 26 & 34 & 30 & 33.6 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret\_crit2 & 30 & -- & -- & -- & -- & 30.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit4 & 44 & 28 & 18 & 22 & 24 & 27.2 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret\_crit4 & 34 & 28 & 28 & -- & -- & 30.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit8 & 32 & 24 & 18 & 32 & 22 & 25.6 \\
+dir\_la13.7\_th8\_htd8\_te0.9 & 8 & -- & -- & -- & -- & 8.0 \\
+path\_sugap5\_th8\_htd8\_te0.9 & 6 & -- & -- & -- & -- & 6.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Per-seed pair sets (100 pairs), cross-ep, per seed, and pooled over the seeds each row has.}
+\label{tab:gas-mpc-pooled-cross-perseed-n100}
+\begin{tabular}{lrr}
+\toprule
+configuration & s0 & pooled \\
+\midrule
+l2 & 10 & 10.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_ret\_crit1 & 36 & 36.0 \\
+subgoal\_tdr\_la13.7\_th8\_htd8\_te0.9\_crit4 & 36 & 36.0 \\
+\bottomrule
+\end{tabular}
+\end{table}

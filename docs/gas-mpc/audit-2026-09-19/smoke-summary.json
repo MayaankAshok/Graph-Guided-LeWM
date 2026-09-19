@@ -1,0 +1,30 @@
+{
+  "smoke_test": true,
+  "main_eligible": false,
+  "environments": {
+    "pusht": {
+      "status": "passed",
+      "tdr_seeds": 5,
+      "critic_seeds": 5,
+      "l2_evals": 20,
+      "our_evals": 20,
+      "main_result_validation_rejected_all_smoke_results": true
+    },
+    "reacher": {
+      "status": "passed",
+      "tdr_seeds": 5,
+      "critic_seeds": 5,
+      "l2_evals": 20,
+      "our_evals": 20,
+      "main_result_validation_rejected_all_smoke_results": true
+    },
+    "cube": {
+      "status": "passed",
+      "tdr_seeds": 5,
+      "critic_seeds": 5,
+      "l2_evals": 20,
+      "our_evals": 20,
+      "main_result_validation_rejected_all_smoke_results": true
+    }
+  }
+}
