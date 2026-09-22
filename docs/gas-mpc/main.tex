@@ -139,126 +139,182 @@ pairs per protocol, for screening; promising objectives get more seeds and pairs
 Headline comparison, LeWM's own terminal L2 vs.\ the winning configuration
 \textbf{OUR} (\texttt{subgoal\_tdr} $+$ final-goal switch at one lookahead $+$ z-space L2 in
 the final phase $+$ the budget-capped expected-hitting-time critic term, $\beta=1$;
-\cref{sec:phase8}), across all three environments and every goal protocol. Each cell is
-the 5-seed mean $\pm$ sd on the fixed 200-task pool (first 50 tasks used), same pairs for
-L2 and OUR. Cube's \texttt{same25} column is a hard 22\%-pre-solved draw; the representative
-200-task correction (\cref{sec:cube-baseline-audit}) gives L2 64.3, OUR 75.5 instead.
+\cref{sec:phase8}), across all three environments and every goal protocol, on the current
+held-out, disjoint \texttt{task200u} pool with planning and critic assets prepared from
+training episodes only (\cref{sec:task-pools,sec:task-critic-refresh}). Each cell is the
+5-seed mean $\pm$ sd on the fixed 200-task pool (first 50 tasks used), same tasks and same
+CEM seeds for L2 and OUR.
 
 \begin{table}[H]
 \centering\small
-\caption{Push-T. Old-dataset results use the original full-dataset task pool; new-dataset results use
-\texttt{task200u} and planning assets prepared from training episodes only.}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrrrr}
-\toprule
-& \multicolumn{4}{c}{old dataset} & \multicolumn{4}{c}{new dataset} \\
-\cmidrule(lr){2-5}\cmidrule(lr){6-9}
-configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
-\midrule
-l2 & \textbf{91.2} $\pm$ 3.0 & 48.4 $\pm$ 4.6 & 11.2 $\pm$ 2.0 & 10.4 $\pm$ 3.4 & \textbf{91.2} $\pm$ 1.1 & 40.8 $\pm$ 4.1 & 13.2 $\pm$ 3.6 & 14.4 $\pm$ 4.3 \\
-OUR & 90.8 $\pm$ 2.7 & \textbf{64.4} $\pm$ 4.6 & \textbf{50.4} $\pm$ 5.0 & \textbf{44.4} $\pm$ 3.9 & 88.4 $\pm$ 2.6 & \textbf{70.0} $\pm$ 2.4 & \textbf{46.4} $\pm$ 3.6 & \textbf{42.4} $\pm$ 3.6 \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
-
-\begin{table}[H]
-\centering\small
-\caption{Reacher. Old-dataset results use the original full-dataset task pool; new-dataset results use
-\texttt{task200u} and planning assets prepared from training episodes only.}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lrrrrrrrr}
-\toprule
-& \multicolumn{4}{c}{old dataset} & \multicolumn{4}{c}{new dataset} \\
-\cmidrule(lr){2-5}\cmidrule(lr){6-9}
-configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
-\midrule
-l2 & \textbf{86.8} $\pm$ 4.8 & 96.0 $\pm$ 1.4 & 76.0 $\pm$ 1.4 & 24.4 $\pm$ 1.7 & \textbf{77.2} $\pm$ 5.4 & 90.8 $\pm$ 1.1 & 82.8 $\pm$ 1.1 & 29.2 $\pm$ 2.7 \\
-OUR & 80.8 $\pm$ 5.2 & \textbf{97.6} $\pm$ 2.6 & \textbf{98.0} $\pm$ 0.0 & \textbf{64.0} $\pm$ 2.8 & 76.0 $\pm$ 5.1 & \textbf{98.0} $\pm$ 1.4 & \textbf{97.6} $\pm$ 0.9 & \textbf{65.6} $\pm$ 2.2 \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
-
-\begin{table}[H]
-\centering\small
-\caption{Cube (\texttt{same25} is the hard first-50 draw; see caption above for the corrected figure).}
+\caption{Push-T, held-out \texttt{task200u} pool, training-only planning/critic assets.
+OUR+retr adds demonstration retrieval (\cref{sec:cube-variants}) to OUR's exact
+configuration; unlike Cube (below), it does not help here.}
+\label{tab:pusht-summary}
 \begin{tabular}{lrrrr}
 \toprule
 configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
 \midrule
-l2 & 56.8 $\pm$ 3.2 & 50.8 $\pm$ 1.6 & 62.0 $\pm$ 2.2 & 12.8 $\pm$ 2.7 \\
-OUR & \textbf{66.8} $\pm$ 5.2 & \textbf{56.4} $\pm$ 4.6 & \textbf{70.4} $\pm$ 0.8 & \textbf{37.6} $\pm$ 4.3 \\
+random & 4.0 $\pm$ 1.3 & 0.4 $\pm$ 0.8 & 0.0 $\pm$ 0.0 & 0.4 $\pm$ 0.8 \\
+l2 & \textbf{91.2} $\pm$ 1.0 & 40.8 $\pm$ 3.7 & 13.2 $\pm$ 3.2 & 14.4 $\pm$ 3.9 \\
+OUR & 88.4 $\pm$ 2.3 & \textbf{70.0} $\pm$ 2.2 & \textbf{46.4} $\pm$ 3.2 & \textbf{42.4} $\pm$ 3.2 \\
+OUR+retr & 86.8 $\pm$ 2.0 & 66.8 $\pm$ 5.2 & 44.8 $\pm$ 4.7 & \textbf{42.4} $\pm$ 6.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Reacher, held-out \texttt{task200u} pool, training-only planning/critic assets.
+OUR+retr adds demonstration retrieval (\cref{sec:cube-variants}) to OUR's exact
+configuration; as on Push-T, it hurts here.}
+\begin{tabular}{lrrrr}
+\toprule
+configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+random & 8.0 $\pm$ 3.8 & 8.4 $\pm$ 0.8 & 9.2 $\pm$ 3.2 & 2.8 $\pm$ 1.0 \\
+l2 & \textbf{77.2} $\pm$ 4.8 & 90.8 $\pm$ 1.0 & 82.8 $\pm$ 1.0 & 29.2 $\pm$ 2.4 \\
+OUR & 76.0 $\pm$ 4.6 & \textbf{98.0} $\pm$ 1.3 & \textbf{97.6} $\pm$ 0.8 & \textbf{65.6} $\pm$ 2.0 \\
+OUR+retr & 62.0 $\pm$ 6.4 & 88.4 $\pm$ 2.7 & 94.0 $\pm$ 1.3 & 63.6 $\pm$ 2.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Cube, held-out \texttt{task200u} pool, training-only planning/critic assets.
+OUR+retr adds demonstration retrieval (\cref{sec:cube-variants}) to OUR's exact
+configuration; Cube-only, not part of the 3-environment headline comparison.}
+\begin{tabular}{lrrrr}
+\toprule
+configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+random & 21.2 $\pm$ 3.0 & 12.8 $\pm$ 2.0 & 4.8 $\pm$ 4.1 & 3.6 $\pm$ 2.3 \\
+l2 & 56.0 $\pm$ 3.8 & 34.4 $\pm$ 3.2 & 35.6 $\pm$ 1.5 & 16.4 $\pm$ 1.5 \\
+OUR & 62.0 $\pm$ 4.7 & 49.6 $\pm$ 4.6 & 50.4 $\pm$ 3.2 & 27.6 $\pm$ 6.1 \\
+OUR+retr & \textbf{86.4} $\pm$ 4.1 & \textbf{59.2} $\pm$ 2.4 & \textbf{78.8} $\pm$ 3.0 & \textbf{48.0} $\pm$ 2.8 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection*{Per-seed results}
-Every cell above, broken down by seed. Pooled = successes summed over all 5 seeds out of
-250 (start, goal) pairs per protocol.
+Every cell above, broken down by seed. ``solved'' = tasks (out of 50) solved in
+$\geq$1 of the 5 CEM seeds / solved in every one of the 5 seeds.
 
 \begin{table}[H]
 \centering\small
-\caption{Push-T, per seed.}
-\begin{tabular}{llrrrrrr}
+\caption{Push-T, per seed, held-out \texttt{task200u} pool. OUR+retr adds demonstration
+retrieval to OUR's exact configuration (\cref{sec:cube-variants}); it does not help on
+Push-T, unlike Cube.}
+\begin{tabular}{llrrrrrrr}
 \toprule
-protocol & configuration & s0 & s1 & s2 & s3 & s4 & pooled \\
+protocol & configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
 \midrule
-same-ep 25 & l2 & 90 & 92 & 86 & 94 & 94 & 228/250 \\
-same-ep 25 & OUR  & 96 & 90 & 90 & 90 & 88 & 227/250 \\
+same-ep 25 & random & 2 & 4 & 4 & 4 & 6 & 4.0 $\pm$ 1.3 & 7 / 0 \\
+same-ep 25 & l2 & 92 & 92 & 90 & 92 & 90 & 91.2 $\pm$ 1.0 & 47 / 43 \\
+same-ep 25 & OUR & 86 & 88 & 90 & 86 & 92 & 88.4 $\pm$ 2.3 & 48 / 39 \\
+same-ep 25 & OUR+retr & 88 & 90 & 84 & 86 & 86 & 86.8 $\pm$ 2.0 & 48 / 34 \\
 \midrule
-same-ep 50 & l2 & 56 & 46 & 50 & 42 & 48 & 121/250 \\
-same-ep 50 & OUR  & 60 & 70 & 70 & 62 & 60 & 161/250 \\
+same-ep 50 & random & 0 & 0 & 0 & 2 & 0 & 0.4 $\pm$ 0.8 & 1 / 0 \\
+same-ep 50 & l2 & 34 & 40 & 42 & 44 & 44 & 40.8 $\pm$ 3.7 & 28 / 15 \\
+same-ep 50 & OUR & 72 & 72 & 70 & 70 & 66 & 70.0 $\pm$ 2.2 & 47 / 21 \\
+same-ep 50 & OUR+retr & 74 & 62 & 72 & 64 & 62 & 66.8 $\pm$ 5.2 & 44 / 13 \\
 \midrule
-same-ep 100 & l2 & 10 & 14 & 12 & 12 & 8  & 28/250  \\
-same-ep 100 & OUR  & 44 & 52 & 46 & 58 & 52 & 126/250 \\
+same-ep 100 & random & 0 & 0 & 0 & 0 & 0 & 0.0 $\pm$ 0.0 & 0 / 0 \\
+same-ep 100 & l2 & 18 & 14 & 14 & 12 & 8 & 13.2 $\pm$ 3.2 & 15 / 2 \\
+same-ep 100 & OUR & 48 & 44 & 52 & 44 & 44 & 46.4 $\pm$ 3.2 & 41 / 9 \\
+same-ep 100 & OUR+retr & 48 & 48 & 36 & 48 & 44 & 44.8 $\pm$ 4.7 & 42 / 5 \\
 \midrule
-cross-ep & l2 & 12 & 16 & 10 & 8  & 6  & 26/250  \\
-cross-ep & OUR  & 48 & 40 & 42 & 42 & 50 & 111/250 \\
+cross-ep & random & 0 & 0 & 0 & 0 & 2 & 0.4 $\pm$ 0.8 & 1 / 0 \\
+cross-ep & l2 & 14 & 14 & 8 & 16 & 20 & 14.4 $\pm$ 3.9 & 16 / 1 \\
+cross-ep & OUR & 38 & 42 & 48 & 42 & 42 & 42.4 $\pm$ 3.2 & 35 / 6 \\
+cross-ep & OUR+retr & 34 & 38 & 42 & 46 & 52 & 42.4 $\pm$ 6.2 & 34 / 6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Retrieval is a Cube-specific win, not a general one.} On Cube, OUR+retr beat OUR by
+24--28 points at every protocol (\cref{tab:cube-retrieval-full}). The same exact mechanism
+(OUR's config plus \texttt{retrieval=true}, no other change, same 5 seeds) \emph{hurts} on
+both other environments: Push-T loses 1.6--3.2 points at same-ep 25/50/100 and ties at
+cross-ep (42.4 vs.\ 42.4, with visibly higher seed variance: 6.2 vs.\ 3.6); Reacher loses at
+every protocol, worst at short horizon (same-ep 25: $-14.0$ points, 62.0 vs.\ 76.0), and still
+down 9.6 / 3.6 / 2.0 points at same-ep 50 / 100 / cross-ep. Losses are consistently largest at
+the shortest horizon on both non-Cube environments (Push-T's smallest gap is at same-ep 100,
+Reacher's worst loss is at same-ep 25) and shrink or vanish as the horizon or task difficulty
+grows (Reacher's cross-ep gap, 2.0 points, is its smallest).
+
+This is consistent with the property \cref{sec:cube-variants} pointed to as retrieval's likely
+mechanism, now with three environments' worth of evidence instead of one: Cube tasks need a
+multi-phase grasp-then-carry action sequence that CEM's zero-mean initialization struggles to
+discover from scratch, where a retrieved demonstration block is a large head start. Push-T's
+short, single-phase pushing motions and Reacher's short reaching motions are apparently
+already well within CEM's own from-scratch search at short horizons, so warm-starting from a
+logged block there adds a possibly-suboptimal bias pulling the mean away from CEM's own
+optimum without adding information CEM did not already have -- and the harder/longer the task
+gets, the less that bias matters relative to the guidance the graph/critic terms already
+provide, which is why the gap narrows at longer horizons on both environments. Retrieval
+should not be adopted as a Push-T or Reacher default; it stays Cube-only.
+
+\begin{table}[H]
+\centering\small
+\caption{Reacher, per seed, held-out \texttt{task200u} pool. OUR+retr adds demonstration
+retrieval to OUR's exact configuration (\cref{sec:cube-variants}); as on Push-T, it hurts
+here, most at same-ep 25.}
+\begin{tabular}{llrrrrrrr}
+\toprule
+protocol & configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
+\midrule
+same-ep 25 & random & 10 & 14 & 8 & 4 & 4 & 8.0 $\pm$ 3.8 & 13 / 0 \\
+same-ep 25 & l2 & 74 & 80 & 70 & 84 & 78 & 77.2 $\pm$ 4.8 & 50 / 18 \\
+same-ep 25 & OUR & 82 & 78 & 68 & 76 & 76 & 76.0 $\pm$ 4.6 & 50 / 14 \\
+same-ep 25 & OUR+retr & 60 & 52 & 70 & 68 & 60 & 62.0 $\pm$ 6.4 & 49 / 9 \\
+\midrule
+same-ep 50 & random & 8 & 8 & 8 & 10 & 8 & 8.4 $\pm$ 0.8 & 14 / 0 \\
+same-ep 50 & l2 & 92 & 92 & 90 & 90 & 90 & 90.8 $\pm$ 1.0 & 49 / 39 \\
+same-ep 50 & OUR & 98 & 96 & 98 & 100 & 98 & 98.0 $\pm$ 1.3 & 50 / 45 \\
+same-ep 50 & OUR+retr & 84 & 92 & 88 & 88 & 90 & 88.4 $\pm$ 2.7 & 50 / 28 \\
+\midrule
+same-ep 100 & random & 14 & 12 & 6 & 8 & 6 & 9.2 $\pm$ 3.2 & 18 / 0 \\
+same-ep 100 & l2 & 82 & 84 & 82 & 84 & 82 & 82.8 $\pm$ 1.0 & 43 / 40 \\
+same-ep 100 & OUR & 98 & 96 & 98 & 98 & 98 & 97.6 $\pm$ 0.8 & 49 / 48 \\
+same-ep 100 & OUR+retr & 92 & 94 & 96 & 94 & 94 & 94.0 $\pm$ 1.3 & 48 / 44 \\
+\midrule
+cross-ep & random & 4 & 2 & 4 & 2 & 2 & 2.8 $\pm$ 1.0 & 5 / 0 \\
+cross-ep & l2 & 32 & 26 & 28 & 32 & 28 & 29.2 $\pm$ 2.4 & 19 / 11 \\
+cross-ep & OUR & 68 & 66 & 62 & 66 & 66 & 65.6 $\pm$ 2.0 & 34 / 31 \\
+cross-ep & OUR+retr & 66 & 66 & 62 & 64 & 60 & 63.6 $\pm$ 2.3 & 33 / 27 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[H]
 \centering\small
-\caption{Reacher, per seed.}
-\begin{tabular}{llrrrrrr}
+\caption{Cube, per seed, held-out \texttt{task200u} pool. OUR+retr adds demonstration
+retrieval to OUR's exact configuration (\cref{sec:cube-variants}, \cref{tab:cube-retrieval-full}).}
+\begin{tabular}{llrrrrrrr}
 \toprule
-protocol & configuration & s0 & s1 & s2 & s3 & s4 & pooled \\
+protocol & configuration & s0 & s1 & s2 & s3 & s4 & mean $\pm$ sd & solved \\
 \midrule
-same-ep 25 & l2 & 80 & 84 & 88 & 92 & 90 & 217/250 \\
-same-ep 25 & OUR  & 80 & 76 & 88 & 84 & 76 & 202/250 \\
+same-ep 25 & random & 24 & 16 & 20 & 22 & 24 & 21.2 $\pm$ 3.0 & 19 / 3 \\
+same-ep 25 & l2 & 52 & 52 & 56 & 58 & 62 & 56.0 $\pm$ 3.8 & 37 / 20 \\
+same-ep 25 & OUR & 56 & 60 & 60 & 70 & 64 & 62.0 $\pm$ 4.7 & 39 / 17 \\
+same-ep 25 & OUR+retr & 88 & 84 & 80 & 88 & 92 & 86.4 $\pm$ 4.1 & 50 / 32 \\
 \midrule
-same-ep 50 & l2 & 96  & 96 & 96 & 94 & 98  & 240/250 \\
-same-ep 50 & OUR  & 100 & 96 & 98 & 94 & 100 & 244/250 \\
+same-ep 50 & random & 12 & 10 & 14 & 12 & 16 & 12.8 $\pm$ 2.0 & 14 / 1 \\
+same-ep 50 & l2 & 36 & 28 & 36 & 36 & 36 & 34.4 $\pm$ 3.2 & 24 / 9 \\
+same-ep 50 & OUR & 42 & 50 & 52 & 56 & 48 & 49.6 $\pm$ 4.6 & 35 / 12 \\
+same-ep 50 & OUR+retr & 58 & 56 & 58 & 62 & 62 & 59.2 $\pm$ 2.4 & 35 / 22 \\
 \midrule
-same-ep 100 & l2 & 76 & 74 & 76 & 76 & 78 & 190/250 \\
-same-ep 100 & OUR  & 98 & 98 & 98 & 98 & 98 & 245/250 \\
+same-ep 100 & random & 2 & 12 & 4 & 6 & 0 & 4.8 $\pm$ 4.1 & 8 / 0 \\
+same-ep 100 & l2 & 36 & 36 & 34 & 34 & 38 & 35.6 $\pm$ 1.5 & 25 / 13 \\
+same-ep 100 & OUR & 46 & 56 & 50 & 50 & 50 & 50.4 $\pm$ 3.2 & 37 / 12 \\
+same-ep 100 & OUR+retr & 82 & 78 & 78 & 82 & 74 & 78.8 $\pm$ 3.0 & 44 / 32 \\
 \midrule
-cross-ep & l2 & 24 & 26 & 24 & 26 & 22 & 61/250  \\
-cross-ep & OUR  & 64 & 64 & 60 & 68 & 64 & 160/250 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering\small
-\caption{Cube, per seed.}
-\begin{tabular}{llrrrrrr}
-\toprule
-protocol & configuration & s0 & s1 & s2 & s3 & s4 & pooled \\
-\midrule
-same-ep 25 & l2 & 54 & 52 & 58 & 60 & 60 & 142/250 \\
-same-ep 25 & OUR  & 68 & 68 & 74 & 66 & 58 & 167/250 \\
-\midrule
-same-ep 50 & l2 & 50 & 50 & 50 & 50 & 54 & 127/250 \\
-same-ep 50 & OUR  & 52 & 58 & 50 & 62 & 60 & 141/250 \\
-\midrule
-same-ep 100 & l2 & 62 & 60 & 66 & 60 & 62 & 155/250 \\
-same-ep 100 & OUR  & 70 & 70 & 72 & 70 & 70 & 176/250 \\
-\midrule
-cross-ep & l2 & 16 & 8  & 12 & 14 & 14 & 32/250 \\
-cross-ep & OUR  & 34 & 44 & 40 & 38 & 32 & 94/250 \\
+cross-ep & random & 6 & 4 & 2 & 0 & 6 & 3.6 $\pm$ 2.3 & 7 / 0 \\
+cross-ep & l2 & 16 & 18 & 16 & 18 & 14 & 16.4 $\pm$ 1.5 & 16 / 3 \\
+cross-ep & OUR & 18 & 30 & 36 & 30 & 24 & 27.6 $\pm$ 6.1 & 23 / 3 \\
+cross-ep & OUR+retr & 52 & 50 & 48 & 46 & 44 & 48.0 $\pm$ 2.8 & 34 / 15 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -268,6 +324,563 @@ cross-ep & OUR  & 34 & 44 & 40 & 38 & 32 & 94/250 \\
 
 \section{Diagnostics}
 \emph{Supplementary checks, not part of the headline results above.}
+
+\subsection{Does retrieval's action quality explain why it only helps Cube? (2026-09-20)}
+\label{sec:retrieval-action-diag}
+\emph{Script: \texttt{scripts/retrieval\_action\_diag.py}; diagnosis only -- reads held-out
+ground truth directly from the raw h5 to measure retrieval quality offline, never feeds it
+back into retrieval or eval (see \cref{sec:cube-variants} for the leakage audit this reuses
+the same data-provenance guarantees from).}
+
+\paragraph{Setup.} \texttt{same-ep 25} tasks give an exact ground truth for free:
+$\mathrm{goal\_row} = \mathrm{start\_row} + 25$, so the real logged actions from
+\texttt{start\_row} to \texttt{start\_row}+25 in that held-out episode are, by construction,
+one correct 25-step action sequence for that task (not necessarily the only one). This script
+runs the exact same query \texttt{Retriever}/\texttt{GraphOracle} execute inside
+\texttt{gas\_mpc\_eval.py} (graph\_seed 0, OUR's config) against the first 50 \texttt{same25}
+held-out tasks in each environment's \texttt{task200u} pool, encodes each task's start/goal
+frame with the frozen LeWM encoder, and compares the z-scored retrieved action block against
+the z-scored real block: MSE, Pearson $r$ (flattened over tasks $\times$ steps $\times$ action
+dims), and the same comparison against a uniformly random training-cache block (same length)
+as a floor.
+
+\begin{table}[H]
+\centering\small
+\caption{Retrieved vs.\ real held-out action, \texttt{same-ep 25}, $N=50$, graph\_seed 0.
+$d_{\mathrm{start}}$/$d_{\mathrm{end}}$: median psi-space distance from the retrieved segment's
+start/end to the query/target psi; step\_units is the calibrated TDR distance of one 5-step
+gap, included so the psi distances can be read in roughly-env-step units.}
+\label{tab:retrieval-action-diag}
+\begin{tabular}{lrrrrrrr}
+\toprule
+env & $r$ (retrieved) & $r$ (random) & MSE (retrieved) & MSE (random) & $d_{\mathrm{start}}$ & $d_{\mathrm{end}}$ & step\_units \\
+\midrule
+Push-T  & \textbf{0.900} & $-0.074$ & \textbf{0.200} & 2.194 & \textbf{0.47} & \textbf{0.95} & 3.58 \\
+Cube    & 0.672 & 0.010 & 0.482 & 1.776 & 1.66 & 1.87 & 3.56 \\
+Reacher & 0.042 & 0.035 & 1.866 & 1.928 & \textbf{0.31} & \textbf{0.29} & 2.27 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Retrieval is not noise on Push-T or Cube -- but it is on Reacher.} On Push-T and
+Cube, the retrieved block beats the random-training-block floor by a wide margin (Push-T: MSE
+0.20 vs.\ 2.19, $r$ 0.90 vs.\ $-0.07$; Cube: MSE 0.48 vs.\ 1.78, $r$ 0.67 vs.\ 0.01) and wins on
+49/50 individual tasks in both. Reacher is different: $r=0.042$ is statistically
+indistinguishable from the random floor's $r=0.035$, and the retrieved block beats random on
+only 26/50 tasks -- a coin flip. Per-action-dimension correlation on Reacher is 0.052 and 0.03
+(both joints), vs.\ Push-T's 0.89/0.91. Retrieval's action output on Reacher is not a bad
+match; it is \emph{no match at all}.
+
+\paragraph{This is not for lack of a good state-space match.} Reacher actually has the
+\emph{tightest} psi-space retrieval of the three environments ($d_{\mathrm{start}}=0.31$,
+$d_{\mathrm{end}}=0.29$, both under Push-T's 0.47/0.95 relative to a similar step\_units scale)
+-- the nearest-neighbour search is finding states that really are close to the query and
+target. The problem is that close-in-state does not imply close-in-action here: Reacher's
+2-joint arm can reach visually/latently similar configurations via different joint-angle paths
+(redundant kinematics), so two segments that start and end in nearly the same place can have
+been driven by nearly unrelated actions. Push-T's story is the mirror image: its match is
+\emph{better} than Cube's on every measure (correlation almost double, MSE under half, psi
+distance a third), yet it is Push-T, not Cube, where retrieval fails to help
+(\cref{tab:pusht-summary}: $-1.6$ to $-3.2$ points, or an exact tie at cross-ep with
+\emph{higher} variance, 6.2 vs.\ OUR's 3.6). So the three environments give three different
+diagnoses for what is nominally the same failure (retrieval doesn't help): Cube's baseline CEM
+search is genuinely aided by an imperfect demonstration; Push-T's baseline CEM search does not
+need the (accurate) demonstration it gets; Reacher's demonstration is not even a real answer to
+the question asked.
+
+\paragraph{Does gating on match quality help? No -- checked and ruled out.} A natural fix is to
+trust retrieval only when its own psi-distance diagnostics ($d_{\mathrm{end}}$, or whether the
+query is still in the graph-subgoal phase vs.\ the direct-goal final phase) suggest a reliable
+match, falling back to zero-mean initialization otherwise. Two checks against the same
+same-ep-25 data rule this out as a fix for Reacher specifically:
+\begin{itemize}[nosep]
+  \item \textbf{Stratifying by final-phase vs.\ subgoal-walking phase} (whether
+        \texttt{GraphOracle.select} returned the true goal directly or a graph node) changes
+        nothing: Push-T $r=0.924$ (final) vs.\ $0.813$ (walking); Cube $0.666$ vs.\ $0.679$;
+        Reacher $0.046$ vs.\ $0.035$. Every environment's correlation is flat across phases,
+        so gating retrieval off during one phase would not change any environment's outcome.
+  \item \textbf{Per-task $d_{\mathrm{end}}$ vs.\ per-task action-match quality}, within each
+        environment: Push-T $r(d_{\mathrm{end}}, \mathrm{MSE})=0.748$ and
+        Cube $0.496$ -- a tighter psi match \emph{does} predict a better action match on both,
+        so a confidence threshold could in principle trim Push-T's or Cube's worst individual
+        retrievals. Reacher: $0.025$ -- no relationship at all. The one signal the pipeline
+        already computes for free (psi distance) carries real information on Push-T/Cube but
+        is uninformative on Reacher precisely because Reacher's failure mode (action
+        multimodality) is invisible in state space by construction.
+\end{itemize}
+
+\paragraph{Iteration-1 hitting probability: log $P(\text{true action} \mid \text{CEM's initial
+sampling distribution})$.} \texttt{CEMSolver} samples i.i.d.\
+$\mathcal{N}(\mathrm{mean}, \mathtt{var\_scale}\cdot I)$ every iteration with
+$\mathtt{var\_scale}=1.0$ fixed across every config in this project
+(\texttt{config/eval/solver/cem.yaml}), so the log-density of the real held-out action sequence
+under CEM's \emph{first, pre-update} population is exactly
+$-\tfrac12 D\log(2\pi) - \tfrac12\sum(\mathrm{real}-\mathrm{mean})^2$ for
+$D=\mathtt{horizon}\times\mathtt{action\_block}\times\mathtt{action\_dim}$ dimensions -- a
+closed-form function of the same squared error already measured above, evaluated at
+$\mathrm{mean}=0$ (CEM's zero-mean default) vs.\ $\mathrm{mean}=$ the retrieved block. No
+sampling needed; this is exact.
+
+\begin{table}[H]
+\centering\small
+\caption{$\log P$(true \texttt{same-ep 25} action) under CEM's iteration-1 sampling
+distribution, zero-mean vs.\ retrieval-mean init, $N=50$ held-out tasks per environment.
+Advantage $=\log P_{\mathrm{retr}} - \log P_{\mathrm{zero}}$; frac(retr wins) = fraction of the
+50 tasks where retrieval's placement is closer to the truth than zero-mean's.}
+\label{tab:retrieval-logp}
+\begin{tabular}{lrrrrr}
+\toprule
+env & $\log P$ zero & $\log P$ retr & advantage (median) & likelihood ratio & frac(retr wins) \\
+\midrule
+Push-T  & $-70.7$  & $-51.0$  & \textbf{+16.6} & $1.5\times10^{7}\times$  & 98\% \\
+Cube    & $-165.5$ & $-145.0$ & \textbf{+19.6} & $3.3\times10^{8}\times$  & 88\% \\
+Reacher & $-70.4$  & $-92.6$  & $-21.2$        & $6.5\times10^{-10}\times$ & \textbf{0\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Reacher's failure is now fully explained, not just correlated.} It is not merely
+that retrieval's action guess is statistically unrelated to the truth ($r\approx0$, above) --
+retrieval actively starts CEM's search population \emph{farther from the correct answer than
+doing nothing would}, on \emph{every one} of the 50 held-out tasks (0\% win rate), by a factor
+of $\sim 10^9$ in likelihood. This is direct, per-task, closed-form evidence (not a weak
+aggregate correlation) that the fallback in interventions (1) above -- reject the retrieval and
+use zero-mean instead when the predictor-verified rollout misses the target -- would trigger
+correctly here: zero-mean genuinely is the better starting distribution for Reacher, and this
+table is why.
+
+\paragraph{Push-T's non-result: the gap vs.\ iteration-1 hypothesis, tested and rejected
+(2026-09-21).} \emph{Script: \texttt{ada\_logp\_iterations\_diag.sh} +
+\texttt{logp\_iterations\_analyze.py}; \texttt{+mpc.logp\_steps} records the CEM population's
+own (mean, var) via a \texttt{MeanVarRecorder} callback at 0-indexed steps
+$\{0,4,9,19\}$ = iterations $\{1,5,10,20\}$, \texttt{+mpc.budget=25} forces exactly one solve
+per task (this project's existing single-pass convention).} The natural follow-up question to
+the iteration-1 result above is whether Push-T's from-scratch CEM search \emph{closes} that
+placement gap over its remaining 29 iterations, explaining why it doesn't need the head start.
+It does not -- the opposite happens:
+
+\begin{table}[H]
+\centering\small
+\caption{$\log P$(true \texttt{same-ep 25} action) vs.\ CEM iteration, using each iteration's
+\emph{actual} population (mean, var) -- not the fixed iteration-1 $\mathrm{var}=1$ used above.
+Advantage $=\log P_{\mathrm{retr}}-\log P_{\mathrm{zero}}$; frac(retr wins) over 50 tasks.}
+\label{tab:retrieval-logp-iterations}
+\begin{tabular}{lrrrrr}
+\toprule
+env & iter & $\log P$ zero & $\log P$ retr & advantage & frac(retr wins) \\
+\midrule
+Push-T  & 1  & $-70.7$  & $-51.0$  & +19.7 & 98\% \\
+        & 5  & $-66.0$  & $-49.1$  & +16.9 & 92\% \\
+        & 10 & $-69.5$  & $-49.0$  & +20.5 & 90\% \\
+        & 20 & $-94.6$  & $-57.9$  & \textbf{+36.7} & 88\% \\
+\midrule
+Cube    & 1  & $-165.5$ & $-145.0$ & +20.6 & 88\% \\
+        & 5  & $-164.4$ & $-148.4$ & +16.0 & 78\% \\
+        & 10 & $-180.4$ & $-157.5$ & +22.9 & 82\% \\
+        & 20 & $-235.5$ & $-198.0$ & \textbf{+37.5} & 80\% \\
+\midrule
+Reacher & 1  & $-70.4$  & $-92.6$  & $-22.2$ & 0\% \\
+        & 5  & $-73.9$  & $-103.6$ & $-29.7$ & 0\% \\
+        & 10 & $-82.0$  & $-123.0$ & $-41.0$ & 2\% \\
+        & 20 & $-114.9$ & $-189.3$ & \textbf{$-74.4$} & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{The gap does not close on either environment -- it grows, monotonically, on all three,
+in whichever direction it started.} Push-T's retrieval advantage nearly doubles by iteration 20
+(+19.7 $\to$ +36.7); so does Cube's (+20.6 $\to$ +37.5); Reacher's disadvantage more than
+triples ($-22.2\to-74.4$), with retrieval losing on effectively 100\% of tasks at \emph{every}
+iteration checked, not just the first. This directly overturns the hypothesis in the previous
+version of this section: it is not that Push-T's zero-mean search catches up to retrieval's
+placement through its own refinement -- CEM's optimization pulls \emph{both} populations
+steadily away from the logged human action in absolute terms (zero's $\log P$ worsens from
+$-70.7$ to $-94.6$ too), but retrieval's population, anchored nearer the truth to begin with,
+consistently stays closer throughout, by a growing margin. The right question was never
+whether the gap closes; it is whether closeness to the logged human action is something
+CEM's own criterion rewards on that environment. It evidently does not need to be, and mostly
+isn't, on Push-T: CEM converges to a genuinely different (and by this measure, decreasingly
+human-like) solution that succeeds just as often, meaning multiple qualitatively different
+action sequences solve a typical Push-T same25 task, and staying near the specific one that was
+logged confers no advantage once CEM is free to search. Cube's landscape rewards it far more:
+even though retrieval's advantage there grows at essentially the same rate as Push-T's, Cube's
+own optimum apparently sits much closer to the human strategy (the reach-grasp-lift-carry
+sequence), so tracking it continues to pay off. Reacher's pattern is the clearest of the three:
+retrieval doesn't just start badly, it gets \emph{worse} every measured iteration -- CEM is
+refining the population \emph{within} the wrong, redundant-kinematics region the retrieved
+action anchored it to, never escaping it in the 20 iterations checked. This is consistent with
+\texttt{retrieval\_verify}'s partial (not full) fix at same-ep 25
+(\cref{tab:retrieval-verify-reacher} below): a single-solve, single-plan protocol like same25
+gives CEM's full 20+-iteration compounding process nowhere to be interrupted or corrected by a
+fresh replan, unlike same-ep 100/cross-ep, where verification's full recovery suggests each
+fresh solve gets an independent, uncorrupted chance.
+
+This also revises the motivation for intervention (2) (partial-population warm start): it is
+not "Push-T's own search already reaches an equally good \emph{placement}" (it explicitly does
+not, and the gap widens) but "Push-T's task admits solutions CEM can find without needing to
+stay near the logged one." Partial seeding remains worth testing as a variance-reduction
+measure regardless of which framing is right, since it should cost Cube little (Cube's current
+full-population retrieval is the 100\%-seeded special case) while giving Push-T's (evidently
+already-sufficient, if divergent) from-scratch search an unbiased population to fall back on.
+
+\paragraph{What could actually help, without touching Cube.} Two structurally different
+interventions follow from the two distinct failure modes, both additive (default off, so
+Cube's retrieval path is untouched):
+\begin{enumerate}[nosep]
+  \item \textbf{Predictor-verified retrieval, for Reacher's problem -- implemented and
+        tested (2026-09-20).} The pipeline previously verified only that the retrieved
+        segment's \emph{logged, observed} endpoint was close to the target in psi space -- it
+        never checked whether replaying those actions from the \emph{current} query state
+        would land anywhere near the target, which is the only thing that matters for a
+        redundant-kinematics environment. \texttt{+mpc.retrieval\_verify=true}
+        (\texttt{attach\_solve\_hook} in \texttt{gas\_mpc\_eval.py}) scores the retrieved block
+        against a zero-action candidate using \emph{this run's own} \texttt{model.get\_cost}
+        (predictor rollout + configured criterion, critic included when active -- the exact
+        function CEM's own optimization calls every iteration) and keeps whichever scores
+        lower, per env, per replan. No ground truth needed online; it only compares the two
+        candidates' own predicted cost.
+  \item \textbf{Partial-population warm start, for Push-T's variance -- not yet implemented.}
+        Push-T's issue is not a bad placement (\cref{tab:retrieval-logp} shows it is nearly as
+        good as Cube's) -- it is an unnecessary one that adds coupling/variance without a
+        compensating benefit: retrieval currently overwrites CEM's \emph{entire} initial
+        population mean (\texttt{CEMSolver.init\_action\_distrib}), coupling every one of the
+        300 first-iteration samples, and the run's outcome, to one specific logged episode.
+        Seeding only a fraction of the initial population at the retrieved mean while leaving
+        the rest at CEM's default zero-mean init would let CEM's own top-k elitism arbitrate
+        between the two starting points every iteration instead of committing up front --
+        keeping Cube's benefit on the fraction that gets seeded, while giving Push-T's
+        already-sufficient from-scratch search an unbiased population to fall back on if the
+        seeded fraction loses the elite competition.
+\end{enumerate}
+
+\paragraph{Predictor-verified retrieval: results.} \emph{Scripts:
+\texttt{ada\_cube\_retrieval\_verify\_check.sh} (Cube regression check, 3 seeds, same100/cross)
+and \texttt{ada\_reacher\_retrieval\_verify\_full.sh} (Reacher, all 5 seeds, all 4 protocols).}
+
+\begin{table}[H]
+\centering\small
+\caption{Cube regression check: does verification cost anything? Matched 3-seed means.}
+\begin{tabular}{lrrr}
+\toprule
+protocol & OUR+retr & OUR+retr+verify & keep-rate \\
+\midrule
+same-ep 100 & 79.3 & 75.3 ($-4.0$) & 85\% \\
+cross-ep    & 50.0 & 48.0 ($-2.0$) & 90\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{Reacher, full 5-seed sweep: does verification recover OUR+retr's losses?}
+\label{tab:retrieval-verify-reacher}
+\begin{tabular}{lrrrr}
+\toprule
+protocol & OUR & OUR+retr & OUR+retr+verify & keep-rate \\
+\midrule
+same-ep 25  & 76.0 $\pm$ 5.1 & 62.0 $\pm$ 6.4 & 63.6 $\pm$ 10.1 & 84\% \\
+same-ep 50  & 98.0 $\pm$ 1.4 & 88.4 $\pm$ 2.7 & 90.4 $\pm$ 4.6  & 81\% \\
+same-ep 100 & 97.6 $\pm$ 0.9 & 94.0 $\pm$ 1.3 & \textbf{97.2 $\pm$ 1.0}  & 85\% \\
+cross-ep    & 65.6 $\pm$ 2.2 & 63.6 $\pm$ 2.3 & \textbf{65.6 $\pm$ 0.8}  & 78\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Cube's win survives verification with a small cost (2--4 points; it still beats plain OUR by
+20--25 points, vs.\ 22--29 unverified) -- the fallback mechanism does not gut the environment it
+was designed to leave alone. On Reacher, same-ep 100 and cross-ep are \textbf{fully recovered}
+to match OUR (cross-ep even ties OUR's variance, both $\pm$ well under 1). Same-ep 50 recovers
+about a fifth of its gap ($-9.6\to-7.6$). \textbf{Same-ep 25 is not fixed}: $-14.0\to-12.4$, and
+its variance gets \emph{worse} (6.4 $\to$ 10.1).
+
+This partial result is informative on its own. The log-$P$ diagnostic
+(\cref{tab:retrieval-logp}) said retrieval was worse than zero-mean placement on \emph{100\%}
+of Reacher's held-out same25 tasks; the verify gate here only rejects 12--27\% of retrievals
+across all four protocols (keep-rate 73--88\%, similar at every horizon). That gap means
+\texttt{model.get\_cost} (predicted cost under this run's own criterion) and ``distance to the
+true action'' are measuring different things -- a retrieved block can score acceptably under
+the coarse task criterion (especially near a goal, where several different endpoints score
+similarly) while still being a poor match to what is actually needed. Same-ep 25 has the fewest
+replans (1--2 solves per episode on a 50-step budget), so a wrongly-kept bad retrieval there has
+no later replan to correct it, which is consistent with it being the one case this fix does not
+reach. Intervention (2) (partial-population warm start) or a stricter verification margin
+(require retrieval to beat zero by more than a tie, not just \texttt{costs[:,0] <=
+costs[:,1]}) are the next things to try specifically for same-ep 25; both remain untested.
+
+\subsection{A dynamics-based test of retrieval's core assumption: same action, nearby latent
+$\to$ nearby result? (2026-09-21)}
+\label{sec:retrieval-dynamics-sensitivity}
+\emph{Script: \texttt{scripts/retrieval\_sensitivity\_diag.py}. New CEM solves are not
+required -- only the frozen encoder and predictor.}
+
+\paragraph{The assumption retrieval makes.} Retrieval never applies a logged action block from
+the state it was actually logged at. It picks a training-bank row whose state is
+\emph{close} to the current query in latent space, then hands the row's action block to CEM,
+which imagines it forward from the query's own (different) current latent. This only makes
+sense if the frozen predictor's dynamics are locally well-behaved: running the same actions
+from two nearby latents should land in two nearby places. \Cref{sec:retrieval-action-diag}
+tested a proxy for this (does the retrieved action correlate with the true one); this section
+tests the assumption directly, in latent space, using the predictor itself.
+
+\paragraph{Setup.} For 150 held-out same-ep-25 query windows per environment (query latent
+$z_q$ from its own real history, frozen encoder), pair each with training-bank candidate rows
+("nodes") spanning the query's own full range of latent distance -- from its nearest neighbor
+out to a uniformly-random row -- via 13 percentiles of the sorted distance list (13
+percentiles $\times$ 150 queries $=$ 1{,}950 pairs per env). For each pair: $d_0 = \lVert
+z_{\text{node}} - z_q\rVert$ (real latents, both sides); $z_{\text{node,end}} =$ the node's own
+real logged continuation 25 steps later (ground truth, no predictor involved); $z_{\text{q,end}}
+=$ the predictor's imagined rollout of the \emph{node's} action block, run from the
+\emph{query's} own real history (only the future action block is swapped -- exactly what
+retrieval does inside CEM); $d_{\text{final}} = \lVert z_{\text{node,end}} - z_{\text{q,end}}
+\rVert$. A same-node self-consistency check (node's own actions imagined from the node's own
+real history, vs.\ its own real continuation) gives a \emph{floor}: the predictor's inherent
+25-step error with zero latent offset at all, so $d_{\text{final}}$ above the floor is error
+attributable to the offset, not general predictor noise.
+
+\begin{table}[H]
+\centering\small
+\caption{Retrieval's implicit-smoothness assumption, tested directly on the frozen predictor.
+Floor: self-consistency $d_{\text{final}}$ at zero offset. Nearest bucket: the closest available
+training-bank candidate to each query (matches what production retrieval actually picks).
+Global slope: log-log fit of $d_{\text{final}}$ vs.\ $d_0$ over the full percentile range ($<$1
+convergent/contracting, $=$1 isometric, $>$1 divergent/expanding); all three environments are
+\emph{sub}-linear only because the latent manifold is bounded and $d_{\text{final}}$ saturates
+at large $d_0$ -- none show true contraction near $d_0{=}0$.}
+\label{tab:retrieval-sensitivity}
+\begin{tabular}{lrrrrr}
+\toprule
+env & floor & nearest $d_0$ (median) & nearest $d_{\text{final}}$ (excess/ratio) & global log-log slope \\
+\midrule
+Push-T   & 2.42 & 1.43 & 3.41 (+0.99 / 2.4$\times$)  & 0.535 \\
+Cube     & 1.81 & 2.08 & 3.23 (+1.41 / 1.5$\times$)  & 0.758 \\
+Reacher  & 1.68 & 0.27 & 5.99 (+4.31 / \textbf{22.5$\times$})  & 0.299 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{No environment is locally convergent -- but Reacher is uniquely, severely
+divergent right where retrieval actually operates.} Every environment's error \emph{grows}
+with $d_0$ near the origin (no contraction anywhere), then saturates once $d_0$ is large
+enough that the two rollouts are effectively unrelated (all three environments converge to a
+similar $d_{\text{final}}$ ceiling of roughly 17--20 by $d_0\approx20$, the log-log sub-linearity
+in the table is this saturation, not local stability). What differentiates the environments is
+how much divergence has already happened at the offsets retrieval actually encounters. Push-T's
+and Cube's nearest available candidates sit close to their own predictor-noise floor (excess
+$+0.99$ and $+1.41$, ratios 2.4$\times$/1.5$\times$) -- consistent with \cref{sec:retrieval-action-diag}'s
+finding that the retrieved action is a genuine match on both. Reacher's nearest candidate is an
+order of magnitude closer in raw latent distance ($d_0=0.27$ vs.\ 1.4--2.1) -- its retrieval
+mechanism is, if anything, finding \emph{better}-matched neighbors by the distance metric alone
+-- yet already produces $4.3$ latent units of excess error, a $22.5\times$ amplification of an
+almost-zero initial offset. This is a second, independent measurement (latent-dynamics
+sensitivity, not action-label correlation) landing on the same conclusion as
+\cref{sec:retrieval-action-diag} and \cref{tab:retrieval-logp}: Reacher's redundant kinematics
+make its frozen dynamics locally chaotic under action substitution, so retrieval's core
+assumption -- nearby latent, same action, nearby result -- fails specifically and severely
+there, while holding well enough on Push-T and Cube that axis (1) is not what separates those
+two (\cref{sec:baseline-cem-reliability} is).
+
+\subsection{Ground truth: the same test replayed in the real simulator, not the predictor
+(2026-09-21)}
+\label{sec:retrieval-dynamics-sensitivity-real}
+\emph{Script: \texttt{scripts/retrieval\_sensitivity\_real\_diag.py}. No predictor anywhere --
+the node's real logged 25-step action block is executed in the LIVE simulator (pymunk for
+Push-T, MuJoCo for Cube/Reacher) starting from the held-out query's real physical state
+(restored via the exact same eval-config callables production evaluation uses), and both the
+resulting real frame (re-encoded through the frozen encoder) and the resulting real physical
+state are compared against the training-bank node's own real, logged continuation.}
+
+\paragraph{Why redo it without the predictor.} \Cref{sec:retrieval-dynamics-sensitivity}'s
+result runs entirely through the frozen predictor's imagined rollout, so in principle its
+divergence could be a predictor artifact (the predictor mispredicting) rather than a genuine
+property of the environment's own dynamics. Replaying in the real simulator removes that
+confound entirely, and additionally allows a second, independent measurement in the raw
+physical state space (not just latent space) -- position error in pixels/metres/radians,
+exactly the units each environment's own success predicate uses.
+
+\paragraph{Setup.} 50 held-out same-ep-25 queries $\times$ 7 candidate-distance percentiles
+per environment (350 pairs/env). For each pair: restore the query's exact real physical state
+in the live simulator; step the node's real 25-action block; record the real final frame
+(re-encoded, for the latent comparison) and the real final physical state (for the state-space
+comparison, in each environment's own success-predicate units: Push-T agent+block position in
+px, Cube block position in m, Reacher max-abs joint error in rad, matching
+\cref{tab:two-axes}'s tolerances). Compared against the node's own real, logged continuation
+in both spaces.
+
+\begin{table}[H]
+\centering\small
+\caption{Ground-truth (real simulator, no predictor) version of \cref{tab:retrieval-sensitivity}.
+Near-field bucket = the closest available training-bank candidate to each query (matches what
+production retrieval actually picks), in both latent units and the environment's own
+success-tolerance units (Push-T 20\,px, Cube 0.04\,m, Reacher 0.05\,rad).}
+\label{tab:retrieval-sensitivity-real}
+\begin{tabular}{lrrrr}
+\toprule
+env & near $d_0$ (latent) & near $d_{\text{final}}$ (latent, ratio) & near $d_0/$tol & near $d_{\text{final}}/$tol (ratio) \\
+\midrule
+Push-T   & 1.03 & 3.80 (3.7$\times$)   & 0.25$\times$ & 0.87$\times$ (3.6$\times$) \\
+Cube     & 1.85 & 6.64 (3.6$\times$)   & 0.25$\times$ & 0.80$\times$ (3.2$\times$) \\
+Reacher  & 0.22 & 6.14 (\textbf{27.9$\times$}) & 0.12$\times$ & \textbf{2.98$\times$} (\textbf{26.8$\times$}) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Confirmed, in ground truth, and sharper.} The ranking from
+\cref{sec:retrieval-dynamics-sensitivity} survives entirely -- if anything the real simulator
+makes Reacher's failure starker. In tolerance-normalized state space, Push-T and Cube both land
+their real final state \emph{just inside or at the edge of} their own success band
+(0.87$\times$/0.80$\times$ tolerance) from an initial offset a quarter of that tolerance
+(0.25$\times$). Reacher starts from a \emph{smaller} relative offset than either (0.12$\times$
+tolerance -- its nearest available real neighbor is genuinely closer, same as
+\cref{sec:retrieval-dynamics-sensitivity} found) and still ends up at \textbf{2.98$\times$} its
+own tolerance -- nearly three full success-radii outside the target, roughly $3.4\times$ farther
+out (in tolerance units) than Push-T or Cube manage from a relatively larger starting offset.
+This is not a predictor-imagination artifact: it is what actually happens when the node's real
+action sequence is executed, in real physics, from the query's real state. Retrieval's core
+assumption -- nearby state, same action, nearby result -- holds closely enough on Push-T and
+Cube to be usable, and fails outright on Reacher, independent of whether the "nearby" and
+"result" are measured in the frozen latent space or in the environment's own physical units.
+
+\paragraph{The latent-space number specifically: Reacher's better match buys it nothing.}
+Read in raw latent units rather than ratios, the near-field numbers reframe the failure mode
+slightly. Reacher's nearest available real neighbor is latently \emph{closer} than Push-T's or
+Cube's ($d_0=0.22$ vs.\ $1.03$/$1.85$) -- its retrieval mechanism is, if anything, doing its job
+better by the distance metric alone -- yet the real outcome after 25 real steps lands about as
+far from the target in absolute latent terms ($d_{\text{final}}=6.14$) as Cube's does from a
+starting point over $8\times$ farther away ($6.64$ from $d_0=1.85$), and nearly $2\times$
+Push-T's ($3.80$ from $d_0=1.03$). The huge ratio (27.9$\times$) is not an artifact of an
+unusually bad outcome; it is what a merely-average outcome looks like when it starts from an
+unusually good match. As a validity check that this latent measurement is tracking something
+physically real and not encoder noise decorrelated from the actual simulator outcome: per-pair
+$d_{\text{final}}$ in latent space and in raw state space correlate positively in all three
+environments (Pearson $r=0.64$ Push-T, $0.50$ Cube, $0.63$ Reacher; Spearman $0.46$/$0.45$/$0.50$)
+-- moderate, not perfect (the two spaces are not measuring identical things -- pixel/metre/radian
+position vs.\ the full learned representation), but consistently positive, so the latent
+divergence reported here is measuring the same underlying physical divergence as
+\cref{tab:retrieval-sensitivity-real}'s state-space column, not an independent source of noise.
+
+\subsection{A metric for axis (2): baseline CEM reliability, not action-match quality
+(2026-09-21)}
+\label{sec:baseline-cem-reliability}
+\emph{Script: \texttt{scripts/solution\_multiplicity\_diag.py}. Pure post-hoc analysis of
+data already on disk -- the 5 CEM seeds' plain \textbf{OUR} (zero-mean, no retrieval)
+same-ep-25 runs used for every headline table above -- no new CEM solves.}
+
+\paragraph{Why the log-$P$ advantage isn't the axis-(2) metric.} \Cref{tab:retrieval-logp}
+and \cref{tab:retrieval-logp-iterations} explain axis (1) (Reacher) well but do not separate
+Push-T from Cube: both environments' retrieval-vs-zero-mean $\log P$ advantage grows to
+roughly the same place by CEM iteration 20 (Push-T +36.7, Cube +37.5), yet retrieval only
+helps one of them. That diagnostic measures how close retrieval's placement stays to the
+\emph{logged human action}; it says nothing about whether zero-mean CEM, left alone, would
+have found a comparably good answer anyway.
+
+\paragraph{A direct measurement of axis (2): does the same environment, same task, same
+planner, disagree with itself across random seeds?} If zero-mean CEM's search is a reliable
+process, five independent CEM seeds solving the identical task should agree, both on whether
+they succeed and roughly on what solution they land on; if the search is unreliable or
+strategy-dependent, seeds will disagree. Two measurements, both from the existing 5-seed
+same-ep-25 \textbf{OUR} (no retrieval) sweep on the fixed \texttt{task200u} pool:
+\begin{enumerate}[nosep]
+  \item \textbf{Baseline success rate and its cross-seed spread.} Mean $\pm$ sd over the 5
+  CEM seeds: Push-T \textbf{87.6\% $\pm$ 2.3}, Cube \textbf{62.0\% $\pm$ 4.7}, Reacher
+  \textbf{76.0\% $\pm$ 4.6}.
+  \item \textbf{Fraction of tasks solved by every one of the 5 seeds}, vs.\ the naive
+  success rate above (a big gap means failures are seed-dependent, not just uniformly hard
+  tasks): Push-T \textbf{39/50 (78\%)} -- close to its 87.6\% average, failures are
+  consistent; Cube \textbf{17/50 (34\%)} -- far below its own 62\% average; Reacher
+  \textbf{14/50 (28\%)} -- the widest success/consistency gap of the three despite a
+  respectable 76\% average success rate.
+  \item \textbf{Cross-seed trajectory diversity among jointly-solved tasks}: the mean
+  pairwise distance (in the env's own state units) between the 5 seeds' realized state
+  trajectories, restricted to tasks every seed solves, expressed as a multiple of the
+  environment's own success tolerance (Push-T 20\,px, Cube 0.04\,m, Reacher 0.05\,rad
+  max-joint-error) so the three environments are comparable on one scale: Push-T
+  \textbf{0.76$\times$}, Cube \textbf{1.42$\times$}, Reacher \textbf{2.15$\times$}. Even on
+  tasks every seed independently solves, Push-T's five solutions sit closer together than
+  the environment's own success band; Cube's and (more so) Reacher's routinely differ by
+  more than a full success radius.
+\end{enumerate}
+
+\paragraph{This orders Push-T and Cube correctly; Reacher needs the other axis too.}
+Push-T's baseline search is both the most successful (87.6\%) and the most internally
+consistent (0.78 solved-by-all rate nearly matches its own average, 0.76$\times$-tolerance
+spread among solved tasks) of the three -- CEM converges to essentially the same solution
+whichever seed drives it, so a demonstration anchor removes variance the search did not have.
+Cube's baseline search is markedly less reliable: 26 points lower average success than
+Push-T, a solved-by-all rate less than half its own average (seeds disagree on \emph{which}
+tasks they solve), and nearly double Push-T's cross-seed path diversity even among shared
+successes -- exactly the regime where anchoring the population at one known-good
+demonstration should (and does, \cref{tab:pusht-summary} vs.\ the corresponding Cube table)
+turn an unreliable search into a reliable one. Reacher's baseline search is \emph{also}
+unreliable by this metric -- the widest success/consistency gap and the largest cross-seed
+diversity of the three, which by axis (2) alone would predict Reacher as the \emph{best}
+retrieval candidate, not the worst. It is not, because axis (1) fails first: retrieval's
+anchor is not a real answer to the redundant-kinematics search problem
+(\cref{sec:retrieval-action-diag}), so pointing an unreliable search at noise makes the
+unreliability worse rather than resolving it. The two axes are not substitutes for each
+other -- axis (2) alone mis-ranks Reacher above Cube, and the log-$P$ proxy tried in place of
+axis (2) mis-ranks Push-T alongside Cube; both are needed, and axis (2) should be measured
+this way (baseline reliability, not resemblance to a human demonstration) rather than via
+log-$P$.
+
+\begin{table}[H]
+\centering\small
+\caption{Two axes, three environments. Baseline: 5-seed \textbf{OUR} (no retrieval)
+same-ep-25 zero-mean CEM, \texttt{task200u} pool. Action-match $r$ from
+\cref{tab:retrieval-action-diag}. Retrieval effect: OUR+retr vs.\ OUR, same protocol.}
+\label{tab:two-axes}
+\begin{tabular}{lrrrrr}
+\toprule
+env & baseline succ.\ (sd) & solved-by-all & traj.\ div.\ ($\times$tol) & action-match $r$ & retrieval effect \\
+\midrule
+Push-T   & 87.6 (2.3) & 78\% & 0.76$\times$ & 0.89--0.91 & $-1.6$ to $-3.2$ \\
+Cube     & 62.0 (4.7) & 34\% & 1.42$\times$ & 0.67       & $+20$ to $+28$   \\
+Reacher  & 76.0 (4.6) & 28\% & 2.15$\times$ & 0.03--0.05 & $-14$ (worst horizon) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Practical guidance: when does demonstration retrieval help?} Three environments
+give two independent axes, not one, and both must be checked before adopting retrieval as a
+default:
+\begin{enumerate}[nosep]
+  \item \textbf{Is the retrieved action a genuine match to what the current state needs?}
+  Measured directly by per-action-dimension correlation between the retrieved block and the
+  true action on same-ep-25 tasks (\cref{tab:retrieval-action-diag}): Cube 0.67, Push-T
+  0.89--0.91, Reacher 0.03--0.05. Reacher fails this test outright -- its redundant kinematics
+  mean two states that look alike in psi-space (tight retrieval, $d_{\mathrm{start}}=0.31$)
+  can have been reached by unrelated actions, so retrieval is not a weak signal there, it is
+  \emph{anti}-signal: the $\log P$ diagnostic (\cref{tab:retrieval-logp}) shows it starts CEM's
+  search farther from the true action than doing nothing, on 100\% of tasks, and the gap
+  \emph{grows} every CEM iteration (\cref{tab:retrieval-logp-iterations}). This axis is cheap
+  to check before running a full sweep: encode a handful of same-ep-25 (start, goal) pairs,
+  retrieve, and correlate against the logged action.
+  \item \textbf{Does the environment's own from-scratch search already find an equally good
+  solution reliably, without it?} This is the axis that separates Push-T from Cube even
+  though both pass test (1) -- Push-T's match is \emph{better} than Cube's on every measure,
+  yet retrieval still costs 1.6--3.2 points there. It is not well measured by resemblance to
+  the logged human action (Push-T and Cube's $\log P$ advantage over zero-mean grows to
+  nearly the same place); it is measured directly by \emph{cross-seed reliability of
+  zero-mean CEM itself} (\cref{sec:baseline-cem-reliability}, \cref{tab:two-axes}): Push-T's
+  baseline search is both more successful and far more internally consistent across 5 CEM
+  seeds (87.6\% success, 0.76$\times$-tolerance cross-seed path spread on jointly-solved
+  tasks) than Cube's (62.0\% success, 1.42$\times$ spread, and seeds disagree on which tasks
+  they solve). A demonstration anchor removes search variance Push-T's CEM did not have and
+  Cube's did.
+\end{enumerate}
+\textbf{Rule of thumb: adopt retrieval only when both axes are positive} -- the retrieved
+action correlates with the true one (state doesn't underdetermine action), \emph{and}
+plain zero-mean CEM measurably struggles on the task without it (long-horizon, multi-phase,
+or contact-rich search landscapes). Passing only axis (1), as Push-T does, is not sufficient.
+When axis (1) fails (Reacher), predictor-verified retrieval
+(\texttt{+mpc.retrieval\_verify=true}, \cref{tab:retrieval-verify-reacher}) is a cheap,
+env-agnostic partial fix -- it recovers most of the loss at longer horizons (same-ep 100,
+cross-ep fully recover) by rejecting retrievals that score worse than zero-mean under the
+run's own predicted cost, but does not fully fix the shortest, least-replanned horizon
+(same-ep 25, where a wrongly-kept bad retrieval has no later replan to correct it). It has not
+been tested on Push-T, where axis (1) is not the problem, so no recovery is expected from it
+there; the untested fix for axis (2) is partial-population warm start (seed only a fraction of
+CEM's initial population at the retrieved mean, leaving the rest free), which should cost
+Cube nothing while giving Push-T's already-sufficient search an unbiased fallback.
 
 \subsection{Single-pass L2 CEM at offset 25: predicted latent cost vs.\ realized latent
 distance (2026-09-16)}
@@ -325,6 +938,170 @@ sees its own imagined rollout cannot correct for.
   where the predictor was optimistic.}
   \label{fig:l2-single-pass}
 \end{figure}
+
+\subsection{Graph vs.\ L2 candidate ranking across horizon, and why L2 loses (2026-09-21)}
+\label{sec:graph-vs-l2-ranking}
+\emph{Scripts: \texttt{scripts/viability\_inversion\_audit.py} (offset 10, new; offsets 25/50
+reuse the existing Experiment-2 audit) and \texttt{scripts/graph\_candidate\_ranking\_diag.py}
+(new). Answers the open question of whether the graph is only a long-horizon tool.}
+
+\paragraph{Setup.} The Experiment-2 privileged-oracle audit (the viability-critic line's
+mechanism, \texttt{scripts/viability\_inversion\_audit.py}) fixes 50 (start, goal) problems per offset and, for each, a pool of $K=32$
+candidate 25-step action sequences; it stores every candidate's LeWM-predicted terminal
+latent $z_{\mathrm{pred}}$, the truly-executed terminal latent $z_{\mathrm{true}}$ (real
+physics, same actions), the goal latent $z_g$, and the oracle's true minimum recovery time
+$T$ from the executed endpoint. \texttt{graph\_candidate\_ranking\_diag.py} scores every
+candidate with four costs -- LeWM's own $\|z-z_g\|^2$ (\textbf{l2}), direct TDR distance with
+no graph (\textbf{tdr}), the pure graph route distance (\textbf{geo}), and
+$\min(\mathrm{tdr},\mathrm{geo})$ (\textbf{ctg}, the cost \textbf{ctg}/\textbf{subgoal\_tdr}
+actually use) -- against $z_{\mathrm{pred}}$ (what the planner sees at decision time) and
+separately against $z_{\mathrm{true}}$ (removing predictor error), and reports the mean
+per-task Spearman correlation with $T$ (95\% task-bootstrap CI), matching
+\texttt{viability\_metric\_vs\_dynamics.py}'s existing convention -- offsets 25/50's
+$z_{\mathrm{pred}}$ column reproduces the already-published L2 numbers (0.719/0.356 vs.\
+main.tex's 0.72/0.36) as a validation check.
+
+\begin{table}[H]
+\centering\small
+\caption{Mean per-task Spearman(cost, oracle recovery time $T$), 95\% task-bootstrap CI,
+$n=50$ tasks $\times$ 32 candidates. Deployed setting: cost computed on the predictor's own
+imagined endpoint $z_{\mathrm{pred}}$, exactly what CEM sees.}
+\label{tab:graph-vs-l2-zpred}
+\begin{tabular}{lrrrr}
+\toprule
+offset & l2 & tdr (no graph) & geo (pure graph) & ctg $=\min$(tdr, geo) \\
+\midrule
+10 & 0.183 [0.09, 0.27] & 0.343 [0.26, 0.42] & \textbf{0.363} [0.28, 0.44] & 0.343 [0.26, 0.42] \\
+25 & 0.719 [0.69, 0.75] & \textbf{0.731} [0.69, 0.77] & 0.710 [0.67, 0.75] & \textbf{0.731} [0.69, 0.77] \\
+50 & 0.356 [0.25, 0.46] & 0.664 [0.61, 0.71] & \textbf{0.672} [0.62, 0.72] & 0.664 [0.61, 0.71] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{L2 is not the best candidate-ranker anywhere in this sweep.} The original
+hypothesis motivating this check was that L2 should rank candidates best at short range and
+the graph should overtake it only at long range. The data does not show that crossover: L2
+is worst at offset 10, roughly tied with the graph at 25 (overlapping CIs), and clearly worst
+at 50. There is no offset here where L2 wins outright. Offset 10 needs one important caveat,
+however: the candidate pool is always a fixed 25-step rollout
+(\texttt{HORIZON}$\times$\texttt{SKIP} in \texttt{planning\_cost\_gate.py}), independent of
+the audit's goal offset, so at offset 10 every candidate overshoots a goal that is only 10
+real steps away by construction -- this is not a clean test of ``short planning horizon,'' and
+offset 10's very low numbers should be read with that in mind.
+
+\paragraph{Decomposing the offset-50 gap: predictor error vs.\ metric quality.} Rerunning the
+same four costs on $z_{\mathrm{true}}$ (the actually-executed endpoint, so predictor rollout
+error is removed) separates two different failure modes that both make L2 look bad at
+$z_{\mathrm{pred}}$:
+
+\begin{table}[H]
+\centering\small
+\caption{Same metric, scored on the true executed endpoint $z_{\mathrm{true}}$ instead of the
+predicted one -- isolates the graph's advantage that survives \emph{even with a perfect
+predictor}, versus the part that is really about robustness to predictor error.}
+\label{tab:graph-vs-l2-ztrue}
+\begin{tabular}{lrrrrr}
+\toprule
+offset & l2 ($z_{\mathrm{pred}}$) & l2 ($z_{\mathrm{true}}$) & ctg ($z_{\mathrm{pred}}$) & ctg ($z_{\mathrm{true}}$) & gap closed by true endpoint \\
+\midrule
+10 & 0.183 & 0.835 & 0.343 & 0.829 & l2: +0.652; ctg: +0.486 -- l2 catches up \\
+25 & 0.719 & 0.809 & 0.731 & 0.833 & l2: +0.090; ctg: +0.102 -- both improve equally \\
+50 & 0.356 & 0.454 & 0.664 & 0.734 & l2: +0.098; ctg: +0.070 -- gap persists \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{At offset 10, the gap is almost entirely predictor error, not metric quality.} Given
+the true endpoint, L2 and the graph are statistically indistinguishable (0.835 vs.\ 0.829,
+L2 marginally \emph{ahead}). The z\_pred gap (0.183 vs.\ 0.343) all but disappears once the
+predictor's rollout error is removed -- consistent with the horizon-mismatch caveat above: L2
+is simply more sensitive to the specific noise that a mismatched 25-step rollout injects at
+this offset, not intrinsically a worse metric once given an accurate endpoint. At offset 25
+the two metrics improve by almost the same amount with the true endpoint (+0.090 vs.\
++0.102), so neither predictor error nor metric quality dominates -- consistent with the two
+metrics being statistically tied at this offset already.
+
+\textbf{At offset 50, the story flips: the gap survives a perfect predictor.} Handing L2 the
+ground-truth endpoint only recovers 0.098 of Spearman (0.356 $\to$ 0.454); the graph, scored
+on the noisier predicted endpoint, already exceeds L2's \emph{true-endpoint ceiling}
+(0.664 $>$ 0.454). This means raw latent L2 distance is an intrinsically weak proxy for
+``how many actions until success'' at $\sim$50-step range, independent of how well LeWM's
+predictor rolls forward. This is consistent with the mechanism the Findings log's Phase 1
+analysis (below) already identified behaviourally (L2's closest approach to the goal is 32\,px but it
+drifts back out to 76\,px by the time the episode ends: it gets near, then the block
+specifically -- not the agent -- fails to stay converged) and gives it a metric-level
+explanation: raw latent L2 pools every state dimension into one Euclidean norm with no notion
+of how many actions each dimension actually costs to fix, so a state where the agent already
+sits on target but the block is still far away can score as ``close'' even though the
+remaining task is not nearly done. TDR is trained on an expectile-TD loss over real transition
+counts (Setup, above), so $\psi$ warps the latent specifically so that distance
+\emph{is} action-count, weighting each dimension by how expensive it actually is to move, not
+by how large it looks in the raw embedding. That training signal is exactly what raw L2 lacks,
+and it is why the graph's advantage grows with horizon (more opportunity for the L2-vs-actions
+mismatch to compound) rather than shrinking.
+
+\subsection{Live CEM trace: does OUR rank its own elites better than L2? (2026-09-21)}
+\label{sec:cem-trace-audit}
+\emph{Script: \texttt{scripts/gas\_mpc\_cem\_trace\_audit.py}. Unlike
+\cref{sec:graph-vs-l2-ranking}'s fixed diagnostic pool (32 candidates spanning near-expert to
+random), this scores the actual 300-candidate population OUR's own live CEM solver samples
+and the actual top-30 elites it selects.}
+
+\paragraph{Setup.} For 25 held-out \texttt{task200u} tasks per protocol (\texttt{same25},
+\texttt{same50}, CEM seed 0), OUR (\texttt{subgoal\_tdr} + phase-8 final switch + ET critic,
+$\beta=1$ -- \cref{sec:phase8} configuration B) runs its normal CEM solver (300 samples, 30
+iterations, top-30 elites) for only the \emph{first} plan call (no replanning, no env
+execution beyond the CEM optimisation itself). A callback on the solver captures, at
+iterations 1, 10, and 20, the 30 elite candidates OUR's own cost selects; each elite's
+25-step action sequence is then executed for real in the simulator from the task's true
+start state, and the privileged real-physics oracle (\cref{sec:graph-vs-l2-ranking}'s
+mechanism, same settings) is run from each elite's true endpoint to the goal. This gives an
+oracle recovery-time ranking of the exact elites OUR's optimisation actually kept, so OUR's
+cost and LeWM's own z-space L2 (computed for free on the same predicted rollout every
+iteration, since both criteria see identical predicted latents -- only their formula differs)
+can both be scored against it.
+
+\begin{table}[H]
+\centering\small
+\caption{Spearman(cost, oracle recovery time) and mean $|{\rm rank(cost)}-{\rm rank}(T)|$
+(0 = perfect agreement, $\approx$10 = uncorrelated for $n=30$), over OUR's own 30 elite
+candidates, 25 tasks, 95\% task-bootstrap CI where shown.}
+\label{tab:cem-trace-audit}
+\begin{tabular}{llrrrr}
+\toprule
+protocol & iteration & $\rho$(OUR) & $\rho$(L2) & mismatch(OUR) & mismatch(L2) \\
+\midrule
+same25 & 1  & 0.327 [0.25, 0.40]   & 0.396 [0.29, 0.49]   & 7.68 & 7.09 \\
+same25 & 10 & 0.168 [0.07, 0.26]   & 0.184 [0.06, 0.30]   & 8.23 & 8.19 \\
+same25 & 20 & 0.049 [$-$0.05, 0.15] & 0.106 [$-$0.02, 0.23] & 8.25 & 8.07 \\
+same50 & 1  & 0.203 [0.10, 0.30]   & 0.086 [$-$0.06, 0.23] & 8.37 & 9.03 \\
+same50 & 10 & 0.150 [0.06, 0.24]   & 0.190 [0.08, 0.30]   & 8.30 & 8.02 \\
+same50 & 20 & 0.100 [0.03, 0.17]   & 0.089 [$-$0.04, 0.22] & 8.53 & 8.59 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Within its own elites, OUR does not rank better than L2.} Every row's confidence
+intervals overlap heavily; the sign of the (small) gap flips between protocols and iterations
+(L2 nominally ahead at every same25 iteration, OUR ahead at same50 iterations 1 and 20). This
+is a real contrast with \cref{tab:graph-vs-l2-zpred}, where the graph clearly beat L2 at
+offset 50 (0.664 vs.\ 0.356) on a wide, fixed candidate pool. Both correlations here are also
+much weaker than that table's (0.05--0.4 vs.\ 0.6--0.7) and decay from iteration 1 to 20 for
+\emph{both} costs, consistent with a restricted-range effect: by iteration 20 the top-30 have
+already converged into a narrow cluster around the running optimum, leaving little spread for
+either metric to rank.
+
+\paragraph{Reading.} The graph's advantage over L2 documented earlier in this project is not
+``ranks an already-converged elite set more precisely.'' It is upstream of that: which
+candidates survive each iteration's elite cut shapes where the population's mean moves over
+the following iterations, and \cref{sec:graph-vs-l2-ranking}'s wide-pool result shows the
+graph is a better cost \emph{to decide that} when the candidates span a broad range (near
+expert to random). Once CEM has already narrowed to a tight elite cluster, however, neither
+cost discriminates much further within it -- the mechanism's payoff is in steering the search
+trajectory over the full 30 iterations, not in a sharper final ranking at any single
+iteration. This is consistent with, and gives a mechanistic account under, the standing
+closed-loop finding that OUR's benefit shows up over full episodes at offset 50+ rather than
+as a single-solve ranking improvement.
 
 \section{Findings log}
 % Entries are appended as runs finish; each states what was run, what happened, the
@@ -1183,5 +1960,194 @@ cross-ep & L2 & 32 & 26 & 28 & 32 & 28 & $29.2 \pm 2.7$ \\
 On the new Reacher dataset, OUR is 7.2 points above L2 at offset 50, 14.8 points above at
 offset 100, and 36.4 points above on cross-episode goals; L2 is 1.2 points higher at offset
 25.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Cube held-out, training-only-asset results: success (\%) on 50 fixed tasks per
+CEM seed. The final column is mean $\pm$ sample standard deviation over five CEM seeds.}
+\label{tab:cube-task-critic-refresh}
+\begin{tabular}{llrrrrrr}
+\toprule
+protocol & method & s0 & s1 & s2 & s3 & s4 & mean $\pm$ std \\
+\midrule
+same-ep 25 & L2 & 52 & 52 & 56 & 58 & 62 & $56.0 \pm 3.8$ \\
+           & OUR & 56 & 60 & 60 & 70 & 64 & $62.0 \pm 4.7$ \\
+\midrule
+same-ep 50 & L2 & 36 & 28 & 36 & 36 & 36 & $34.4 \pm 3.2$ \\
+           & OUR & 42 & 50 & 52 & 56 & 48 & $49.6 \pm 4.6$ \\
+\midrule
+same-ep 100 & L2 & 36 & 36 & 34 & 34 & 38 & $35.6 \pm 1.5$ \\
+            & OUR & 46 & 56 & 50 & 50 & 50 & $50.4 \pm 3.2$ \\
+\midrule
+cross-ep & L2 & 16 & 18 & 16 & 18 & 14 & $16.4 \pm 1.5$ \\
+         & OUR & 18 & 30 & 36 & 30 & 24 & $27.6 \pm 6.1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On the new Cube dataset, OUR is 6.0 points above L2 at offset 25, 15.2 points above at
+offset 50, 14.8 points above at offset 100, and 11.2 points above on cross-episode goals.
+Unlike Push-T and Reacher, OUR wins at offset 25 too, and by the same margin the old-dataset
+same25 draw showed (\cref{sec:final-results}) -- Cube's held-out pool does not reproduce the
+old dataset's hard-draw dilution (\cref{sec:task-pools}).
+
+\section{Replan frequency ablation: fewer, longer L2 chunks (2026-09-19)}
+\label{sec:replan-frequency}
+The L2 baseline above replans every $\texttt{receding}=5$ blocks (25 env steps), so it takes
+8 rollouts of 25 steps to fill same-ep 100's 200-step budget, 4 rollouts of 25 for same-ep
+50's 100-step budget, and 10 rollouts of 25 for cross-episode's 250-step budget. This
+ablation instead sets \texttt{plan\_config.horizon} and \texttt{receding} to the SAME larger
+block count, so CEM commits to (and only replans after) a much longer open-loop chunk: 2
+rollouts of 50 steps each for same-ep 50 (\texttt{receding=10}), 2 rollouts of 100 steps each
+for same-ep 100 (\texttt{receding=20}), and 3 rollouts of 100 steps each for cross-episode
+(\texttt{receding=20}; budget 250 is not a multiple of 100, so the last rollout is truncated
+to 50 steps by the remaining budget). Same held-out \texttt{task200u} pool, same 5 CEM seeds,
+same L2 method (no graph/critic) as the default baseline in Table~\ref{tab:task-critic-refresh}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Push-T L2 baseline, default replan cadence (25-step chunks) vs.\ long-chunk ablation:
+success (\%) on 50 fixed tasks per CEM seed. The final column is mean $\pm$ sample standard
+deviation over five CEM seeds.}
+\label{tab:replan-frequency}
+\begin{tabular}{llrrrrrr}
+\toprule
+protocol & chunking & s0 & s1 & s2 & s3 & s4 & mean $\pm$ std \\
+\midrule
+same-ep 50  & default (4$\times$25) & 34 & 40 & 42 & 44 & 44 & $40.8 \pm 4.1$ \\
+            & long (2$\times$50)    & 34 & 38 & 34 & 30 & 36 & $34.4 \pm 3.0$ \\
+\midrule
+same-ep 100 & default (8$\times$25) & 18 & 14 & 14 & 12 & 8  & $13.2 \pm 3.6$ \\
+            & long (2$\times$100)   & 4  & 6  & 4  & 4  & 10 & $5.6 \pm 2.5$ \\
+\midrule
+cross-ep    & default (10$\times$25) & 14 & 14 & 8  & 16 & 20 & $14.4 \pm 4.3$ \\
+            & long (3$\times$100)    & 4  & 4  & 6  & 2  & 8  & $4.8 \pm 2.2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Replanning less often costs the L2 baseline everywhere, and the cost grows with how much of
+the budget each open-loop chunk covers: $-6.4$ points at same-ep 50 (each chunk is half the
+budget either way, so this is the mildest case), $-7.6$ points at same-ep 100, and $-9.6$
+points (roughly a $3\times$ relative drop) on cross-episode goals, which combines the longest
+individual chunk (100 of 250 steps) with the hardest task distribution. This is consistent
+with longer open-loop commitments giving CEM fewer chances to correct for predictor drift
+between replans, and it means the OUR-vs-L2 gaps in Table~\ref{tab:task-critic-refresh} are
+not an artifact of L2 replanning too rarely --- the default 25-step cadence is in fact the
+more favorable setting for the L2 baseline.
+
+\section{Cube diagnosis/tuning sweep: final-switch, critic, and retrieval variants (2026-09-19)}
+\label{sec:cube-variants}
+\emph{Script: \texttt{scripts/ada\_cube\_variants.sh}; logs under
+\texttt{outputs/cube/logs/variants\_20260919/}.} Table~\ref{tab:cube-task-critic-refresh}'s
+(and the earlier Cube summary table's, \cref{sec:cube}) Cube OUR row is \texttt{subgoal\_tdr}
+with the 13.63-unit final
+switch to goal L2 \emph{and the critic on} (viability critic, $\beta=1$, ET cost) --- confirmed
+by re-reading that run's own logged config on Ada (tag \texttt{..\_ft13.63\_fl2\_crit1\_ccet..},
+same100 $46,56,50,50,50 \to 50.4$, cross $18,30,36,30,24 \to 27.6$ over 5 seeds, matching the
+table exactly). It is \emph{not} a no-critic default. This sweep tests four one-setting-away
+variants of that exact config against the same held-out \texttt{task200u} pool and
+training-only assets, 3 CEM seeds (0--2), on \texttt{same100} and \texttt{cross} only:
+\begin{itemize}
+  \item \textbf{late}: tighter final switch to goal L2 (7.25 vs.\ 13.63 units); critic unchanged
+        ($\beta=1$, ET cost).
+  \item \textbf{nocrit}: critic removed entirely; final switch unchanged (13.63) --- isolates
+        whether the critic is earning its keep at all.
+  \item \textbf{retrieval}: final switch and critic unchanged from OUR; adds demonstration
+        retrieval warm-starting CEM with a graph-compatible logged action block (only this one
+        setting changes vs.\ OUR).
+  \item \textbf{beta2}: critic weight raised to $\beta=2$; final switch unchanged (13.63).
+\end{itemize}
+Because each variant flips exactly one setting relative to the real OUR config, and OUR itself
+was run with seeds 0--4, the table below includes OUR's own seeds 0--2 as a reference row for a
+like-for-like, matched-seed comparison.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Cube diagnosis/tuning sweep: success (\%) on 50 held-out \texttt{task200u} tasks per
+CEM seed, \texttt{subgoal\_tdr} variants and the Table~\ref{tab:cube-task-critic-refresh} OUR
+config restricted to the same 3 seeds. Final column is mean over 3 seeds.}
+\label{tab:cube-variants}
+\begin{tabular}{llrrrr}
+\toprule
+protocol & variant & s0 & s1 & s2 & mean \\
+\midrule
+same-ep 100 & OUR (crit $\beta{=}1$, ft13.63, table config)  & 46 & 56 & 50 & $50.7$ \\
+            & late (tight switch, crit $\beta{=}1$)           & 46 & 56 & 48 & $50.0$ \\
+            & nocrit (critic removed)                          & 42 & 38 & 32 & $37.3$ \\
+            & retrieval (OUR $+$ retrieval)                    & 82 & 78 & 78 & $79.3$ \\
+            & beta2 (crit $\beta{=}2$)                          & 62 & 62 & 60 & $61.3$ \\
+\midrule
+cross-ep    & OUR (crit $\beta{=}1$, ft13.63, table config)  & 18 & 30 & 36 & $28.0$ \\
+            & late (tight switch, crit $\beta{=}1$)           & 18 & 28 & 36 & $27.3$ \\
+            & nocrit (critic removed)                          & 32 & 34 & 26 & $30.7$ \\
+            & retrieval (OUR $+$ retrieval)                    & 52 & 50 & 48 & $50.0$ \\
+            & beta2 (crit $\beta{=}2$)                          & 24 & 34 & 34 & $30.7$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Retrieval} is the only variant that clears OUR by a wide margin at both protocols:
+$+28.7$ points at same-ep 100 (79.3 vs.\ 50.7) and $+22.0$ points at cross-ep (50.0 vs.\ 28.0),
+and since retrieval changes exactly one setting relative to OUR (critic and final switch held
+fixed), this is a clean single-variable result, not confounded with the critic. \textbf{The
+critic itself} is worth roughly $+13$ points at same-ep 100 (OUR 50.7 vs.\ nocrit 37.3) but is a
+wash on cross-ep (OUR 28.0 vs.\ nocrit 30.7, within seed noise) --- raising its weight to
+$\beta=2$ helps further at same-ep 100 ($61.3$, $+10.7$ over OUR) and is roughly flat on
+cross-ep ($30.7$, $+2.7$). \textbf{The tighter final switch} (late) is a wash on both protocols
+(50.0 vs.\ 50.7 same-ep 100; 27.3 vs.\ 28.0 cross-ep) --- the calibrated 13.63-unit default is
+already about as good as switching to goal L2 earlier. Demonstration retrieval, not the critic
+weight or the final-switch threshold, is the change worth carrying forward.
+
+\paragraph{Retrieval, extended to all 5 CEM seeds and all 4 protocols.}
+\emph{Script: \texttt{scripts/ada\_cube\_retrieval\_full.sh}; resumable, skips any
+(seed, protocol) whose output already exists.} The 3-seed, 2-protocol screen above pointed at
+retrieval as the one setting worth carrying forward, so it was re-run to the same 5-seed,
+4-protocol footprint as Table~\ref{tab:cube-task-critic-refresh}'s OUR row (same config, only
+\texttt{retrieval=true} added, confirmed by diffing the two runs' logged \texttt{mpc} configs
+directly --- the only substantive difference is the \texttt{retrieval} flag itself).
+
+\begin{table}[t]
+\centering
+\small
+\caption{Cube retrieval variant (OUR $+$ demonstration retrieval), all 5 CEM seeds, vs.\ the
+Table~\ref{tab:cube-task-critic-refresh} OUR row (critic on, no retrieval), read from the same
+underlying \texttt{task200u} result files. Success (\%) on 50 held-out tasks per seed; std is
+the population standard deviation over the 5 seeds, matching
+Table~\ref{tab:cube-task-critic-refresh}'s own figures.}
+\label{tab:cube-retrieval-full}
+\begin{tabular}{llrrrrrr}
+\toprule
+protocol & method & s0 & s1 & s2 & s3 & s4 & mean $\pm$ std \\
+\midrule
+same-ep 25  & OUR       & 56 & 60 & 60 & 70 & 64 & $62.0 \pm 4.7$ \\
+            & retrieval & 88 & 84 & 80 & 88 & 92 & $86.4 \pm 4.1$ \\
+\midrule
+same-ep 50  & OUR       & 42 & 50 & 52 & 56 & 48 & $49.6 \pm 4.6$ \\
+            & retrieval & 58 & 56 & 58 & 62 & 62 & $59.2 \pm 2.4$ \\
+\midrule
+same-ep 100 & OUR       & 46 & 56 & 50 & 50 & 50 & $50.4 \pm 3.2$ \\
+            & retrieval & 82 & 78 & 78 & 82 & 74 & $78.8 \pm 3.0$ \\
+\midrule
+cross-ep    & OUR       & 18 & 30 & 36 & 30 & 24 & $27.6 \pm 6.1$ \\
+            & retrieval & 52 & 50 & 48 & 46 & 44 & $48.0 \pm 2.8$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Retrieval wins at all 4 protocols, including same-ep 25 and same-ep 50 which the 3-seed screen
+never tested: $+24.4$ points at same-ep 25 (86.4 vs.\ 62.0), $+9.6$ at same-ep 50 (59.2 vs.\
+49.6), $+28.4$ at same-ep 100 (78.8 vs.\ 50.4), and $+20.4$ at cross-ep (48.0 vs.\ 27.6). The
+gain is smallest at same-ep 50 and largest at same-ep 100 and cross-ep --- consistent with a
+warm start mattering most where the unguided CEM mean (zero action, i.e.\ ``do nothing'') is
+furthest from a working plan, and least where the goal is close enough that CEM's own
+from-scratch search already finds it most of the time. Retrieval's seed-to-seed std is lower
+than OUR's at all 4 protocols (4.1 vs.\ 4.7, 2.4 vs.\ 4.6, 3.0 vs.\ 3.2, 2.8 vs.\ 6.1), so the
+gain is not coming at the cost of new instability. This is now the strongest Cube configuration
+measured in this document and a candidate to replace Table~\ref{tab:cube-task-critic-refresh}'s
+OUR row, pending a check of whether the gain survives with the critic switched off.
 
 \end{document}

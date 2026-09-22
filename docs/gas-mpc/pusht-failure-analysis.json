@@ -1,0 +1,728 @@
+{
+  "summary": {
+    "same25": {
+      "success": 221,
+      "close_but_not_enough": 25,
+      "orientation_only": 3,
+      "agent_abandons_block": 1
+    },
+    "same50": {
+      "success": 175,
+      "close_but_not_enough": 54,
+      "block_never_close": 17,
+      "agent_abandons_block": 1,
+      "orientation_only": 3
+    },
+    "same100": {
+      "success": 116,
+      "close_but_not_enough": 96,
+      "block_never_close": 29,
+      "orientation_only": 6,
+      "agent_abandons_block": 3
+    },
+    "cross": {
+      "success": 106,
+      "close_but_not_enough": 119,
+      "block_never_close": 14,
+      "orientation_only": 6,
+      "agent_abandons_block": 5
+    }
+  },
+  "task_fail_count": {
+    "same25": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      3,
+      3,
+      0,
+      0,
+      5,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      0,
+      0,
+      4,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    "same50": [
+      0,
+      0,
+      0,
+      3,
+      1,
+      3,
+      1,
+      0,
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      5,
+      4,
+      2,
+      0,
+      0,
+      1,
+      3,
+      0,
+      4,
+      0,
+      2,
+      1,
+      1,
+      4,
+      4,
+      2,
+      2,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      3,
+      3,
+      5,
+      3,
+      4
+    ],
+    "same100": [
+      0,
+      2,
+      5,
+      5,
+      0,
+      1,
+      3,
+      3,
+      3,
+      4,
+      2,
+      3,
+      4,
+      4,
+      4,
+      4,
+      2,
+      5,
+      3,
+      4,
+      2,
+      5,
+      5,
+      5,
+      4,
+      5,
+      0,
+      4,
+      4,
+      3,
+      2,
+      2,
+      2,
+      0,
+      0,
+      0,
+      2,
+      2,
+      1,
+      0,
+      3,
+      1,
+      0,
+      1,
+      5,
+      4,
+      5,
+      3,
+      0,
+      3
+    ],
+    "cross": [
+      1,
+      2,
+      5,
+      2,
+      1,
+      4,
+      5,
+      4,
+      5,
+      2,
+      5,
+      2,
+      4,
+      4,
+      5,
+      3,
+      1,
+      0,
+      0,
+      1,
+      1,
+      5,
+      4,
+      5,
+      0,
+      5,
+      2,
+      3,
+      4,
+      1,
+      5,
+      0,
+      0,
+      5,
+      2,
+      2,
+      1,
+      5,
+      4,
+      5,
+      5,
+      5,
+      1,
+      3,
+      3,
+      4,
+      1,
+      5,
+      2,
+      0
+    ]
+  },
+  "hard_tasks_all5": {
+    "same25": [
+      17,
+      27
+    ],
+    "same50": [
+      14,
+      15,
+      47
+    ],
+    "same100": [
+      2,
+      3,
+      17,
+      21,
+      22,
+      23,
+      25,
+      44,
+      46
+    ],
+    "cross": [
+      2,
+      6,
+      8,
+      10,
+      14,
+      21,
+      23,
+      25,
+      30,
+      33,
+      37,
+      39,
+      40,
+      41,
+      47
+    ]
+  },
+  "examples": {
+    "same25": {
+      "close_but_not_enough": [
+        {
+          "task": 13,
+          "seed": 0,
+          "min_block_pos": 31.4,
+          "final_block_pos": 31.5,
+          "final_ang_deg": 5.0,
+          "final_agent_pos": 46.0
+        },
+        {
+          "task": 17,
+          "seed": 0,
+          "min_block_pos": 4.4,
+          "final_block_pos": 39.3,
+          "final_ang_deg": 57.3,
+          "final_agent_pos": 40.5
+        },
+        {
+          "task": 18,
+          "seed": 0,
+          "min_block_pos": 0.1,
+          "final_block_pos": 26.0,
+          "final_ang_deg": 27.2,
+          "final_agent_pos": 14.5
+        },
+        {
+          "task": 27,
+          "seed": 0,
+          "min_block_pos": 19.8,
+          "final_block_pos": 19.8,
+          "final_ang_deg": 8.0,
+          "final_agent_pos": 24.3
+        }
+      ],
+      "orientation_only": [
+        {
+          "task": 30,
+          "seed": 0,
+          "min_block_pos": 2.1,
+          "final_block_pos": 39.2,
+          "final_ang_deg": 36.9,
+          "final_agent_pos": 15.7
+        },
+        {
+          "task": 30,
+          "seed": 1,
+          "min_block_pos": 2.2,
+          "final_block_pos": 19.2,
+          "final_ang_deg": 19.5,
+          "final_agent_pos": 12.4
+        },
+        {
+          "task": 30,
+          "seed": 4,
+          "min_block_pos": 1.7,
+          "final_block_pos": 60.7,
+          "final_ang_deg": 40.6,
+          "final_agent_pos": 21.7
+        }
+      ],
+      "agent_abandons_block": [
+        {
+          "task": 17,
+          "seed": 1,
+          "min_block_pos": 35.7,
+          "final_block_pos": 60.8,
+          "final_ang_deg": 30.7,
+          "final_agent_pos": 19.9
+        }
+      ]
+    },
+    "same50": {
+      "close_but_not_enough": [
+        {
+          "task": 6,
+          "seed": 0,
+          "min_block_pos": 6.3,
+          "final_block_pos": 25.6,
+          "final_ang_deg": 5.0,
+          "final_agent_pos": 23.6
+        },
+        {
+          "task": 8,
+          "seed": 0,
+          "min_block_pos": 31.6,
+          "final_block_pos": 31.6,
+          "final_ang_deg": 7.0,
+          "final_agent_pos": 17.6
+        },
+        {
+          "task": 15,
+          "seed": 0,
+          "min_block_pos": 58.9,
+          "final_block_pos": 63.1,
+          "final_ang_deg": 65.7,
+          "final_agent_pos": 47.4
+        },
+        {
+          "task": 16,
+          "seed": 0,
+          "min_block_pos": 1.8,
+          "final_block_pos": 26.8,
+          "final_ang_deg": 2.7,
+          "final_agent_pos": 28.9
+        }
+      ],
+      "block_never_close": [
+        {
+          "task": 14,
+          "seed": 0,
+          "min_block_pos": 96.7,
+          "final_block_pos": 220.7,
+          "final_ang_deg": 46.2,
+          "final_agent_pos": 150.9
+        },
+        {
+          "task": 45,
+          "seed": 0,
+          "min_block_pos": 131.6,
+          "final_block_pos": 153.1,
+          "final_ang_deg": 104.2,
+          "final_agent_pos": 109.2
+        },
+        {
+          "task": 5,
+          "seed": 1,
+          "min_block_pos": 98.1,
+          "final_block_pos": 98.1,
+          "final_ang_deg": 43.6,
+          "final_agent_pos": 79.5
+        },
+        {
+          "task": 14,
+          "seed": 1,
+          "min_block_pos": 96.6,
+          "final_block_pos": 223.7,
+          "final_ang_deg": 42.3,
+          "final_agent_pos": 341.6
+        }
+      ],
+      "agent_abandons_block": [
+        {
+          "task": 23,
+          "seed": 0,
+          "min_block_pos": 36.6,
+          "final_block_pos": 117.1,
+          "final_ang_deg": 13.3,
+          "final_agent_pos": 21.4
+        }
+      ],
+      "orientation_only": [
+        {
+          "task": 16,
+          "seed": 2,
+          "min_block_pos": 8.6,
+          "final_block_pos": 44.5,
+          "final_ang_deg": 59.7,
+          "final_agent_pos": 45.8
+        },
+        {
+          "task": 25,
+          "seed": 3,
+          "min_block_pos": 2.8,
+          "final_block_pos": 17.5,
+          "final_ang_deg": 37.8,
+          "final_agent_pos": 110.6
+        },
+        {
+          "task": 29,
+          "seed": 3,
+          "min_block_pos": 18.4,
+          "final_block_pos": 18.4,
+          "final_ang_deg": 26.3,
+          "final_agent_pos": 12.7
+        }
+      ]
+    },
+    "same100": {
+      "close_but_not_enough": [
+        {
+          "task": 2,
+          "seed": 0,
+          "min_block_pos": 42.0,
+          "final_block_pos": 42.0,
+          "final_ang_deg": 105.6,
+          "final_agent_pos": 44.1
+        },
+        {
+          "task": 3,
+          "seed": 0,
+          "min_block_pos": 18.6,
+          "final_block_pos": 19.1,
+          "final_ang_deg": 6.3,
+          "final_agent_pos": 24.4
+        },
+        {
+          "task": 6,
+          "seed": 0,
+          "min_block_pos": 31.9,
+          "final_block_pos": 31.9,
+          "final_ang_deg": 37.1,
+          "final_agent_pos": 36.9
+        },
+        {
+          "task": 7,
+          "seed": 0,
+          "min_block_pos": 56.3,
+          "final_block_pos": 64.2,
+          "final_ang_deg": 60.8,
+          "final_agent_pos": 54.2
+        }
+      ],
+      "block_never_close": [
+        {
+          "task": 12,
+          "seed": 0,
+          "min_block_pos": 110.4,
+          "final_block_pos": 110.5,
+          "final_ang_deg": 0.2,
+          "final_agent_pos": 45.9
+        },
+        {
+          "task": 13,
+          "seed": 0,
+          "min_block_pos": 154.6,
+          "final_block_pos": 154.6,
+          "final_ang_deg": 85.5,
+          "final_agent_pos": 195.0
+        },
+        {
+          "task": 15,
+          "seed": 0,
+          "min_block_pos": 214.6,
+          "final_block_pos": 214.6,
+          "final_ang_deg": 163.3,
+          "final_agent_pos": 432.7
+        },
+        {
+          "task": 23,
+          "seed": 0,
+          "min_block_pos": 68.9,
+          "final_block_pos": 71.3,
+          "final_ang_deg": 59.2,
+          "final_agent_pos": 1522.6
+        }
+      ],
+      "orientation_only": [
+        {
+          "task": 21,
+          "seed": 0,
+          "min_block_pos": 10.1,
+          "final_block_pos": 10.1,
+          "final_ang_deg": 22.9,
+          "final_agent_pos": 7.1
+        },
+        {
+          "task": 7,
+          "seed": 1,
+          "min_block_pos": 5.9,
+          "final_block_pos": 55.5,
+          "final_ang_deg": 117.8,
+          "final_agent_pos": 7.1
+        },
+        {
+          "task": 36,
+          "seed": 1,
+          "min_block_pos": 7.6,
+          "final_block_pos": 22.9,
+          "final_ang_deg": 22.6,
+          "final_agent_pos": 8.5
+        },
+        {
+          "task": 46,
+          "seed": 2,
+          "min_block_pos": 9.7,
+          "final_block_pos": 10.6,
+          "final_ang_deg": 32.4,
+          "final_agent_pos": 1504.9
+        }
+      ],
+      "agent_abandons_block": [
+        {
+          "task": 22,
+          "seed": 0,
+          "min_block_pos": 23.4,
+          "final_block_pos": 61.0,
+          "final_ang_deg": 101.9,
+          "final_agent_pos": 24.7
+        },
+        {
+          "task": 22,
+          "seed": 2,
+          "min_block_pos": 19.2,
+          "final_block_pos": 71.0,
+          "final_ang_deg": 121.2,
+          "final_agent_pos": 13.6
+        },
+        {
+          "task": 22,
+          "seed": 4,
+          "min_block_pos": 11.9,
+          "final_block_pos": 80.0,
+          "final_ang_deg": 121.5,
+          "final_agent_pos": 12.5
+        }
+      ]
+    },
+    "cross": {
+      "close_but_not_enough": [
+        {
+          "task": 1,
+          "seed": 0,
+          "min_block_pos": 19.0,
+          "final_block_pos": 23.6,
+          "final_ang_deg": 7.3,
+          "final_agent_pos": 22.5
+        },
+        {
+          "task": 2,
+          "seed": 0,
+          "min_block_pos": 30.2,
+          "final_block_pos": 36.1,
+          "final_ang_deg": 61.3,
+          "final_agent_pos": 74.6
+        },
+        {
+          "task": 3,
+          "seed": 0,
+          "min_block_pos": 8.8,
+          "final_block_pos": 12.5,
+          "final_ang_deg": 18.1,
+          "final_agent_pos": 673.4
+        },
+        {
+          "task": 5,
+          "seed": 0,
+          "min_block_pos": 6.1,
+          "final_block_pos": 6.3,
+          "final_ang_deg": 12.7,
+          "final_agent_pos": 5970.2
+        }
+      ],
+      "block_never_close": [
+        {
+          "task": 8,
+          "seed": 0,
+          "min_block_pos": 125.9,
+          "final_block_pos": 129.8,
+          "final_ang_deg": 135.4,
+          "final_agent_pos": 39.5
+        },
+        {
+          "task": 41,
+          "seed": 0,
+          "min_block_pos": 70.2,
+          "final_block_pos": 90.5,
+          "final_ang_deg": 108.3,
+          "final_agent_pos": 67.9
+        },
+        {
+          "task": 8,
+          "seed": 1,
+          "min_block_pos": 103.7,
+          "final_block_pos": 103.9,
+          "final_ang_deg": 116.0,
+          "final_agent_pos": 681.4
+        },
+        {
+          "task": 47,
+          "seed": 1,
+          "min_block_pos": 68.3,
+          "final_block_pos": 68.3,
+          "final_ang_deg": 88.7,
+          "final_agent_pos": 1146.5
+        }
+      ],
+      "orientation_only": [
+        {
+          "task": 40,
+          "seed": 0,
+          "min_block_pos": 6.7,
+          "final_block_pos": 8.9,
+          "final_ang_deg": 52.4,
+          "final_agent_pos": 44.8
+        },
+        {
+          "task": 25,
+          "seed": 1,
+          "min_block_pos": 11.7,
+          "final_block_pos": 78.7,
+          "final_ang_deg": 95.8,
+          "final_agent_pos": 22.1
+        },
+        {
+          "task": 33,
+          "seed": 1,
+          "min_block_pos": 7.0,
+          "final_block_pos": 8.6,
+          "final_ang_deg": 39.7,
+          "final_agent_pos": 48.8
+        },
+        {
+          "task": 25,
+          "seed": 2,
+          "min_block_pos": 15.2,
+          "final_block_pos": 26.9,
+          "final_ang_deg": 3.5,
+          "final_agent_pos": 37.3
+        }
+      ],
+      "agent_abandons_block": [
+        {
+          "task": 14,
+          "seed": 1,
+          "min_block_pos": 28.2,
+          "final_block_pos": 73.8,
+          "final_ang_deg": 98.5,
+          "final_agent_pos": 25.0
+        },
+        {
+          "task": 22,
+          "seed": 1,
+          "min_block_pos": 25.6,
+          "final_block_pos": 105.9,
+          "final_ang_deg": 125.7,
+          "final_agent_pos": 15.9
+        },
+        {
+          "task": 29,
+          "seed": 2,
+          "min_block_pos": 2.5,
+          "final_block_pos": 163.0,
+          "final_ang_deg": 39.6,
+          "final_agent_pos": 20.8
+        },
+        {
+          "task": 40,
+          "seed": 2,
+          "min_block_pos": 39.1,
+          "final_block_pos": 104.8,
+          "final_ang_deg": 80.5,
+          "final_agent_pos": 18.1
+        }
+      ]
+    }
+  }
+}

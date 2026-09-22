@@ -253,6 +253,9 @@ class HittingTimeHead(nn.Module):
                     sigmoid(logit_b); p(b) = lambda_b prod_{b' < b}(1 - lambda_b'),
                     p(> B_max) = prod_b (1 - lambda_b). Same pmf interface, ordinal by
                     construction (ablation).
+    head='weibull': two-parameter discrete Weibull survival model. Unlike the fixed-grid
+                    heads its expectation and CDF extrapolate past B_max, but the unimodal
+                    parametric assumption can underfit multi-route hitting-time distributions.
 
     Exposes the ensemble critic's `prob(z, zg, h) -> (V, std)` (std = 0) so
     viability_eval_audit.py and viability_live_rollout.py score it unchanged, and
@@ -260,12 +263,12 @@ class HittingTimeHead(nn.Module):
 
     def __init__(self, z_dim=Z_DIM, b_max=45, hidden=(512, 256), head="softmax", input_diff=False):
         super().__init__()
-        assert head in ("softmax", "hazard"), head
+        assert head in ("softmax", "hazard", "weibull"), head
         self.z_dim, self.b_max, self.head, self.input_diff = z_dim, b_max, head, input_diff
         self.n_classes = b_max + 2                       # 0..b_max and '> b_max'
         self.h_max = b_max * SKIP
         in_dim = (3 if input_diff else 2) * z_dim
-        out_dim = self.n_classes if head == "softmax" else b_max + 1
+        out_dim = self.n_classes if head == "softmax" else (2 if head == "weibull" else b_max + 1)
         layers, d = [], in_dim
         for w in hidden:
             layers += [nn.Linear(d, w), nn.SiLU()]
@@ -292,6 +295,15 @@ class HittingTimeHead(nn.Module):
         out = self.net(self.features(z, zg))
         if self.head == "softmax":
             return torch.log_softmax(out, dim=-1)
+        if self.head == "weibull":
+            scale = torch.nn.functional.softplus(out[..., 0]).clamp_min(1e-4)
+            shape = torch.nn.functional.softplus(out[..., 1]).clamp(0.1, 10.0)
+            edge = torch.arange(self.b_max + 2, device=out.device, dtype=out.dtype)
+            log_surv = -((edge[None] / scale[:, None]).clamp_min(0) ** shape[:, None])
+            # p(bin=b) = S(b)-S(b+1); log1p keeps the difference stable for long tails.
+            d = (log_surv[:, 1:] - log_surv[:, :-1]).clamp_max(-1e-7)
+            log_exact = log_surv[:, :-1] + torch.log(-torch.expm1(d))
+            return torch.cat([log_exact, log_surv[:, -1:]], dim=-1)
         log_lam = torch.nn.functional.logsigmoid(out)                 # log lambda_b
         log_surv = torch.nn.functional.logsigmoid(-out)               # log (1 - lambda_b)
         cum = torch.cumsum(log_surv, dim=-1)                          # sum_{b' <= b}
@@ -300,6 +312,12 @@ class HittingTimeHead(nn.Module):
 
     def cdf(self, z, zg, h):
         """V(z, zg, h) = P(T <= floor(h / SKIP)); h (B,) in env steps."""
+        if self.head == "weibull":
+            out = self.net(self.features(z, zg))
+            scale = torch.nn.functional.softplus(out[..., 0]).clamp_min(1e-4)
+            shape = torch.nn.functional.softplus(out[..., 1]).clamp(0.1, 10.0)
+            edge = torch.div(h.float(), SKIP, rounding_mode="floor").clamp_min(-1) + 1
+            return (1.0 - torch.exp(-((edge.clamp_min(0) / scale) ** shape))).clamp(0.0, 1.0)
         p = self.log_pmf(z, zg).exp()
         m = torch.div(h.float(), SKIP, rounding_mode="floor").long().clamp(-1, self.b_max)
         c = torch.cumsum(p, dim=-1)
@@ -311,8 +329,34 @@ class HittingTimeHead(nn.Module):
         return v, torch.zeros_like(v)
 
     def expected_bins(self, z, zg):
-        """E[T] in predictor steps, counting '> B_max' as B_max + 1 (a lower bound)."""
+        """E[T] in predictor steps; fixed-grid tails count as B_max + 1 (a lower bound)."""
+        if self.head == "weibull":
+            out = self.net(self.features(z, zg))
+            scale = torch.nn.functional.softplus(out[..., 0]).clamp_min(1e-4)
+            shape = torch.nn.functional.softplus(out[..., 1]).clamp(0.1, 10.0)
+            return scale * torch.exp(torch.lgamma(1.0 + shape.reciprocal()))
         return (self.log_pmf(z, zg).exp() * self.bins).sum(-1)
+
+    def restricted_expected_steps(self, z, zg, h):
+        """5 * sum_{j=0..floor(h/5)} P(T > j), matching the legacy ET cost in one forward.
+
+        `h` may be a scalar or one value per row. The extra endpoint term is intentional:
+        it exactly preserves the historical grid-sum definition (so a tail beyond h costs
+        h + SKIP), making old/new planner comparisons differ only in critic quality/cost.
+        """
+        h = torch.as_tensor(h, device=z.device, dtype=z.dtype).expand(z.shape[0])
+        m = torch.div(h, SKIP, rounding_mode="floor").long().clamp_min(-1)
+        if self.head == "weibull":
+            out = self.net(self.features(z, zg))
+            scale = torch.nn.functional.softplus(out[..., 0]).clamp_min(1e-4)
+            shape = torch.nn.functional.softplus(out[..., 1]).clamp(0.1, 10.0)
+            j = torch.arange(int(m.max().item()) + 1, device=z.device, dtype=z.dtype)
+            surv = torch.exp(-(((j[None] + 1) / scale[:, None]) ** shape[:, None]))
+        else:
+            p = self.log_pmf(z, zg).exp()
+            surv = 1.0 - torch.cumsum(p[..., :-1], dim=-1)
+        j = torch.arange(surv.shape[-1], device=z.device)
+        return SKIP * (surv * (j[None] <= m[:, None])).sum(-1)
 
     def forward(self, z, zg):
         return self.log_pmf(z, zg)

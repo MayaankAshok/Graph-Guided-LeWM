@@ -25,7 +25,7 @@ Seungho Baek, Taegeon Park, Jongchan Park, Seungjun Oh, and Yusung Kim.
 \newblock In \emph{International Conference on Machine Learning (ICML)}, 2025.
 \newblock arXiv:2506.07744.
 
-\bibitem[Bai and Xiong(2026)]{tdjepa}
+\bibitem[Bai \& Xiong(2026)Bai and Xiong]{tdjepa}
 Jiaxin Bai and Jiaxuan Xiong.
 \newblock Temporal-distance {JEPA}: Plan-aware representation learning for
   latent world model predictive control.

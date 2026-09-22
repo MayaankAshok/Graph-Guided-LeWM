@@ -33,8 +33,8 @@ DOC = ROOT / "docs" / "gas-mpc"
 PROTO_ORDER = ["same25", "same50", "same100", "cross"]
 PROTO_LABEL = {"same25": "same-ep 25", "same50": "same-ep 50", "same100": "same-ep 100",
                "cross": "cross-ep"}
-BASE_ORDER = ["l2", "tdr", "ctg", "subgoal", "subgoal_tdr", "dir", "path"]
-BASE_TITLE = {"l2": "L2", "tdr": "TDR (no graph)", "ctg": "CTG (terminal)",
+BASE_ORDER = ["random", "l2", "tdr", "ctg", "subgoal", "subgoal_tdr", "dir", "path"]
+BASE_TITLE = {"random": "Random", "l2": "L2", "tdr": "TDR (no graph)", "ctg": "CTG (terminal)",
               "subgoal": "subgoal", "subgoal_tdr": "subgoal\\_tdr",
               "dir": "Direction", "path": "Waypoint path"}
 
@@ -47,7 +47,7 @@ def parse_tag(tag):
     """'subgoal_tdr_la13.7_th8_htd8_te0.9_ret_crit2_rh2' -> dict of the knobs."""
     d = dict(tag=tag, la=None, th=None, htd=None, te=None, crit=0.0, ret=False, rh=5, sup=0.0,
              ft=None, flt=0.0, fl2=False, cc="nlv", steps=False)
-    m = re.match(r"^(l2|tdr|ctg|subgoal_tdr|subgoal|dir|path)(.*)$", tag)
+    m = re.match(r"^(random|l2|tdr|ctg|subgoal_tdr|subgoal|dir|path)(.*)$", tag)
     d["base"], rest = m.group(1), m.group(2)
     for k, v in re.findall(r"_(la|th|htd|te|crit|rh|sup|ft|flt)([0-9.]+)", rest):
         d[k] = float(v) if k != "rh" else int(v)

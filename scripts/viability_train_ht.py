@@ -155,7 +155,7 @@ def save(path, head, args, step, extra):
     torch.save(dict(kind="hitting_time", head=head.state_dict(),
                     head_kwargs=dict(z_dim=head.z_dim, b_max=head.b_max, hidden=tuple(args.hidden),
                                      head=args.head, input_diff=args.input_diff),
-                    args=dict(vars(args), h_max=head.h_max), step=step, **extra), path)
+                    args=dict(vars(args), h_max=head.h_max, training_only=True), step=step, **extra), path)
 
 
 def run(args):
@@ -214,7 +214,9 @@ def run(args):
                 f"| auroc h0/25/50/100={ev['auroc_by_h'][0]:.3f}/{ev['auroc_by_h'][25]:.3f}/"
                 f"{ev['auroc_by_h'][50]:.3f}/{ev['auroc_by_h'][100]:.3f} pred@25={ev['auroc_predicted_h25']:.3f} "
                 f"| p(>Bmax) fwd/bwd/cross={'/'.join(f'{v:.2f}' for v in ev['p_beyond_mean_by_kind'].values())}")
-            extra = dict(train_episodes=train_eps, val_episodes=val_eps, cache=str(args.cache),
+            extra = dict(train_episodes=cache.episode_ids[train_eps],
+                         val_episodes=cache.episode_ids[val_eps],
+                         evaluation_episodes=cache.evaluation_eps, cache=str(args.cache),
                          labels=str(args.labels), val=ev)
             save(out / "critic_last.pt", head, args, step, extra)
             if ev["loss"] < best:
@@ -234,7 +236,7 @@ def main():
     p.add_argument("--seed", type=int, default=0)
     # head
     p.add_argument("--b-max", type=int, default=45)
-    p.add_argument("--head", choices=["softmax", "hazard"], default="softmax")
+    p.add_argument("--head", choices=["softmax", "hazard", "weibull"], default="softmax")
     p.add_argument("--input-diff", action="store_true", help="append l(z) - l(z_g) to the input (ablation)")
     p.add_argument("--hidden", type=int, nargs="+", default=[512, 256])
     # batches / losses

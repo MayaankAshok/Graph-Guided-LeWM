@@ -194,13 +194,22 @@ def extract_rows(dataset, eps, steps):
     return {k: np.stack(v) for k, v in out.items()}
 
 
-def evaluate_pairs(world, dataset, pairs, budget, callables, mech=None):
+def evaluate_pairs(world, dataset, pairs, budget, callables, mech=None, seed=None):
     """Mirror of stable_worldmodel's World._evaluate_from_dataset (mode='wait'), except
     init and goal come from two independently chosen rows. Returns the first env step at
     which each pair's env reported `terminated` (-1 = never within budget) and the state
     trajectory (n, budget+1, state_dim). `mech` (EnvMechanics, default Push-T) says how the
     state vector is read from dataset rows and live infos (Push-T: `state`; Reacher:
-    qpos|qvel)."""
+    qpos|qvel).
+
+    `seed=None` (the historical default) leaves PushT.reset()'s `self.rng` and its
+    variation-space resampling of agent/block start position+angle seeded from OS entropy;
+    those three fields are immediately overwritten below via `_apply_callables`, so this
+    was not the dominant source of the reproducibility gap measured 2026-09-21 (same seed,
+    same tasks: identical success_rate/success_by_budget but 20-24% of individual tasks'
+    final_pos_err differed by tens to ~240px) -- but it is still unseeded global state with
+    no guarantee nothing else in the env/render path consults it, so callers doing a
+    reproducibility-sensitive run should pass an explicit seed here regardless."""
     mech = mech or ENV_MECHANICS["pusht"]
     n = len(pairs["start_row"])
     assert n == world.num_envs
@@ -210,7 +219,7 @@ def evaluate_pairs(world, dataset, pairs, budget, callables, mech=None):
     assert np.allclose(mech.state_from_row(init_state), np.array(pairs["start_state"], dtype=np.float32))
     assert np.allclose(mech.state_from_row(goal_raw), np.array(pairs["goal_state"], dtype=np.float32))
 
-    world.reset(seed=None)
+    world.reset(seed=seed)
     merged = {**init_state, **goal_state}
     for i in range(n):
         _apply_callables(world.envs.envs[i].unwrapped, callables, {k: v[i] for k, v in merged.items()})

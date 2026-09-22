@@ -20,6 +20,10 @@ Methods (`+mpc.method=`):
                   (the paper's r^dir summed over the horizon); `tdr` once within threshold
     path          sum_k ||psi(z_k) - w_k|| over the predicted block latents, waypoints w_k
                   at cumulative path distance k * `step_units` toward the goal
+    random        uniform action from the env's own action space at every env step (gymnasium
+                  `action_space.sample()` via stable_worldmodel's RandomPolicy) -- no model, no
+                  CEM, no graph; the floor every other method must clear. Ignores every other
+                  `+mpc.*` add-on below (asserted). `mpc.seed` seeds the action draw.
 Add-ons:
     +mpc.support_lambda=L   adds L * min_v ||psi(z_T) - psi_v||
     +mpc.retrieval=true     warm-starts CEM's mean with the logged 25-action block of the dataset
@@ -37,7 +41,8 @@ Add-ons:
                             instead of the TDR norm (`same` = keep the method's metric)
     +mpc.critic_cost=et     critic term = budget-capped expected hitting time in ENV STEPS,
                             SKIP * sum_{h in grid, h <= h_rem} (1 - V(z_T, z_goal, h)); ranks feasible
-                            endpoints by how soon they arrive, infeasible ones at the cap. `etfull`
+                            endpoints by how soon they arrive, infeasible ones at the cap. Hitting-time
+                            heads compute the identical survival sum in one network evaluation. `etfull`
                             = the same sum over the critic's whole grid (budget-agnostic); `nlv` =
                             -log V(z_T, z_goal, h_rem) (the original)
     +mpc.compose=steps      NO per-population standardisation: base cost converted to env steps
@@ -53,6 +58,8 @@ Add-ons:
                             to the goal and nothing else). Default true = the critic term is added in
                             every phase. Tag `_nocf`. Motivation: on Reacher same25, B lost 6 points to
                             L2 entirely in the close-range second plan (2026-09-17)
+    +mpc.critic_member=K   use only zero-based ensemble member K at inference (-1 = ensemble mean).
+                            This is an ablation of whether averaging prevents critic exploitation.
 
 Task sets: one fixed set of 200 (start, goal) tasks per protocol, drawn once from TASK_SEED
 and shared by every method and every seed; pairs the env's success predicate already accepts
@@ -76,10 +83,14 @@ is cached under outputs/pusht/eval/ and skipped on re-run, so any run can be res
 import os
 
 os.environ.setdefault("MUJOCO_GL", "egl")
+# Required by torch.use_deterministic_algorithms(True) below for deterministic cuBLAS ops
+# (matmuls in the predictor/CEM cost evaluation) -- must be set before CUDA context init.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
 import hashlib
 import json
 import pickle
+import random
 import sys
 import time
 from pathlib import Path
@@ -92,6 +103,24 @@ from omegaconf import DictConfig, OmegaConf
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import dijkstra
 from sklearn import preprocessing
+
+# The CEM solver's own candidate sampling is seeded (a dedicated torch.Generator), but
+# candidate scoring runs the predictor through cuDNN conv/reduction kernels that are
+# nondeterministic by default -- small float differences there can flip which candidate
+# is elite, and that nudge compounds over replans into different executed trajectories
+# (confirmed: identical +mpc.seed reran on the same machine gave 50.0% then 46.0% on
+# same50/seed2). Forcing determinism trades some speed for genuinely reproducible runs.
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+torch.use_deterministic_algorithms(True)
+
+# Even with the above, 3 parallel identical +mpc.seed reps (same100, s3, n50, 2026-09-21)
+# matched on success_rate but diverged on individual tasks' final_pos_err (20-24% of
+# tasks, up to ~240px) -- no torch determinism warning fired, so the remaining suspect is
+# CPU-side: multi-threaded BLAS (numpy/MKL/OpenBLAS) reductions are not order-deterministic
+# across process launches even at a fixed thread count. For a genuinely bit-reproducible
+# run, launch with OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 (slower) and
+# re-verify with the same parallel-reps protocol before trusting it fixed the gap.
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -385,10 +414,91 @@ def robust_std(x):
     return (x - q[1][:, None]) / iqr[:, None]
 
 
-def attach_solve_hook(solver, model, oracle, retriever, clock):
+def _expand_for_cost(info_dict, s, device, dtype):
+    """Mirror CEMSolver.solve's own info_dict -> (B, S, ...) expansion (stable_worldmodel/
+    solver/cem.py), so a verification call to model.get_cost sees exactly the shapes/keys a
+    real CEM candidate batch would, just with S=s instead of num_samples."""
+    out = {}
+    for k, v in info_dict.items():
+        if torch.is_tensor(v):
+            target_dtype = dtype if v.is_floating_point() else None
+            out[k] = v.to(device=device, dtype=target_dtype).unsqueeze(1).expand(v.shape[0], s, *v.shape[1:])
+        elif isinstance(v, np.ndarray):
+            out[k] = np.repeat(v[:, None, ...], s, axis=1)
+        else:
+            out[k] = v
+    return out
+
+
+class MeanVarRecorder:
+    """CEMSolver callback: snapshot the PRE-update (mean, var) -- the distribution actually
+    used to sample that iteration's candidates -- at chosen 0-indexed steps (step=0 is
+    iteration 1's sampling distribution, matching the fixed-var_scale log-P computed by hand
+    for iteration 1 elsewhere in this project). Only the first solve() call's snapshots are
+    kept (`done`), since the diagnostic wants one representative solve per task, not every
+    replan of a full rollout."""
+
+    def __init__(self, steps):
+        self.steps = set(steps)
+        self.parts = {s: [] for s in steps}   # step -> list of per-internal-batch (mean, var)
+        self.snapshots = {}   # step -> concatenated (mean, var) cpu tensors, (B, horizon, action_dim)
+        self.done = False
+        self.history = []     # unused; CEMSolver.solve expects every callback to have one
+
+    @property
+    def output_key(self):
+        return "MeanVarRecorder"
+
+    def reset(self):
+        pass
+
+    def start_batch(self):
+        pass
+
+    def end_solve(self):
+        # CEMSolver processes envs in internal batches of solver.batch_size < total_envs, each
+        # its own start_batch()/step-loop/no separate end_solve(); this fires once, after every
+        # internal batch of THIS solve() call has appended its slice for every requested step.
+        if self.done or not all(self.parts[s] for s in self.steps):
+            return
+        for s in self.steps:
+            means = torch.cat([p[0] for p in self.parts[s]], dim=0)
+            vars_ = torch.cat([p[1] for p in self.parts[s]], dim=0)
+            self.snapshots[s] = (means, vars_)
+        self.done = True
+
+    def __call__(self, **state):
+        if self.done:
+            return
+        step = state["step"]
+        if step in self.steps:
+            self.parts[step].append((state["prev_mean"].detach().cpu().clone(),
+                                     state["prev_var"].detach().cpu().clone()))
+
+
+def attach_solve_hook(solver, model, oracle, retriever, clock, verify=False, logp_steps=None):
     """Wrap solver.solve: advance the clock, and (retrieval) encode the current frame + goal,
-    pick the Alg.-1 node, and pass the retrieved logged block as init_action."""
+    pick the Alg.-1 node, and pass the retrieved logged block as init_action.
+
+    `verify`: before trusting the retrieved block, score it against a zero-action candidate
+    with the SAME model.get_cost the real CEM optimization uses (predictor rollout + this
+    run's own configured criterion, critic included when active) and keep whichever of the
+    two scores lower per env, falling back to CEM's own zero-mean default when retrieval
+    loses. Motivated by the diagnostic in docs/gas-mpc/main.tex (Reacher's retrieved actions
+    place CEM's iteration-1 search FURTHER from the true action than zero-init, on every held-
+    out same25 task) -- this checks the same thing online, per live query, with no ground
+    truth required, since it only compares the two candidates' own predicted cost.
+
+    `logp_steps`: 0-indexed CEM iteration numbers (e.g. {0,4,9,19} for iterations 1,5,10,20)
+    to snapshot the population (mean, var) at, via a MeanVarRecorder attached to
+    solver.callbacks -- for the log-P-vs-iteration diagnostic (does CEM's own refinement close
+    an initial-placement gap, or does an initial advantage/disadvantage persist?). Recorded
+    from the first solve() call only; read back via solver.logp_recorder.snapshots."""
     orig = solver.solve
+    stats = dict(n=0, n_kept=0)
+    if logp_steps is not None:
+        solver.logp_recorder = MeanVarRecorder(logp_steps)
+        solver.callbacks.append(solver.logp_recorder)
 
     def solve(info_dict, init_action=None):
         if retriever is not None:
@@ -405,12 +515,24 @@ def attach_solve_hook(solver, model, oracle, retriever, clock):
                     target = hg[b] if v < 0 else oracle.C[v]
                     inits.append(retriever.init_action(hc[b], target))
                 init_action = torch.stack(inits).to(device=solver.device, dtype=solver.dtype)
+
+                if verify:
+                    zero = torch.zeros_like(init_action)
+                    candidates = torch.stack([init_action, zero], dim=1)        # (B, 2, horizon, blk*act)
+                    expanded = _expand_for_cost(info_dict, 2, solver.device, solver.dtype)
+                    costs = model.get_cost(expanded, candidates)                # (B, 2), lower is better
+                    keep = costs[:, 0] <= costs[:, 1]
+                    stats["n"] += len(keep)
+                    stats["n_kept"] += int(keep.sum())
+                    init_action = torch.where(keep[:, None, None].to(init_action.device), init_action, zero)
         out = orig(info_dict, init_action=init_action)
         if clock is not None:
             clock.n_calls += 1
         return out
 
     solver.solve = solve
+    if verify:
+        solver.retrieval_verify_stats = stats
 
 
 # ----------------------------------------------------------------------------------------
@@ -462,6 +584,11 @@ def make_criterion(method, oracle, support_lambda, horizon_blocks, l2_fn, critic
         zT = preds[:, :, -1, :]
         if critic_cost == "nlv":
             return -torch.log(v_at(zT, z_goal, clock.h).clamp_min(eps))
+        if hasattr(critic, "restricted_expected_steps"):
+            h = critic.h_max if critic_cost == "etfull" else clock.h
+            flat = zT.reshape(-1, zT.shape[-1])
+            goals = z_goal[:, None].expand_as(zT).reshape(-1, zT.shape[-1])
+            return critic.restricted_expected_steps(flat, goals, h).reshape(zT.shape[:-1])
         hs = h_grid if critic_cost == "etfull" else [h for h in h_grid if h <= clock.h]
         et = torch.zeros(zT.shape[:-1], device=zT.device)
         for h in hs:
@@ -569,7 +696,7 @@ def method_tag(m):
         tag += f"_la{la}_th{m.subgoal_threshold:g}"
     if m.method == "path":
         tag += f"_su{m.step_units if m.step_units is not None else 'gap5'}_th{m.subgoal_threshold:g}"
-    if m.method not in ("l2", "tdr"):
+    if m.method not in ("l2", "tdr", "random"):
         tag += f"_htd{m.h_td:g}_te{m.te:g}"
     if m.support_lambda > 0:
         tag += f"_sup{m.support_lambda:g}"
@@ -577,6 +704,8 @@ def method_tag(m):
         tag += f"_rh{m.receding}"
     if m.retrieval:
         tag += "_ret"
+    if m.retrieval_verify:
+        tag += "_rv"
     if m.final_thresh is not None and (str(m.final_thresh) == "auto" or float(m.final_thresh) != float(m.subgoal_threshold)):
         tag += "_ftauto" if str(m.final_thresh) == "auto" else f"_ft{float(m.final_thresh):g}"
     if m.final_metric != "same":
@@ -591,6 +720,8 @@ def method_tag(m):
         tag += f"_flt{float(m.critic_filter):g}"
     if m.critic_beta > 0 and not bool(m.critic_final):
         tag += "_nocf"
+    if int(m.critic_member) >= 0:
+        tag += f"_cm{int(m.critic_member)}"
     if m.get("budget") is not None:
         tag += f"_bud{int(m.budget)}"
     if os.environ.get("GAS_MPC_TDR_TAG"):
@@ -605,12 +736,17 @@ def main(cfg: DictConfig):
     m = OmegaConf.create(dict(method="l2", protocol="cross", seed=0, chunk=25, h_td=8.0, te=0.9,
                               graph_seed=0, subgoal_threshold=None, lookahead=0.0, step_units=None,
                               support_lambda=0.0, receding=5, tag="", force=False, retrieval=False,
-                              critic_beta=0.0, critic=str(default_critic),
+                              retrieval_verify=False, logp_steps="", critic_beta=0.0, critic=str(default_critic),
                               final_thresh=None, final_metric="same", critic_cost="nlv",
-                              compose="std", critic_filter=0.0, budget=None, critic_final=True))
+                              compose="std", critic_filter=0.0, budget=None, critic_final=True,
+                              critic_member=-1))
     m = OmegaConf.merge(m, cfg.get("mpc", {}))
     if m.subgoal_threshold is None:
         m.subgoal_threshold = m.h_td
+    if m.method == "random":
+        assert not m.retrieval and m.critic_beta == 0 and m.critic_filter == 0 \
+            and m.support_lambda == 0 and m.compose == "std", \
+            "mpc.method=random takes no action from a model -- planning add-ons don't apply"
     proto = PROTOCOLS[m.protocol]
     if m.budget is not None:
         proto = dict(proto, budget=int(m.budget))
@@ -629,7 +765,12 @@ def main(cfg: DictConfig):
         raise ValueError("mpc.tasks is no longer supported; evaluations always use the fixed 200-task pool")
     assert n <= TASKS, f"eval.num_eval={n} exceeds the fixed task set size {TASKS}"
     pool_suffix = ("__heldout_disjoint" if POOL.endswith("u") else "") + "__trainonly_assets"
-    run_id = f"{tag}__{m.protocol}__{POOL}__s{seed}__n{n}{pool_suffix}"
+    # chunk changes both the CEM seed a task gets (cfg.seed below is keyed off each chunk's
+    # start index) and which cached per-chunk files are valid to reuse, so a non-default
+    # chunk must not share a run_id with the historical chunk=25 runs. Suffix omitted at the
+    # default so every existing archived result/cache filename is unaffected.
+    chunk_tag = "" if int(m.chunk) == 25 else f"__ch{int(m.chunk)}"
+    run_id = f"{tag}__{m.protocol}__{POOL}__s{seed}__n{n}{pool_suffix}{chunk_tag}"
     final_path = EVAL_DIR / f"{run_id}.json"
     if final_path.exists() and not m.force:
         r = json.loads(final_path.read_text())
@@ -683,7 +824,7 @@ def main(cfg: DictConfig):
 
     # ---- graph assets ----
     oracle, tdr_hist, retriever, critic, g = None, None, None, None, None
-    if m.method != "l2" or m.retrieval:
+    if m.method not in ("l2", "random") or m.retrieval:
         tdr, ck = load_tdr(int(m.graph_seed))
         tdr_hist = ck["history"][-1]
         if auto_keys:
@@ -692,7 +833,7 @@ def main(cfg: DictConfig):
                 m[k] = round(d25, 2)
             log(f"[tdr] {auto_keys} = auto -> {round(d25, 2)} TDR units (calibrated 25-step distance)")
             tag = method_tag(m)
-            run_id = f"{tag}__{m.protocol}__{POOL}__s{seed}__n{n}{pool_suffix}"
+            run_id = f"{tag}__{m.protocol}__{POOL}__s{seed}__n{n}{pool_suffix}{chunk_tag}"
             final_path = EVAL_DIR / f"{run_id}.json"
             if final_path.exists() and not m.force:
                 r = json.loads(final_path.read_text())
@@ -734,8 +875,16 @@ def main(cfg: DictConfig):
             raise ValueError("Evaluation episodes overlap critic training/validation")
         del provenance
         critic, cargs = load_critic(str(m.critic))
+        member = int(m.critic_member)
+        if member >= 0:
+            if not hasattr(critic, "members"):
+                raise ValueError("mpc.critic_member requires an ensemble critic")
+            if member >= len(critic.members):
+                raise ValueError(f"critic member {member} is out of range for {len(critic.members)} members")
+            critic.members = torch.nn.ModuleList([critic.members[member]])
+            critic.n_members = 1
         log(f"[critic] {m.critic} h_max={cargs['h_max']} cost={m.critic_cost} compose={m.compose} "
-            f"filter={m.critic_filter}")
+            f"filter={m.critic_filter} member={'mean' if member < 0 else member}")
     steps = None
     if m.compose == "steps":
         calib = gap_calibration(int(m.graph_seed))
@@ -752,38 +901,75 @@ def main(cfg: DictConfig):
         cpath = EVAL_DIR / f"{run_id}__c{ci}.json"
         if cpath.exists():
             results[ci] = json.loads(cpath.read_text())
+            if results[ci]["pair_idx"] != idx:
+                raise ValueError(f"{cpath} covers pair_idx={results[ci]['pair_idx']}, expected {idx} "
+                                  "-- stale cache from a different chunk size?")
             log(f"[chunk {ci}] cached: success={results[ci]['success_rate']:.1f}%")
             continue
         sub = {k: ([v[i] for i in idx] if isinstance(v, list) else v) for k, v in pairs.items()}
         sub["n"] = len(idx)
         cfg.seed = seed * 1000 + ci
-        model = load_lewm(ckpt_dir=mech.ckpt_dir(ROOT), device="cuda")
-        model.interpolate_pos_encoding = True
-        clock = PlanClock(budget, int(cfg.plan_config.receding_horizon) * int(cfg.plan_config.action_block),
-                          int(cfg.plan_config.horizon) * int(cfg.plan_config.action_block),
-                          cargs["h_max"] if critic is not None else 0)
-        if m.method != "l2" or critic is not None or m.compose != "std":
-            l2_fn = model.criterion
-            model.criterion = make_criterion(m.method, oracle, float(m.support_lambda),
-                                             int(cfg.plan_config.horizon), l2_fn, critic=critic,
-                                             critic_beta=float(m.critic_beta), clock=clock,
-                                             final_metric=str(m.final_metric), critic_cost=str(m.critic_cost),
-                                             compose=str(m.compose), critic_filter=float(m.critic_filter),
-                                             steps=steps, critic_final=bool(m.critic_final))
-        config = swm.PlanConfig(**cfg.plan_config)
-        solver = hydra.utils.instantiate(cfg.solver, model=model)
-        if retriever is not None or critic is not None:
-            attach_solve_hook(solver, model, oracle, retriever, clock)
-        policy = swm.policy.WorldModelPolicy(solver=solver, config=config, process=process, transform=transform)
-        world = swm.World(env_name=cfg.world.env_name, num_envs=len(idx), max_episode_steps=2 * budget,
-                          image_shape=(224, 224), **mech.world_kwargs)
-        world.set_policy(policy)
-        t_run = time.time()
-        first_hit, traj = evaluate_pairs(world, dataset, sub, budget, callables, mech=mech)
-        dt = time.time() - t_run
-        crit_stats = dict(model.criterion.stats) if hasattr(model.criterion, "stats") else None
-        world.close()
-        del model, solver, policy, world
+        # Defense-in-depth for the reproducibility gap found 2026-09-21 (identical
+        # +mpc.seed, identical task set: success_rate matched across 3 parallel reps but
+        # 20-24% of individual tasks' final_pos_err differed by tens to ~240px). CEM's own
+        # candidate sampling was already deterministically seeded (a dedicated
+        # torch.Generator, reseeded per chunk above); this closes off any other library
+        # silently consulting the *global* RNG state during env reset/step/render.
+        random.seed(int(cfg.seed))
+        np.random.seed(int(cfg.seed) % (2**32))
+        if m.method == "random":
+            # No model, no CEM: a fresh uniform action from the env's own action space every
+            # env step (stable_worldmodel's RandomPolicy -> env.action_space.sample()).
+            policy = swm.policy.RandomPolicy(seed=int(cfg.seed))
+            world = swm.World(env_name=cfg.world.env_name, num_envs=len(idx), max_episode_steps=2 * budget,
+                              image_shape=(224, 224), **mech.world_kwargs)
+            world.set_policy(policy)
+            t_run = time.time()
+            first_hit, traj = evaluate_pairs(world, dataset, sub, budget, callables, mech=mech,
+                                             seed=int(cfg.seed))
+            dt = time.time() - t_run
+            crit_stats, verify_stats = None, None
+            world.close()
+            del policy, world
+        else:
+            model = load_lewm(ckpt_dir=mech.ckpt_dir(ROOT), device="cuda")
+            model.interpolate_pos_encoding = True
+            clock = PlanClock(budget, int(cfg.plan_config.receding_horizon) * int(cfg.plan_config.action_block),
+                              int(cfg.plan_config.horizon) * int(cfg.plan_config.action_block),
+                              cargs["h_max"] if critic is not None else 0)
+            if m.method != "l2" or critic is not None or m.compose != "std":
+                l2_fn = model.criterion
+                model.criterion = make_criterion(m.method, oracle, float(m.support_lambda),
+                                                 int(cfg.plan_config.horizon), l2_fn, critic=critic,
+                                                 critic_beta=float(m.critic_beta), clock=clock,
+                                                 final_metric=str(m.final_metric), critic_cost=str(m.critic_cost),
+                                                 compose=str(m.compose), critic_filter=float(m.critic_filter),
+                                                 steps=steps, critic_final=bool(m.critic_final))
+            config = swm.PlanConfig(**cfg.plan_config)
+            logp_steps = [int(s) for s in str(m.logp_steps).split(",") if s.strip() != ""]
+            solver = hydra.utils.instantiate(cfg.solver, model=model)
+            if retriever is not None or critic is not None:
+                attach_solve_hook(solver, model, oracle, retriever, clock, verify=bool(m.retrieval_verify),
+                                  logp_steps=(logp_steps or None))
+            policy = swm.policy.WorldModelPolicy(solver=solver, config=config, process=process, transform=transform)
+            world = swm.World(env_name=cfg.world.env_name, num_envs=len(idx), max_episode_steps=2 * budget,
+                              image_shape=(224, 224), **mech.world_kwargs)
+            world.set_policy(policy)
+            t_run = time.time()
+            first_hit, traj = evaluate_pairs(world, dataset, sub, budget, callables, mech=mech,
+                                             seed=int(cfg.seed))
+            dt = time.time() - t_run
+            crit_stats = dict(model.criterion.stats) if hasattr(model.criterion, "stats") else None
+            verify_stats = dict(solver.retrieval_verify_stats) if hasattr(solver, "retrieval_verify_stats") else None
+            if hasattr(solver, "logp_recorder") and solver.logp_recorder.snapshots:
+                snap = solver.logp_recorder.snapshots
+                np.savez_compressed(EVAL_DIR / f"{run_id}__c{ci}_logp.npz",
+                                    steps=np.array(sorted(snap)),
+                                    **{f"mean_{k}": v[0].numpy() for k, v in snap.items()},
+                                    **{f"var_{k}": v[1].numpy() for k, v in snap.items()})
+                log(f"[logp] wrote {run_id}__c{ci}_logp.npz steps={sorted(snap)}")
+            world.close()
+            del model, solver, policy, world
         torch.cuda.empty_cache()
         pos, ang = mech.goal_errors(traj, sub["goal_state"])
         pos0, ang0 = mech.goal_errors(np.array(sub["start_state"])[:, None], sub["goal_state"])
@@ -793,7 +979,7 @@ def main(cfg: DictConfig):
                    min_pos_err=pos.min(1).tolist(), final_pos_err=pos[:, -1].tolist(),
                    final_ang_err=ang[:, -1].tolist(),
                    planner=oracle.summary() if oracle is not None else None,
-                   retrieval=retriever.summary() if retriever is not None else None,
+                   retrieval=(dict(retriever.summary(), verify=verify_stats) if retriever is not None else None),
                    critic_filter=crit_stats)
         np.savez_compressed(EVAL_DIR / f"{run_id}__c{ci}_traj.npz",
                             traj=traj.astype(np.float32), first_hit=first_hit,
