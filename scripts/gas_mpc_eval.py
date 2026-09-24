@@ -24,6 +24,10 @@ Methods (`+mpc.method=`):
                   `action_space.sample()` via stable_worldmodel's RandomPolicy) -- no model, no
                   CEM, no graph; the floor every other method must clear. Ignores every other
                   `+mpc.*` add-on below (asserted). `mpc.seed` seeds the action draw.
+    gciql         the paper's GCIQL feed-forward policy (scripts/gciql_train.py), mean action at
+                  every env step -- no world model, no CEM, no graph. `+mpc.gciql_ckpt=DIR` picks
+                  the policy checkpoint dir (default outputs/<env>/gciql/checkpoints/gciql_policy,
+                  latest epoch). Like `random`, rejects every planning add-on.
 Add-ons:
     +mpc.support_lambda=L   adds L * min_v ||psi(z_T) - psi_v||
     +mpc.retrieval=true     warm-starts CEM's mean with the logged 25-action block of the dataset
@@ -690,13 +694,13 @@ def make_criterion(method, oracle, support_lambda, horizon_blocks, l2_fn, critic
 # ----------------------------------------------------------------------------------------
 
 def method_tag(m):
-    tag = m.method
+    tag = m.method if m.get("wm", "lewm") == "lewm" else f"{m.wm}_{m.method}"
     if m.method in ("subgoal", "subgoal_tdr", "dir"):
         la = m.lookahead if str(m.lookahead) == "auto" else f"{float(m.lookahead):g}"
         tag += f"_la{la}_th{m.subgoal_threshold:g}"
     if m.method == "path":
         tag += f"_su{m.step_units if m.step_units is not None else 'gap5'}_th{m.subgoal_threshold:g}"
-    if m.method not in ("l2", "tdr", "random"):
+    if m.method not in ("l2", "tdr", "random", "gciql"):
         tag += f"_htd{m.h_td:g}_te{m.te:g}"
     if m.support_lambda > 0:
         tag += f"_sup{m.support_lambda:g}"
@@ -739,14 +743,16 @@ def main(cfg: DictConfig):
                               retrieval_verify=False, logp_steps="", critic_beta=0.0, critic=str(default_critic),
                               final_thresh=None, final_metric="same", critic_cost="nlv",
                               compose="std", critic_filter=0.0, budget=None, critic_final=True,
-                              critic_member=-1))
+                              critic_member=-1, wm="lewm", gciql_ckpt=None))
     m = OmegaConf.merge(m, cfg.get("mpc", {}))
     if m.subgoal_threshold is None:
         m.subgoal_threshold = m.h_td
-    if m.method == "random":
+    if m.wm != "lewm":
+        assert m.wm == "dinowm" and ENV == "pusht" and m.method == "l2" and not m.retrieval             and m.critic_beta == 0 and m.critic_filter == 0 and m.compose == "std",             "+mpc.wm=dinowm is the DINO-WM Push-T baseline: plain terminal-latent MSE (l2) only"
+    if m.method in ("random", "gciql"):
         assert not m.retrieval and m.critic_beta == 0 and m.critic_filter == 0 \
             and m.support_lambda == 0 and m.compose == "std", \
-            "mpc.method=random takes no action from a model -- planning add-ons don't apply"
+            f"mpc.method={m.method} is a feed-forward policy -- planning add-ons don't apply"
     proto = PROTOCOLS[m.protocol]
     if m.budget is not None:
         proto = dict(proto, budget=int(m.budget))
@@ -800,8 +806,11 @@ def main(cfg: DictConfig):
     process = {}
     # Reuse the pretrained action interface; fit other transforms on training episodes only.
     training_rows = ~np.isin(ep_col, pairs["heldout_eps"])
-    with np.load(OUT / "cache_train.npz") as stats:
-        action_mean, action_std = stats["act_mean"], stats["act_std"]
+    if m.wm == "dinowm":      # action stats are replaced by DINO-WM's own below
+        action_mean = action_std = np.zeros(dataset.get_col_data("action").shape[1])
+    else:
+        with np.load(OUT / "cache_train.npz") as stats:
+            action_mean, action_std = stats["act_mean"], stats["act_std"]
     for col in cfg.dataset.keys_to_cache:
         if col == "pixels":
             continue
@@ -819,12 +828,19 @@ def main(cfg: DictConfig):
         process[col] = processor
         if col != "action":
             process[f"goal_{col}"] = process[col]
+    if m.wm == "dinowm":
+        # DINO-WM was trained on its own pusht_noise data: use its precomputed stats, not ours
+        from common.dinowm_loader import DINOWM_PUSHT_STATS as S
+        for col, mu, sd in (("action", S["action_mean"], S["action_std"]),
+                            ("proprio", S["proprio_mean"], S["proprio_std"])):
+            assert process[col].mean_.shape == mu.shape, (col, process[col].mean_.shape)
+            process[col].mean_, process[col].scale_, process[col].var_ = mu, sd, sd ** 2
     transform = {"pixels": img_transform(cfg), "goal": img_transform(cfg)}
     callables = OmegaConf.to_container(cfg.eval.get("callables"), resolve=True)
 
     # ---- graph assets ----
     oracle, tdr_hist, retriever, critic, g = None, None, None, None, None
-    if m.method not in ("l2", "random") or m.retrieval:
+    if m.method not in ("l2", "random", "gciql") or m.retrieval:
         tdr, ck = load_tdr(int(m.graph_seed))
         tdr_hist = ck["history"][-1]
         if auto_keys:
@@ -917,10 +933,21 @@ def main(cfg: DictConfig):
         # silently consulting the *global* RNG state during env reset/step/render.
         random.seed(int(cfg.seed))
         np.random.seed(int(cfg.seed) % (2**32))
-        if m.method == "random":
-            # No model, no CEM: a fresh uniform action from the env's own action space every
-            # env step (stable_worldmodel's RandomPolicy -> env.action_space.sample()).
-            policy = swm.policy.RandomPolicy(seed=int(cfg.seed))
+        if m.method in ("random", "gciql"):
+            if m.method == "random":
+                # No model, no CEM: a fresh uniform action from the env's own action space every
+                # env step (stable_worldmodel's RandomPolicy -> env.action_space.sample()).
+                policy = swm.policy.RandomPolicy(seed=int(cfg.seed))
+            else:
+                # One forward pass per env step; `process["action"]` de-normalizes with the
+                # same training-only stats gciql_train.py z-scored with.
+                from gciql_train import load_policy
+                gdir = m.gciql_ckpt or OUT / "gciql" / "checkpoints" / "gciql_policy"
+                gmodel, gweights, gtrain_eps = load_policy(gdir)
+                if np.intersect1d(gtrain_eps, pairs["heldout_eps"]).size:
+                    raise ValueError("Evaluation episodes overlap GCIQL training episodes")
+                log(f"[gciql] policy {gweights}")
+                policy = swm.policy.FeedForwardPolicy(model=gmodel, process=process, transform=transform)
             world = swm.World(env_name=cfg.world.env_name, num_envs=len(idx), max_episode_steps=2 * budget,
                               image_shape=(224, 224), **mech.world_kwargs)
             world.set_policy(policy)
@@ -932,7 +959,11 @@ def main(cfg: DictConfig):
             world.close()
             del policy, world
         else:
-            model = load_lewm(ckpt_dir=mech.ckpt_dir(ROOT), device="cuda")
+            if m.wm == "dinowm":
+                from common.dinowm_loader import DEFAULT_CKPT, load_dinowm
+                model = load_dinowm(os.environ.get("DINOWM_CKPT", DEFAULT_CKPT), device="cuda")
+            else:
+                model = load_lewm(ckpt_dir=mech.ckpt_dir(ROOT), device="cuda")
             model.interpolate_pos_encoding = True
             clock = PlanClock(budget, int(cfg.plan_config.receding_horizon) * int(cfg.plan_config.action_block),
                               int(cfg.plan_config.horizon) * int(cfg.plan_config.action_block),

@@ -4,9 +4,9 @@ frames drawn `--offset` steps apart within the same episode (default 100, i.e. t
 protocol's own horizon)?
 
 For each sampled (start, goal) pair this reports/plots three radii (all centred on the full
-population's mean mu, i.e. r(x) = ||x - mu||, same convention as gas_mpc_gaussian_shell_diag.py):
+origin, i.e. r(x) = ||x||):
     r_start, r_goal   -- real encoded frames, expected to sit on the chi(d) shell (part 1).
-    r_mid_lerp        -- ||0.5*(z_start+z_goal) - mu||, the naive straight-line midpoint a
+    r_mid_lerp        -- ||0.5*(z_start+z_goal)||, the naive straight-line midpoint a
                           z-space-L2 CEM plan is implicitly aiming through.
     r_mid_real        -- the actual logged frame at the trajectory's true midpoint (start +
                           offset//2), i.e. what a real, non-interpolated state at that point in
@@ -116,10 +116,10 @@ def main():
     z_mid_lerp = 0.5 * (z_start + z_goal)
     z_mid_real = z[start_rows + args.offset // 2]
 
-    r_start = np.linalg.norm(z_start - mu, axis=1)
-    r_goal = np.linalg.norm(z_goal - mu, axis=1)
-    r_mid_lerp = np.linalg.norm(z_mid_lerp - mu, axis=1)
-    r_mid_real = np.linalg.norm(z_mid_real - mu, axis=1)
+    r_start = np.linalg.norm(z_start, axis=1)
+    r_goal = np.linalg.norm(z_goal, axis=1)
+    r_mid_lerp = np.linalg.norm(z_mid_lerp, axis=1)
+    r_mid_real = np.linalg.norm(z_mid_real, axis=1)
 
     theo_mean, theo_std = float(chi_dist.mean()), float(chi_dist.std())
     # how far below the shell does the interpolated midpoint sit, in shell-sigma units?
@@ -151,21 +151,24 @@ def main():
     r_grid = np.linspace(0, r_all_max * 1.05, 2000)
     bins = np.linspace(0, r_all_max * 1.05, args.n_bins)
 
-    fig, ax = plt.subplots(figsize=(7.5, 5))
+    # sized to the paper's rendered width (0.56 * 5.5in ICLR text width) so fonts print at
+    # body-text size without scaling. Rendered by LaTeX with the paper's own `times` package
+    # (Times text, Computer Modern math) so the fonts match the document exactly.
+    plt.rcParams.update({"text.usetex": True, "font.family": "serif",
+                         "text.latex.preamble": r"\usepackage{times}",
+                         "font.size": 9, "axes.labelsize": 10, "legend.fontsize": 9})
+    fig, ax = plt.subplots(figsize=(3.1, 2.3))
     ax.hist(r_mid_lerp, bins=bins, density=True, alpha=0.55, color="tab:blue",
-            label=r"r($\mathdefault{0.5(z_{start}+z_{goal})}$) -- straight-line midpoint")
+            label="straight-line\nmidpoint")
     ax.plot(r_grid, chi_dist.pdf(r_grid), color="tab:red", lw=2,
-            label=f"theoretical shell $\\chi_{{{d}}}(\\sigma={sigma_iso:.3g})$")
+            label=f"$\\chi_{{{d}}}$ shell")
     ax.axvline(r_mid_lerp.mean(), color="tab:blue", ls="--", lw=1.5)
     ax.axvline(theo_mean, color="tab:red", ls="--", lw=1.5)
-    ax.set_xlabel(r"$\|z-\mu\|$")
+    ax.set_xlabel(r"$\|z\|$")
     ax.set_ylabel("density")
-    ax.set_title(f"{args.env}: latent radius, {tag} pairs (n={n_pairs})\n"
-                 f"straight-line midpoint sits {z_score:.2f} shell-$\\sigma$ below the shell mean "
-                 f"({r_mid_lerp.mean():.2f} vs.\\ {theo_mean:.2f})")
-    ax.legend(fontsize=8)
+    ax.legend(frameon=False)
     fig.tight_layout()
-    fig.savefig(fig_out, dpi=150)
+    fig.savefig(fig_out, dpi=300)
     print(f"[gaussian_shell_interp_diag] wrote {fig_out}")
     print(f"[gaussian_shell_interp_diag] wrote {json_out}")
 

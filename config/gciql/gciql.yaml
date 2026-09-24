@@ -1,0 +1,61 @@
+# GCIQL baseline, LeWM paper protocol (stable-worldmodel scripts/train/gciql.py +
+# scripts/train/config/gciql.yaml, galilai-group/stable-worldmodel@main, fetched 2026-09-24).
+# Every value below is upstream's unless marked DEVIATION. Used by scripts/gciql_train.py.
+
+hydra:
+  run:
+    dir: ${out_root}/gciql/hydra/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+out_root: ${gas_mpc_out:}     # outputs/<env>/ (GAS_MPC_ENV / GAS_MPC_OUT), set by gciql_train.py
+output_model_name: gciql      # checkpoints: <out_root>/gciql/checkpoints/<name>_{value,policy}/
+
+# DEVIATION: frozen pretrained LeWM encoder (192-d projected CLS latent), read from the
+# training-only cache outputs/<env>/cache_train.npz instead of encoding pixels on the fly;
+# upstream: frozen facebook/dinov2-small patch tokens. Evaluation encodes live frames with the
+# same LeWM encoder.
+
+max_epochs: 100               # per phase; one epoch = one pass over the training clips
+precision: bf16-mixed         # Pascal GPUs (1080 Ti) have no bf16: override precision=32
+gradient_clip_val: 1.0
+batch_size: 32
+train_split: 0.9              # random clip split, as upstream
+seed: 42
+latents_on_gpu: true          # keep the whole latent table on the GPU (Push-T: ~1.7 GB)
+log_every: 1000
+save_every: 3                 # epochs, as upstream's SaveCkptCallback
+
+frameskip: 1                  # one env-step action per prediction (paper's feed-forward eval)
+
+dinowm:
+  history_size: 3
+  td_offset: 1
+
+predictor:
+  depth: 6
+  heads: 16
+  mlp_dim: 2048
+  dim_head: 64
+  dropout: 0.0
+  emb_dropout: 0.0
+
+train_value: true             # false = reuse the finished phase-1 checkpoint
+predictor_lr: 3e-4
+
+# IQL
+discount: 0.99
+expectile: 0.9
+awr_alpha: 10.0
+value_ema_tau: 0.995
+
+# goal sampling (random, geometric_future, uniform_future, current)
+goal_probabilities:
+  random: 0.3
+  geometric_future: 0.5
+  uniform_future: 0.0
+  current: 0.2
+actor_goal_probabilities:
+  random: 0.5
+  geometric_future: 0.0
+  uniform_future: 0.5
+  current: 0.0
+goal_gamma: 0.99

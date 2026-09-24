@@ -76,12 +76,16 @@ Without retraining LeWorld Model, we add a graph-based subgoal  for direction, a
 
 ## TODOS
 - Reacher taskset description (filtered trivial task) - [WRITEUP]
-- CEM logP analysis per env
+- [NOTODO] CEM logP analysis per env
 - [DONE] HTD ablations 
 - [DONE] No-switch ablation
 - [DONE] Fix reproducibility
 - Mention how graph edges are weighted (distance in TD space) - [WRITEUP]
-- Random Baseline
-
+- [DONE] Random Baseline
+- Ensure all results are consistent (Ablation vs headline)
 18k episodes  train
 300 episodes held out => goals
+
+## Reviewed
+- 4.4
+- 5

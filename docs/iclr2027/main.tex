@@ -49,6 +49,7 @@ Address \\
 }
 
 %\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
+\usepackage{capt-of}
 \begin{document}
 
 \maketitle
@@ -69,18 +70,18 @@ by 2.8 points on Push-T (88.4 vs 91.2) and 1.2 points on Reacher (76.0 vs 77.2),
 
 % =====================================================================================
 \section{Introduction}
-\keypoints{
-\item The problem is the \emph{objective}, not the model: terminal latent L2 stops ranking
-      candidates past $\sim$50 steps and plateaus on cross-episode goals at 14\% even with a
-      5$\times$ larger budget.
-\item Existing fixes retrain the encoder, add predictors, or learn generators. We keep the
-      world model and its planner frozen and use the dataset itself as a graph.
-\item Three mechanisms, three failures: direction (graph subgoal), reachability (hitting-time
-      critic), resolution (final switch). Neither subgoal nor critic alone moves cross-episode.
-\item Cross-episode goal reaching is the headline evaluation; same-episode long horizons are
-      supporting evidence.
-\item Contributions list, four items, each tied to a table or figure.
-}
+% \keypoints{
+% \item The problem is the \emph{objective}, not the model: terminal latent L2 stops ranking
+%       candidates past $\sim$50 steps and plateaus on cross-episode goals at 14\% even with a
+%       5$\times$ larger budget.
+% \item Existing fixes retrain the encoder, add predictors, or learn generators. We keep the
+%       world model and its planner frozen and use the dataset itself as a graph.
+% \item Three mechanisms, three failures: direction (graph subgoal), reachability (hitting-time
+%       critic), resolution (final switch). Neither subgoal nor critic alone moves cross-episode.
+% \item Cross-episode goal reaching is the headline evaluation; same-episode long horizons are
+%       supporting evidence.
+% \item Contributions list, four items, each tied to a table or figure.
+% }
 
 Joint-embedding world models trained from pixels \citep{lewm,dinowm,pldm} plan by search: they
 sample candidate action sequences, roll each through a learned latent predictor, and select the
@@ -89,17 +90,11 @@ distance -- the default objective we call L2 throughout. On the horizons these
 models are typically evaluated on, where the goal is a frame from the same trajectory a fixed
 number of steps ahead, this objective performs well. Its performance degrades sharply, however,
 as the goal becomes more temporally distant. With the frozen LeWorldModel (LeWM) checkpoint and
-its published cross-entropy-method (CEM) planner, Push-T success is 91\% for goals 25 steps
-ahead, 41\% at 50 steps, 13\% at 100 steps, and 14\% for a goal drawn from a different episode.
-Additional budget barely helps: L2 reaches 12.0\% of cross-episode goals within a 100-step budget
-and it only increases to 14.4\% with the full 250-step budget (\textcolor{red}{\cref{tab:budget-sweep}}).
-
-The failure lies in the objective rather than the model. A privileged audit shows that
-terminal-latent distance ranks candidate endpoints well at 25 steps (Spearman correlation of 0.72
-with a recovery-time oracle) but poorly at 50 steps (0.36); a single-pass audit further shows that
-the predicted terminal cost is optimistic on 88\% of tasks and barely separates successes from
-failures (\cref{sec:problem}). The planner is not wrong about where the goal is; it is wrong about
-which of its candidates can still reach it.
+its published cross-entropy-method (CEM) planner, Push-T success falls from 91\% for goals
+25 steps ahead to 13\% at 100 steps and 14\% for goals drawn from a different episode. The failure
+is not a budget constraint: a 250-step budget instead of 100 adds barely two points
+(\textcolor{red}{\cref{tab:diagnostics}b}). In \cref{sec:problem} we show that it lies in the
+objective itself, not just in the predictor.
 
 A substantial body of recent work targets the same failure in the same frozen-model setting,
 almost uniformly by learning something new on top of it: a subgoal generator and action prior
@@ -110,56 +105,54 @@ line of work in offline goal-conditioned reinforcement learning addresses long h
 searching over the data directly: it builds a graph over the offline dataset and lets shortest
 paths select subgoals \citep{sptm,sorb,sgm,gas,ttgs,alps}, handing the resulting subgoal to a
 learned goal-conditioned policy. To our knowledge, no prior method places the dataset graph inside
-a pixel world model's planner itself, and \citet{hilewm} identify a plausible reason: their
-hierarchical planner fails whenever its generated subgoals cease to be ``data-supported,
-executable, and matched to the temporal scale.'' A subgoal that is itself a dataset frame
-satisfies all three by construction.
+a pixel world model's planner itself. \citet{hilewm} point to why that would help: from their own
+hierarchical planner, they identify the conditions under which a subgoal interface transfers to a
+compact frozen world model -- subgoals must remain ``data-supported, executable, and matched to
+the temporal scale.''
 
-This paper takes that approach. We learn a temporal distance representation (TDR) on the frozen
-LeWM latents \citep{hilp,gas}, build a graph over the full offline dataset in that space, and
-replace LeWM's terminal cost with the distance to a subgoal: the graph node one planning horizon
-along the shortest path toward the goal. This alone repairs the mid-range regime (Push-T offset
-50: $42.0\to51.6\%$, \cref{tab:ladder}) but does nothing for cross-episode goals: by the graph's
-own geodesic, every cross-episode pair is 45--120 steps apart, well inside the planning budget,
-yet the planner does not execute the route. The missing component is reachability. We add a
-critic $V(\z,\z_g,h)$, the probability that the goal is reachable from latent $\z$ within $h$
-steps, and score each predicted endpoint by a budget-capped \emph{expected hitting time} under the
-steps remaining after the plan being scored. With this term, and with the final horizon handed
-back to LeWM's own objective once the goal is one horizon away, a single configuration matches or
-exceeds every alternative we tested at every horizon of 50 steps or more, on same-episode and
-cross-episode goals alike, across three environments (\cref{tab:main}). Averaged over offsets 50
-and 100 and cross-episode goals, our method raises success from 41/13/14\% to 70/46/42\% on
-Push-T, from 91/83/29\% to 98/98/66\% on Reacher, and from 34/36/16\% to 50/50/28\% on Cube. At
-the 25-step horizon our method trails L2 by 2.8 points on Push-T (88.4 vs 91.2) and 1.2 points on
-Reacher (76.0 vs 77.2), within CEM sampling noise (\cref{app:reacher}), while leading by 6.0
-points on Cube (62.0 vs 56.0).
+We place the dataset graph inside LeWM's planner: a subgoal that is data-supported,
+executable, and matched to the temporal scale by construction. We learn a temporal distance
+representation (TDR)
+on the frozen LeWM latents \citep{hilp,gas}, build a graph over the offline dataset in that
+space, and replace LeWM's terminal cost with the distance to a subgoal -- a dataset frame reached
+from the current state by the shortest path of observed transitions toward the goal, truncated to
+one planning horizon. This alone meaningfully improves the mid-range regime, but does nothing for
+cross-episode goals: the graph finds a route for every pair we evaluate, well inside the planning
+budget, yet the planner does not execute it. The missing component is reachability, which we
+address with a critic $V(\z,\z_g,h)$, the probability that the goal is reachable from latent $\z$
+within $h$ steps, and score each predicted endpoint by \emph{expected hitting time} under the
+steps remaining. With this term, and with the final horizon handed
+back to LeWM's own objective once the goal is within one horizon, a single configuration matches or
+exceeds every alternative we tested at offsets 50 and above and on cross-episode goals, across
+three environments -- Push-T, Reacher, and Cube (\cref{tab:main}).
 
 Our contributions are:
 \begin{enumerate}[nosep,leftmargin=*]
   \item A planner-side method for long-horizon and cross-episode goal reaching with a frozen
         pixel world model, requiring no new generator, policy, or predictor: a TDR on frozen
-        latents, a dataset graph, a hitting-time critic, and an unmodified CEM
-        (\cref{sec:method}).
-  \item A budget-clocked expected-hitting-time cost that replaces the standard $-\log V$
-        feasibility term, removes its dependence on a weighting hyperparameter, and preserves a
-        progress gradient among feasible candidates (\cref{sec:critic,sec:ablation}).
-  \item The first cross-episode goal-reaching evaluation for latent MPC on Push-T, Reacher, and
-        Cube, using fixed task pools shared by every method and seed (\cref{sec:setup,tab:main}).
-  \item A mechanistic account, supported by per-pair diagnostics, of which failure mode each
-        component addresses: direction, reachability, and resolution (\cref{sec:analysis}).
+        latents, a dataset graph, and a hitting-time critic, all scored through LeWM's own CEM
+        planner without modification (\cref{sec:method}).
+  \item A budget-clocked expected-hitting-time cost that replaces the \textcolor{red}{standard}
+        $-\log V$ feasibility term, removes its dependence on a weighting hyperparameter, and
+        preserves a progress gradient among feasible candidates (\cref{sec:critic,sec:ablation}).
+  \item \textcolor{red}{The first} cross-episode goal-reaching evaluation for latent MPC on
+        Push-T, Reacher, and Cube (\cref{sec:setup,tab:main}).
+  \item A \textcolor{red}{mechanistic account}, supported by per-pair diagnostics, of which failure mode each
+        component addresses: direction, reachability, and resolution
+        (\cref{sec:analysis}).
 \end{enumerate}
 
 % =====================================================================================
 \section{Related work}
 \label{sec:related}
-\keypoints{
-\item Group by what is learned, not by year: (i) planner-side costs on a frozen model,
-      (ii) hierarchical planning with learned generators/predictors, (iii) graph search over
-      offline data with learned policies, (iv) value functions inside MPC.
-\item For each group say in one clause what we take and in one clause what we do not.
-\item Be explicit that SAGE reports higher same-episode numbers at $H\!=\!150$ and cannot stitch
-      by construction; do not hide it, it is our argument.
-}
+% \keypoints{
+% \item Group by what is learned, not by year: (i) planner-side costs on a frozen model,
+%       (ii) hierarchical planning with learned generators/predictors, (iii) graph search over
+%       offline data with learned policies, (iv) value functions inside MPC.
+% \item For each group say in one clause what we take and in one clause what we do not.
+% \item Be explicit that SAGE reports higher same-episode numbers at $H\!=\!150$ and cannot stitch
+%       by construction; do not hide it, it is our argument.
+% }
 
 \paragraph{Planning with latent world models.}
 PlaNet and Dreamer \citep{planet,dreamerv3} plan or learn policies in a reconstruction-based
@@ -198,9 +191,7 @@ temporal distance representation \citep{hilp,qrl} into nodes with a temporal-eff
 searches it for subgoals; TTGS \citep{ttgs} and ALPS \citep{alps} do the same at test time for
 frozen OGBench policies \citep{ogbench}. All of them execute subgoals with a learned policy (or a
 state-space model with a behaviour prior). We take GAS's graph construction essentially unchanged
-and give the subgoal to a pixel world model's CEM instead; an earlier RL version of GAS on the
-same latent found the low-level policy, not the graph, to be the win, which is why the executor
-matters and why we test it separately.
+and give the subgoal to a pixel world model's CEM instead.
 
 \paragraph{Value functions inside MPC.}
 POLO \citep{polo}, TD-MPC \citep{tdmpc,tdmpc2} and Director \citep{director} put a learned value
@@ -210,20 +201,26 @@ critic is a reachability classifier trained from hindsight and cross-episode neg
 offline data, and its contribution is a budget-aware hitting time rather than a value.
 
 % =====================================================================================
-\section{The problem: latent MPC beyond one horizon}
-\label{sec:problem}
-\keypoints{
-\item Define the planner exactly once (300 samples, 30 iterations, 30 elites, 5 blocks of 5
-      actions, open-loop 25 steps, replan). Everything downstream changes only the criterion.
-\item Two audits, one figure: (a) oracle Spearman of terminal L2 vs recovery time drops
-      $0.72\to0.36$ from offset 25 to 50; (b) single-pass predicted vs realized terminal cost:
-      optimistic on 88.5\% of tasks, Spearman 0.30, medians 2.2 vs 2.3 (pred) against 11 vs 30 (real).
-\item Cross-episode is budget-limited, not budget-invariant: L2 reaches 6.0\% within a 50-step
-      budget, 12.0\% within 100, and only 14.4\% within the full 250-step budget
-      (\cref{tab:budget-sweep}).
-}
+\section{Method}
+\label{sec:method}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{approach}
+  \caption{Graph-guided latent MPC. Training (left): We train a Critic: $V$, TDR $\psi$ and graph $G$ from the dataset frames. Planning (right): Graph identifies a subgoal. CEM scores the candidate rollouts }
+  \label{fig:approach}
+\end{figure}
+% \keypoints{
+% \item One equation per component. The reader should be able to reimplement from the section.
+% \item Say what is learned (TDR: 3$\times$512 MLP; critic: 5-member MLP ensemble) and what is
+%       not (encoder, predictor, CEM, graph is built not trained).
+% \item State the privileged-label dependency of the critic here, in the open.
+% \item The plan clock: $h_{\mathrm{rem}}$ is the budget left \emph{after} the plan being scored.
+%       This is the single most important implementation detail.
+% \item Only two scalars are environment specific ($\Htd$, $\lambda$) and both are read off the
+%       TDR's own step-gap calibration; $\beta=1$ everywhere.
+% }
 
-\paragraph{Frozen world model and planner.}
+\paragraph{Frozen world model and CEM planner.}
 LeWM \citep{lewm} consists of a ViT encoder $E$ mapping a $224\times224$ frame to a 192-d CLS
 latent $\z$ and a predictor $P$ that maps three past latents and three action blocks to the next
 latent, where an action block is five consecutive environment actions (frame-skip 5). Planning is
@@ -231,168 +228,141 @@ CEM over $K=5$ blocks (25 environment steps): 300 candidates, 30 iterations, 30 
 candidate scored by the terminal cost $c_{\mathrm{L2}}=\|\hat\z_K-\z_g\|^2$ between the predicted
 block-$K$ latent and the encoded goal frame. The optimum is executed open loop for 25 steps and
 the planner is called again. We keep the encoder, the predictor and this planner fixed
-throughout and change only the function that scores $(\z_0,\hat\z_{1..K},\z_g)$.
+throughout and change only the cost function that scores $(\z_0,\hat\z_{1..K},\z_g)$.
 
-\paragraph{Where it fails.}
-\Cref{tab:main} (rows ``L2'') gives the picture on three environments: near-perfect one horizon
-out, a steep fall past two, and a floor for goals from another episode. Two audits locate the
-failure in the ranking. First, against a privileged recovery-time oracle (the number of steps a
-strong planner with state access needs from a candidate endpoint), $c_{\mathrm{L2}}$ orders
-endpoints with Spearman 0.72 at offset 25 and 0.36 at offset 50. Second, executing the single
-25-step plan of 200 offset-25 tasks and re-encoding the true final frame, the predicted cost
-under-estimates the realized latent distance on 88.5\% of tasks, correlates with it at only
-$\rho=0.30$, and barely separates successes from failures (median 2.17 vs 2.31) while the realized
-distance does (10.9 vs 30.0). The planner optimises a quantity that is
-optimistic and, past one horizon, uninformative about which endpoints can still reach the goal.
-On the fixed \texttt{task200u} pool, cross-episode success accrues most of its gain early and then
-saturates: L2 reaches 6.0\% within a 50-step budget, 12.0\% within 100, and only 14.4\% within the
-full 250-step budget, with the hazard rate for each further 50-step window falling below 1.5\%
-past step 100 (\cref{tab:budget-sweep}). More budget buys diminishing, not zero, returns.
-
-% =====================================================================================
-\section{Method}
-\label{sec:method}
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{approach}
-  \caption{Graph-guided latent MPC. Training (left): frozen LeWM maps frames to $z$; the learned
-  TDR maps $z$ to $\psi(z)$ for filtering and clustering into graph $G$, while a separate
-  reachability critic is trained. Planning (right): graph search selects a subgoal
-  one horizon ahead, and frozen LeWM/CEM scores rollouts by subgoal distance and budget-clocked
-  expected hitting time. Near the goal, goal latent L2 replaces subgoal distance.}
-  \label{fig:approach}
-\end{figure}
-\keypoints{
-\item One equation per component. The reader should be able to reimplement from the section.
-\item Say what is learned (TDR: 3$\times$512 MLP; critic: 5-member MLP ensemble) and what is
-      not (encoder, predictor, CEM, graph is built not trained).
-\item State the privileged-label dependency of the critic here, in the open.
-\item The plan clock: $h_{\mathrm{rem}}$ is the budget left \emph{after} the plan being scored.
-      This is the single most important implementation detail.
-\item Only two scalars are environment specific ($\Htd$, $\lambda$) and both are read off the
-      TDR's own step-gap calibration; $\beta=1$ everywhere.
-}
-
-\paragraph{Two failure modes, two different fixes.}
-\Cref{sec:problem}'s 91/41/13/14\% success and 0.72$\to$0.36 oracle Spearman collapse conflate two
-separate problems. The first is procedural: committing to an open-loop rollout wider than one
-horizon compounds predictor error and costs the L2 baseline 6--10 points, growing with commit
-width (\cref{app:predictor-error}); every result in this paper already replans every 25 steps, so
-this is folded into the baseline rather than something the method fixes. The second is what
-remains after that fix, and is what the rest of this section targets: even replanning every 25
-steps, terminal $z$-space L2 aimed at the true goal still collapses with horizon, because past
-$H{\approx}50$ the true start-goal latent distance (19.4--19.6) is statistically indistinguishable
-from two unrelated frames (19.6, \cref{app:predictor-error}) -- the cost has nothing left to
-discriminate on -- while at $H=25$ it remains clearly separated (17.1). \Cref{app:gaussian-shell}
-gives the mechanism: the latent cloud concentrates on a thin isotropic shell, so a straight line
-between two far-apart points on it passes through the shell's near-empty interior, exactly what a
-terminal-L2 CEM plan implicitly draws. The method below keeps raw L2 wherever it is still
-informative -- within one horizon, via the final switch of \cref{sec:subgoal} -- and replaces it
-beyond that with quantities built to stay informative at range: TDR distance in place of raw
-position (\cref{sec:graph}), a graph that follows the shell instead of cutting across it
-(\cref{sec:graph,sec:subgoal}), and a critic that estimates reachability directly rather than
-through any latent distance (\cref{sec:critic}).
+\paragraph{Each of these failures are fixed separately.}
+With the planner fixed, terminal L2 fails in two distinct ways beyond one horizon, which we
+analyze in \cref{sec:problem}: a procedural one, already absorbed by the baseline's 25-step
+replanning cadence, and a structural one: L2 loses its ranking signal beyond one horizon because
+the start--goal distance saturates at the random-pair scale. We retain raw L2 within one horizon, via the final switch of
+\cref{sec:subgoal}, and beyond it substitute three quantities designed to stay informative at
+range: TDR distance in place of raw position (\cref{sec:graph}), a graph that follows the shell
+rather than cutting across it (\cref{sec:graph,sec:subgoal}), and a critic that estimates
+reachability directly (\cref{sec:critic}). \Cref{fig:approach} provides an overview of our approach.
 
 \subsection{Temporal distance representation and dataset graph}
 \label{sec:graph}
-We encode every frame of the offline dataset once with the frozen encoder and train a small MLP
-$\psiT:\mathbb{R}^{192}\to\mathbb{R}^{32}$ so that $\|\psiT(\z)-\psiT(\z_g)\|$ approximates the
-minimum number of steps from $\z$ to $\z_g$, using the expectile temporal-difference objective of
-HILP and GAS \citep{hilp,gas} (expectile 0.99, $\gamma=0.99$, goals relabelled from the same
-trajectory with probability 0.625 and uniformly otherwise). We calibrate what one TDR unit means by
-the median TDR distance between frames $k$ steps apart, $u_k$, for $k\in\{1,\dots,50\}$; this table
-is the only place environment scale enters.
+Let $\mathcal{D}=\{(\z,a,\z')\}$ denote the offline dataset of consecutive-frame transitions,
+encoded once by the frozen encoder.
+We train a temporal distance representation $\psiT:\mathbb{R}^{192}\to\mathbb{R}^{32}$ by
+expectile TD (HILP/GAS \citep{hilp,gas}): with value $V(\z,\z_g)=-\|\psiT(\z)-\psiT(\z_g)\|$, EMA
+target $V^-$, discount $\gamma=0.99$, TD target $q=-1+\gamma\,V^-(\z',\z_g)$, and, for
+$(\z,a,\z')\sim\mathcal{D}$, a goal $\z_g$ drawn from $\z$'s own trajectory at a
+$\mathrm{Geom}(1-\gamma)$ offset with probability $0.625$ and uniformly from $\mathcal{D}$
+otherwise,
+\begin{equation}
+  \mathcal{L}_{\mathrm{TDR}}=\mathbb{E}_{(\z,a,\z')\sim\mathcal{D},\,\z_g}\big[\ell_{0.99}\big(q-V(\z,\z_g)\big)\big],
+  \qquad \ell_\tau(u)=|\tau-\1_{u<0}|\,u^2,
+  \label{eq:tdr}
+\end{equation}
+(we use HILP/GAS's target-stabilisation trick: computing $q$ over the minimum of two independent
+networks). At convergence
+$\|\psiT(\z)-\psiT(\z_g)\|$ approximates the discounted minimum
+step count between $\z$ and $\z_g$; we map distance in TDR space to environment steps using
+$u_k=\mathrm{median}_t\|\psiT(\z_t)-\psiT(\z_{t+k})\|$ over same-episode pairs $k$ steps apart,
+$k\in\{1,\dots,50\}$.
 
-The graph follows GAS: frames whose temporal efficiency (the ratio of TDR progress to steps
-taken) falls below $\theta_{\mathrm{TE}}=0.9$ are dropped, the rest are clustered sequentially in
-TDR space at radius $\Htd/2$, and nodes within $\Htd$ of each other are joined by edges weighted by
-TDR distance. $\Htd$ is $u_{12}$, the TDR distance of a 12-step gap. Each node stores its medoid
-frame's latent. At planning time the goal latent is attached as a temporary node linked to every
-node within $\max(\Htd,1.2\,d_{\min})$ and one Dijkstra pass gives $D_g[v]$, the cost-to-go from
-every node. On Push-T (18{,}685 expert episodes, 2.34M frames) the graph has 20.5k nodes;
-Reacher (10k episodes, 2.01M frames) needs 535; \todo{Cube}. Building it is a one-off cost of
-\todo{x} minutes on one GPU.
+The graph follows GAS. Let $F(\z_t)$ be the first later frame of $t$'s trajectory with
+$\|\psiT(F(\z_t))-\psiT(\z_t)\|\ge\Htd$ (the episode's last frame if none), and define temporal
+efficiency
+\begin{equation}
+  \mathrm{TE}(\z_t)=\cos\angle\big(\psiT(F(\z_t))-\psiT(\z_t),\ \psiT(\z_{t+\Htd})-\psiT(\z_t)\big),
+  \label{eq:te}
+\end{equation}
+the agreement between where a real $\Htd$-step transition moves and the direction $\psiT$ calls
+optimal. Frames with $\mathrm{TE}<\theta_{\mathrm{TE}}=0.9$ are dropped; the remainder are
+clustered sequentially in $\psiT$-space -- assign to the nearest existing centre if within
+$\Htd/2$, else open a new one, then reset centres to member means -- giving nodes $v\in V_G$ with
+medoid latent $c_v$. Nodes within $\Htd$ of each other are joined by an edge weighted by their
+$\psiT$-distance, with $\Htd=u_{12}$. At planning time the goal is attached as a temporary node
+linked to every node within $\max(\Htd,1.2\,d_{\min})$, and one Dijkstra pass gives the cost-to-go
+$D_g[v]$ from every node. On Push-T (18{,}685 expert episodes, 2.34M frames) the graph has 20.5k
+nodes; Reacher (10k episodes, 2.01M frames) needs 535; Cube (10k episodes, 2.01M frames) needs
+16k. Construction is a
+one-off cost per environment, reported with the rest of the pipeline's compute in
+\cref{sec:analysis}.
 
 \subsection{Subgoal one horizon ahead, and the final switch}
 \label{sec:subgoal}
 At each planning call with current latent $\z_0$, we select the start node
-$v^\star=\arg\min_{v:\|\psiT(\z_0)-c_v\|\le\Htd} D_g[v]+\|\psiT(\z_0)-c_v\|$ and walk the shortest
-path from $v^\star$ toward the goal until the cumulative TDR distance from $\z_0$ reaches the
-lookahead $\lambda=u_{25}$, the calibrated distance of one planning horizon. The node reached,
-$v_\lambda$, is the subgoal and the criterion becomes
 \begin{equation}
-  c_{\mathrm{sub}}(\hat\z_K)=\|\psiT(\hat\z_K)-c_{v_\lambda}\|.
+  v^\star=\operatorname*{arg\,min}_{v\,:\,\|\psiT(\z_0)-c_v\|\le\Htd} D_g[v]+\|\psiT(\z_0)-c_v\|,
+  \label{eq:startnode}
+\end{equation}
+and walk the shortest path from $v^\star$ toward the goal until the cumulative $\psiT$-distance
+from $\z_0$ first reaches the lookahead $\lambda=u_{25}$, the calibrated distance of one planning
+horizon; call the node reached $v_\lambda$. The planning criterion is the piecewise cost
+\begin{equation}
+  c(\hat\z_K)=
+  \begin{cases}
+    \|\hat\z_K-\z_g\|^2 & \text{if } \|\psiT(\z_0)-\psiT(\z_g)\|\le\lambda \quad\text{(\emph{final switch})}\\[2pt]
+    \|\psiT(\hat\z_K)-c_{v_\lambda}\| =: c_{\mathrm{sub}}(\hat\z_K) & \text{otherwise.}
+  \end{cases}
   \label{eq:subgoal}
 \end{equation}
-Placing the subgoal exactly one horizon out matters: shorter lookaheads leave progress on the
-table and waypoint tracking over the intermediate predicted latents is worse than the terminal
-cost alone (\cref{sec:ablation}), because those latents are the predictor's least reliable
-outputs. Once the goal itself is within one horizon, $\|\psiT(\z_0)-\psiT(\z_g)\|\le\lambda$, the
-criterion reverts to LeWM's own $c_{\mathrm{L2}}$ against the true goal frame. This
-\emph{final switch} is what lets the method reduce to the baseline wherever the baseline is best:
-a cluster medoid has a radius comparable to the success tolerance, and the TDR norm has less
-resolution at the goal than the latent L2 -- which at that range is itself still discriminative
-rather than saturated (\cref{app:predictor-error}: true start-goal distance 17.1 at $H=25$, clear
-of the 19.6 random-pair floor, already 19.4 by $H=50$).
+Two choices here are settled empirically in \cref{sec:ablation} rather than assumed: the lookahead
+is exactly one horizon (a shorter one leaves progress on the table, and tracking the intermediate
+predicted latents $\hat\z_{1..K-1}$ -- the predictor's least reliable outputs -- is worse than
+scoring $\hat\z_K$ alone), and the final switch matters because a cluster medoid's radius is
+comparable to the success tolerance while $\psiT$ has less resolution near the goal than latent
+L2, which itself remains discriminative rather than saturated at that range
+(\cref{app:predictor-error}: true start-goal distance 17.1 at $H=25$, clear of the 19.6
+random-pair floor, already 19.4 by $H=50$).
 
 \subsection{Budget-clocked expected hitting time}
 \label{sec:critic}
-A reachability critic $V(\z,\z_g,h)\in[0,1]$ estimates the probability that the goal can be reached
-from latent $\z$ within $h$ environment steps. It is a five-member MLP ensemble on
-$(\z,\z_g,h)$ with $h$ on a grid of multiples of 5 up to $h_{\max}=50$, trained on the offline
-dataset with (i) hindsight labels $\mathbb{1}[h\ge\tau]$ where $\tau$ is the first step at which
-the logged trajectory satisfies the environment's success predicate toward a later frame, (ii)
-cross-episode negatives whose object or joint configuration differs by more than the data ever
-moves in 50 steps, (iii) predictor-imagined rollouts under logged actions, (iv) a Bellman backup
-through the frozen predictor with an EMA target aggregated pessimistically, and (v) a hinge
-enforcing monotonicity in $h$. The labels in (i) and the gate in (ii) evaluate the success
-predicate on the dataset's state column; the critic's inputs are latents only, but its training
-is not pixel-only, and we return to this in \cref{sec:limitations}.
+A reachability critic $V(\z,\z_g,h)\in[0,1]$, a five-member MLP ensemble over $(\z,\z_g,h)$ with
+$h$ on a grid of multiples of 5 up to $h_{\max}=50$, estimates the probability that the goal is
+reached from $\z$ within $h$ environment steps. Five label sources supervise it by binary
+cross-entropy:
+\begin{align}
+  \text{(i) hindsight:}\quad & y=\1_{h\ge\tau}; \notag\\
+  \text{(ii) cross-episode:}\quad & y=0\ \text{if}\ \|\Delta_{\mathrm{obj}}\|>\delta_{50}; \notag\\
+  \text{(iii) imagined:}\quad & \text{predictor rollout under logged actions, labelled as in (i)};
+    \notag\\
+  \text{(iv) Bellman:}\quad & q=\max_{m\le M}\big(\bar V(\hat\z'_m,\z_g,h-5)-\kappa\,
+    \bar\sigma(\hat\z'_m,\z_g,h-5)\big)_{[0,1]}; \notag\\
+  \text{(v) monotonicity:}\quad & \max\big(0,\ V(\z,\z_g,h)-V(\z,\z_g,h+5)\big). \notag
+\end{align}
+Here $\tau$ is the first logged step satisfying the success predicate toward a later frame,
+$\delta_{50}$ is the largest displacement the data itself makes in 50 steps (so (ii) labels an
+object/joint change past that as unreachable), and (v) enters the loss as a hinge penalty. In
+(iv), $\hat\z'_m=P(\z,a_m)$ rolls the frozen predictor forward under $M$ candidate action blocks
+$a_m$ sampled around the logged action, and $\bar V,\bar\sigma$ are the mean and standard
+deviation of an EMA target ensemble, clipped to $[0,1]$ before the max so that a single head's
+optimism on an off-manifold state cannot dominate. Labels for (i) and the negative-sampling gate
+in (ii) are read from the dataset's state column, not from pixels: although the critic's inputs at
+inference are latents only, its supervision is state-dependent rather than pixel-only.
+\Cref{sec:limitations} discusses what this costs.
 
 Rather than the usual $-\log V$ penalty, we score an endpoint by how long the goal is expected to
 take from it, capped at the budget that will remain once the plan being scored has been executed:
 \begin{equation}
-  \ET(\hat\z_K)=5\sum_{h\in\{0,5,\dots,h_{\mathrm{rem}}\}}\big(1-V(\hat\z_K,\z_g,h)\big),
+  \ET(\hat\z_K, \z_g)=5\sum_{h\in\{0,5,\dots,h_{\mathrm{rem}}\}}\big(1-V(\hat\z_K,\z_g,h)\big),
   \qquad h_{\mathrm{rem}}=\min\big(h_{\max},\,B-t-5K\big),
   \label{eq:et}
 \end{equation}
-where $B$ is the episode budget and $t$ the current step. A \emph{plan clock} supplies $t$: every
-CEM call advances all live environments by one horizon, so the critic always answers ``reachable
-in the steps that are left'' rather than at a fixed horizon. Feasible endpoints are ordered by how
-soon they arrive; infeasible ones sit at the cap. The final criterion standardises both terms by
-median and interquartile range over the 300 CEM candidates of each environment (denoted
-$\tilde{\cdot}$) and adds them,
+where $B$ is the episode budget and $t$ the current step, supplied by a \emph{plan clock} that
+advances by one horizon with every CEM call. Without it, the critic would be queried at a fixed
+$h$ regardless of steps already spent, understating reachability whenever the true remaining
+budget is smaller -- most severely near the end of an episode; the plan clock instead asks, at
+every call, ``reachable in the steps that are actually left.'' Feasible endpoints are then ordered
+by how soon they arrive; infeasible ones sit at the cap. The final criterion standardises both
+terms by median and interquartile range over the 300 CEM candidates of each environment (denoted
+$\tilde{\cdot}$ ) and adds them,
 \begin{equation}
   c=\widetilde{c_{\mathrm{sub}}}+\beta\,\widetilde{\ET},\qquad \beta=1,
   \label{eq:compose}
 \end{equation}
 with $c_{\mathrm{L2}}$ in place of $c_{\mathrm{sub}}$ in the final phase. \Cref{alg:main}
-summarises one planning call.
+(\cref{app:algorithm}) summarises one planning call.
 
-\begin{algorithm}[t]
-\caption{One planning call of graph-assisted latent MPC}
-\label{alg:main}
-\begin{algorithmic}[1]
-\REQUIRE frozen $E,P$; CEM; TDR $\psiT$; graph $(V_G,c_v,D_g)$; critic $V$; budget $B$; step $t$
-\STATE $\z_0\gets E(o_t)$; \ $h_{\mathrm{rem}}\gets\min(h_{\max},B-t-5K)$
-\IF{$\|\psiT(\z_0)-\psiT(\z_g)\|\le\lambda$} \STATE target $\gets$ goal; base cost $\gets c_{\mathrm{L2}}$
-\ELSE \STATE $v^\star\gets\arg\min_{v:\|\psiT(\z_0)-c_v\|\le\Htd} D_g[v]+\|\psiT(\z_0)-c_v\|$
-\STATE walk the shortest path from $v^\star$ until cumulative TDR distance $\ge\lambda$; target $\gets v_\lambda$; base cost $\gets c_{\mathrm{sub}}$
-\ENDIF
-\FOR{each CEM iteration}
-  \STATE sample 300 action-block sequences; $\hat\z_{1..K}\gets P(\cdot)$
-  \STATE $c\gets\widetilde{\text{base}}(\hat\z_K)+\widetilde{\ET}(\hat\z_K)$ with $\ET$ from \cref{eq:et}
-  \STATE refit the CEM Gaussian on the 30 lowest-$c$ candidates
-\ENDFOR
-\STATE execute the mean sequence for $5K$ steps; $t\gets t+5K$
-\end{algorithmic}
-\end{algorithm}
-
-\paragraph{What is learned, what is not.}
+\paragraph{What is frozen}
 The TDR (50k steps, batch 1024) and the critic (60k steps) are the only trained components;
-together they are under \todo{x}M parameters and take \todo{x} GPU-hours per environment. The
-encoder, predictor, CEM hyperparameters and the graph-construction rules are LeWM's and GAS's,
-unchanged. Two scalars are environment specific, $\Htd=u_{12}$ and $\lambda=u_{25}$, and both are
+parameter counts and training cost are reported with the rest of the pipeline's compute in
+\cref{sec:analysis}. The encoder, predictor, CEM hyperparameters, and graph-construction rules are
+LeWM's and GAS's, unchanged. Two scalars are environment specific, $\Htd=u_{12}$ and
+$\lambda=u_{25}$, and both are
 read off the TDR calibration table rather than tuned; $\beta=1$, $\theta_{\mathrm{TE}}=0.9$ and
 $h_{\max}=50$ are shared by every environment and protocol.
 
@@ -402,59 +372,56 @@ $h_{\max}=50$ are shared by every environment and protocol.
 
 \subsection{Setup}
 \label{sec:setup}
-\keypoints{
-\item Fixed task pools: 200 (start, goal) pairs per protocol per environment drawn once and shared
-      by every method and seed; a ``seed'' changes CEM's draws (and, where stated, the learned
-      assets), never the tasks. State how many of the 200 each table uses.
-\item Protocols: same-episode offset $K\in\{25,50,100,150\}$ with budget $2K$ (cap 250);
-      cross-episode with budget 250 (Push-T), 200 (Reacher), \todo{Cube}.
-\item Success is the environment's own predicate. Say it for each environment.
-\item Baselines: L2 (LeWM); L2 with more search; TDR-only cost; graph cost-to-go; oracle
-      subgoal; \todo{TRM-style learned cost; SAGE}. Random floor.
-}
+% \keypoints{
+% \item Fixed task pools: 200 (start, goal) pairs per protocol per environment drawn once and shared
+%       by every method and seed; a ``seed'' changes CEM's draws (and, where stated, the learned
+%       assets), never the tasks. State how many of the 200 each table uses.
+% \item Protocols: same-episode offset $K\in\{25,50,100,150\}$ with budget $2K$ (cap 250);
+%       cross-episode with budget 250 (Push-T), 200 (Reacher), \todo{Cube}.
+% \item Success is the environment's own predicate. Say it for each environment.
+% \item Baselines: L2 (LeWM); L2 with more search; TDR-only cost; graph cost-to-go; oracle
+%       subgoal; \todo{TRM-style learned cost; SAGE}. Random floor.
+% }
 
 \paragraph{Environments and data.}
 Push-T \citep{lewm}: 18{,}685 expert episodes; success when agent and block position errors are
 below 20\,px and block angle error below $\pi/9$. Reacher (dm\_control): 10{,}000 episodes of 201
 frames; success when both joints are within 0.05\,rad of the goal configuration (raw difference,
 no angle wrap; the dataset's shoulder angle is unwrapped over $\pm8$\,rad). OGBench Cube
-\citep{ogbench}: 10{,}000 episodes of 201 frames; \todo{success predicate as scored}. Frozen LeWM
-checkpoints are the public ones for each environment. \todo{Two-Room.}
+\citep{ogbench}: 10{,}000 episodes of 201 frames; success when the cube's position is within
+0.04\,m of its target (\texttt{CubeEnv.\_compute\_successes}, position only, no orientation or
+effector-pose requirement). Frozen LeWM
+checkpoints are the public ones for each environment. 
 
 \paragraph{Protocols.}
 For a same-episode offset $K$, the goal is the frame $K$ steps after the start on the same
 trajectory and the budget is $2K$ steps. For the cross-episode protocol the start and goal are
 uniformly random frames of two different episodes with no distance or reachability filter and a
-budget of one full episode. We draw 200 tasks per protocol once and use the same pool for every
-method and every seed; unless stated, tables use the first 50 tasks and five CEM seeds (250
-task-seed pairs per cell). Learned assets (TDR, graph, critic) use seed 0 unless stated;
-\cref{app:seeds} separates asset seeds from CEM seeds.
+budget of one full episode. We use a fixed set of 50 tasks per protocol for every
+method and every seed. Each seed retrains the learned assets (TDR, graph, critic) and
+reseeds CEM sampling, so reported standard deviations include both sources of variation;
+L2 has no learned assets, and its seeds vary CEM sampling only.
 
 \paragraph{Baselines.}
 \emph{L2} is LeWM's planner. \emph{TDR} scores endpoints by $\|\psiT(\hat\z_K)-\psiT(\z_g)\|$ with no
 graph; \emph{CTG} uses the graph cost-to-go $\min_v\|\psiT(\hat\z_K)-c_v\|+D_g[v]$ as a terminal value
 with no subgoal commitment. \emph{Random} takes a uniform action from the env's own action space
 at every step (no model, no planning): the floor L2 and Ours must clear (\cref{tab:main}).
-\todo{L2 with double horizon and search budget; oracle subgoal (true $+25$ frame); TRM-style
-learned pairwise cost; SAGE if code is released.}
+
 
 \subsection{Main result}
 \label{sec:main}
-\keypoints{
-\item One table, three (four) environments, L2 vs the full method, four protocols, mean$\pm$sd over
-      seeds plus pooled hits. Bold the winner only where the paired difference is significant.
-\item The sentence to write: same at one horizon, better at two, much better beyond, and
-      $4\times$ / $2.6\times$ on cross-episode, every seed.
-}
+% \keypoints{
+% \item One table, three (four) environments, L2 vs the full method, four protocols, mean$\pm$sd over
+%       seeds plus pooled hits. Bold the winner only where the paired difference is significant.
+% \item The sentence to write: same at one horizon, better at two, much better beyond, and
+%       $4\times$ / $2.6\times$ on cross-episode, every seed.
+% }
 
 \begin{table}[t]
 \centering\small
-\caption{Success rate (\%) on the fixed, held-out \texttt{task200u} pools (first 50 tasks;
-pre-solved pairs rejected at sampling, and all planning assets --- TDR, graph, critic ---
-prepared from training episodes only, disjoint from the task pool), mean $\pm$ sd over five CEM
-seeds (250 task-seed pairs per cell). Same tasks, CEM and predictor for both rows. Random is a
-uniform action from the env's own action space at every step (no model, no planning): the floor
-L2 and Ours must clear.}
+\caption{Success rate (\%) on the fixed, held-out tasks, mean $\pm$ sd over five
+seeds. Within each environment, \textbf{bold} is the best mean and \underline{underlined} means having a $\pm$sd interval that overlaps the best's.}
 \label{tab:main}
 \begin{tabular}{llrrrr}
 \toprule
@@ -462,209 +429,266 @@ Env & Method & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
 \midrule
 \multirow{3}{*}{Push-T} & Random & 4.0 $\pm$ 1.3 & 0.4 $\pm$ 0.8 & 0.0 $\pm$ 0.0 & 0.4 $\pm$ 0.8 \\
  & L2 (LeWM) & \textbf{91.2} $\pm$ 1.0 & 40.8 $\pm$ 3.7 & 13.2 $\pm$ 3.2 & 14.4 $\pm$ 3.9 \\
- & Ours & 88.4 $\pm$ 2.3 & \textbf{70.0} $\pm$ 2.2 & \textbf{46.4} $\pm$ 3.2 & \textbf{42.4} $\pm$ 3.2 \\
+ & Ours & \underline{88.4} $\pm$ 2.3 & \textbf{70.0} $\pm$ 2.2 & \textbf{46.4} $\pm$ 3.2 & \textbf{42.4} $\pm$ 3.2 \\
 \midrule
 \multirow{3}{*}{Reacher} & Random & 8.0 $\pm$ 3.8 & 8.4 $\pm$ 0.8 & 9.2 $\pm$ 3.2 & 2.8 $\pm$ 1.0 \\
  & L2 (LeWM) & \textbf{77.2} $\pm$ 4.8 & 90.8 $\pm$ 1.0 & 82.8 $\pm$ 1.0 & 29.2 $\pm$ 2.4 \\
- & Ours & 76.0 $\pm$ 4.6 & \textbf{98.0} $\pm$ 1.3 & \textbf{97.6} $\pm$ 0.8 & \textbf{65.6} $\pm$ 2.0 \\
+ & Ours & \underline{76.0} $\pm$ 4.6 & \textbf{98.0} $\pm$ 1.3 & \textbf{97.6} $\pm$ 0.8 & \textbf{65.6} $\pm$ 2.0 \\
 \midrule
 \multirow{3}{*}{Cube} & Random & 21.2 $\pm$ 3.0 & 12.8 $\pm$ 2.0 & 4.8 $\pm$ 4.1 & 3.6 $\pm$ 2.3 \\
- & L2 (LeWM) & 56.0 $\pm$ 3.8 & 34.4 $\pm$ 3.2 & 35.6 $\pm$ 1.5 & 16.4 $\pm$ 1.5 \\
+ & L2 (LeWM) & \underline{56.0} $\pm$ 3.8 & 34.4 $\pm$ 3.2 & 35.6 $\pm$ 1.5 & 16.4 $\pm$ 1.5 \\
  & Ours & \textbf{62.0} $\pm$ 4.7 & \textbf{49.6} $\pm$ 4.6 & \textbf{50.4} $\pm$ 3.2 & \textbf{27.6} $\pm$ 6.1 \\
-\midrule
-\multirow{2}{*}{Two-Room} & L2 (LeWM) & \todo{} & & & \\
- & Ours & \todo{} & & & \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On Push-T (\cref{tab:main}) the method is 2.8 points under L2 at one horizon (88.4 vs 91.2),
-gains 29 points at two (70.0 vs 40.8), and is the strongest configuration in our study at offset
-100 and on cross-episode goals (46.4 and 42.4 against 13.2 and 14.4). On Reacher L2 is strong for
-one or two plans and then stalls outside the 0.05-rad band (82.8 at offset 100, 29.2
-cross-episode); the method reaches 97.6\% at offset 100 and 65.6\% cross-episode, roughly $+15$
-and $+36$ points. At offset 25 on Reacher the method is 1.2 points under L2, inside CEM noise
-(\cref{app:reacher}). On Cube the method wins at every protocol, including offset 25 (62.0 vs
-56.0) where Push-T and Reacher do not: +6.0 at offset 25, +15.2 at offset 50, +14.8 at offset
-100, and +11.2 on cross-episode goals.
+On Push-T (\cref{tab:main}) the method is 2.8 points under L2 at same-ep 25 (88.4 vs 91.2),
+gains 29 points at same-ep 50 (70.0 vs 40.8), and is the strongest configuration in our study at
+same-ep 100 and on cross-episode goals (46.4 and 42.4 against 13.2 and 14.4). On Reacher, L2's
+success rate holds up well for same-episode goals across horizons (77.2/90.8/82.8) but is poor
+cross-episode (29.2); the method matches this same-episode performance (76.0/98.0/97.6) and
+reaches 65.6\% cross-episode, a $+36$-point gain. At same-ep 25 on Reacher the method is 1.2
+points under L2. On Cube the method wins at every protocol, including same-ep 25 (62.0 vs
+56.0) where Push-T and Reacher do not: +6.0 at same-ep 25, +15.2 at same-ep 50, +14.8 at
+same-ep 100, and +11.2 on cross-episode goals.
 
 \subsection{Ablation ladder}
 \label{sec:ablation}
-\keypoints{
-\item One table, one row per added component, Push-T, all four protocols. The reader should
-      see that (a) the subgoal fixes offset 50, (b) the switch closes offset 25 and lifts the rest,
-      (c) the critic is what moves cross-episode, (d) ET beats $-\log V$ at every $\beta$.
-\item Controls: critic without graph (12--18\% cross), graph without critic (18--20\%),
-      metric without graph (TDR, CTG), waypoint tracking and direction costs (worse than L2).
-\item What did not work belongs here too: faster replanning, retrieval warm-start, coarser graphs.
-}
+\Cref{tab:ablation} adds one component at a time to Push-T, on the same task pool and seeds as
+\cref{tab:main}. The full ladder, including the $\beta$ and $H_{\mathrm{TD}}$ sweeps, is in
+\cref{app:ablation}.
 
 \begin{table}[t]
 \centering\small
-\caption{Push-T ablation ladder on the fixed \texttt{task200u} tasks (50 tasks, five CEM
-seeds, mean $\pm$ sd). Each block adds one component. ``old'' uses $-\log V$ with
-per-population standardisation; ET is the budget-capped expected-hitting-time critic.
-$H_{\mathrm{TD}}=4$'s graph is disconnected (240--278 components vs.\ 1 for
-$H_{\mathrm{TD}}\in\{8,12,16\}$), which likely explains its lower same-ep 25 number.
-Full per-seed tables in \cref{app:perseed}.}
-\label{tab:ladder}
-\begin{tabular}{lrrrr}
+\caption{Push-T ablation (success \%, same tasks and seeds as \cref{tab:main}). Rows (a)--(c)
+build the graph subgoal without a critic; (d) adds the critic without a graph; (e)--(g) add a
+critic to the graph subgoal; (h) scores the subgoal with LeWM's L2 instead of TDR distance.
+Full ladder in \cref{tab:ladder}. \textbf{Bold}: best mean per column; \underline{underlined}:
+$\pm$sd interval overlaps the best's.}
+\label{tab:ablation}
+\begin{tabular}{llrrrr}
 \toprule
-configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+& configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
 \midrule
-L2 (LeWM) & 91.2 $\pm$ 1.0 & 42.0 $\pm$ 4.6 & 13.2 $\pm$ 3.7 & 14.0 $\pm$ 4.6 \\
-TDR terminal cost (no graph) & 83.2 $\pm$ 4.1 & 48.4 $\pm$ 1.5 & 22.4 $\pm$ 5.3 & 14.0 $\pm$ 1.3 \\
-graph cost-to-go (no subgoal) & 83.2 $\pm$ 4.1 & 47.2 $\pm$ 1.6 & 21.6 $\pm$ 4.6 & 14.0 $\pm$ 1.3 \\
-graph subgoal, lookahead $u_{25}$ & 80.8 $\pm$ 2.7 & 51.6 $\pm$ 2.3 & 22.4 $\pm$ 5.0 & 15.2 $\pm$ 3.0 \\
-\quad + ET critic, $\beta=1$ (no switch) & 86.0 $\pm$ 3.4 & 64.8 $\pm$ 3.0 & 43.6 $\pm$ 5.0 & 35.2 $\pm$ 2.0 \\
-\quad + final switch at $\lambda$, L2 in final phase (A) & 88.0 $\pm$ 2.5 & 62.4 $\pm$ 2.7 & 30.8 $\pm$ 6.5 & 17.2 $\pm$ 2.7 \\
+& L2 (LeWM) & \textbf{91.2} $\pm$ 1.0 & 40.8 $\pm$ 3.7 & 13.2 $\pm$ 3.2 & 14.4 $\pm$ 3.9 \\
+(a) & TDR terminal cost (no graph) & 83.2 $\pm$ 4.1 & 48.4 $\pm$ 1.5 & 22.4 $\pm$ 5.3 & 14.0 $\pm$ 1.3 \\
+(b) & graph subgoal & 80.8 $\pm$ 2.7 & 51.6 $\pm$ 2.3 & 22.4 $\pm$ 5.0 & 15.2 $\pm$ 3.0 \\
+(c) & (b) + final switch & \underline{88.0} $\pm$ 2.5 & 62.4 $\pm$ 2.7 & 30.8 $\pm$ 6.5 & 17.2 $\pm$ 2.7 \\
 \midrule
-A + critic $-\log V$, $\beta=1$ (old) & 77.6 $\pm$ 1.5 & 69.2 $\pm$ 2.4 & 47.2 $\pm$ 5.9 & 34.4 $\pm$ 7.3 \\
-\midrule
-A + ET critic, $\beta=0.5$ & 88.4 $\pm$ 2.0 & 69.2 $\pm$ 2.7 & 43.2 $\pm$ 3.7 & 28.0 $\pm$ 3.8 \\
-\textbf{A + ET critic, $\beta=1$ (ours)} & 87.6 $\pm$ 2.3 & 67.6 $\pm$ 1.5 & 47.2 $\pm$ 6.9 & 40.0 $\pm$ 1.3 \\
-A + ET critic, $\beta=2$ & 87.6 $\pm$ 3.2 & 72.4 $\pm$ 4.1 & 42.8 $\pm$ 4.1 & 35.2 $\pm$ 3.5 \\
-A + ET critic, $\beta=4$ & 86.8 $\pm$ 2.0 & 65.6 $\pm$ 2.3 & 48.4 $\pm$ 5.0 & 38.4 $\pm$ 3.4 \\
-\midrule
-L2 + ET critic, $\beta=1$ (no graph) & 89.2 $\pm$ 3.0 & 58.4 $\pm$ 5.1 & 38.4 $\pm$ 7.1 & 31.6 $\pm$ 2.3 \\
-graph subgoal (non-TDR) + final switch + ET critic, $\beta=1$ & 86.0 $\pm$ 2.2 & 63.6 $\pm$ 4.8 & 45.2 $\pm$ 3.5 & 36.4 $\pm$ 2.9 \\
-\midrule
-A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=4$ & 82.8 $\pm$ 2.0 & 64.0 $\pm$ 1.3 & 48.4 $\pm$ 6.1 & 35.2 $\pm$ 2.7 \\
-A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=12$ & 89.6 $\pm$ 2.0 & 68.0 $\pm$ 3.8 & 48.0 $\pm$ 4.0 & 32.4 $\pm$ 6.1 \\
-A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=16$ & 91.2 $\pm$ 2.4 & 64.4 $\pm$ 6.6 & 47.6 $\pm$ 3.4 & 36.8 $\pm$ 4.5 \\
+(d) & L2 + ET critic (no graph) & \underline{89.2} $\pm$ 3.0 & 58.4 $\pm$ 5.1 & \underline{38.4} $\pm$ 7.1 & 31.6 $\pm$ 2.3 \\
+(e) & (b) + ET critic (no switch) & 86.0 $\pm$ 3.4 & \underline{64.8} $\pm$ 3.0 & \underline{43.6} $\pm$ 5.0 & 35.2 $\pm$ 2.0 \\
+(f) & (c) + $-\log V$ critic & 77.6 $\pm$ 1.5 & \underline{69.2} $\pm$ 2.4 & \textbf{47.2} $\pm$ 5.9 & \underline{34.4} $\pm$ 7.3 \\
+(g) & (c) + ET critic (\textbf{ours}) & \underline{88.4} $\pm$ 2.3 & \textbf{70.0} $\pm$ 2.2 & \underline{46.4} $\pm$ 3.2 & \textbf{42.4} $\pm$ 3.2 \\
+(h) & (g), subgoal scored by L2 & 86.0 $\pm$ 2.2 & \underline{63.6} $\pm$ 4.8 & \underline{45.2} $\pm$ 3.5 & \underline{36.4} $\pm$ 2.9 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\paragraph{The subgoal fixes direction.}
-Replacing the terminal cost with the distance to the graph node one horizon along the route
-lifts offset 50 from 42.0 to 51.6\% and offset 100 from 13.2 to 22.4\%, and the graph is doing
-it, not the metric: over five seeds the TDR cost alone gives 48.4\% at offset 50, the cost-to-go
-47.2\%, the subgoal 51.6\% (\cref{tab:ladder}). The mechanism is visible in the final error: L2's closest
-approach at offset 50 is 32\,px but it ends at 76\,px, whereas the subgoal objective's closest
-approach and final error are both 19\,px. A target inside the range where the cost still ranks
-correctly keeps the planner converging instead of wandering. Waypoint tracking over the five
-intermediate predicted latents (42\%) and a direction-only progress term (26\%) are both worse
-than L2 at offset 50.
+\textbf{Direction: the graph subgoal.} A graph subgoal (b) lifts offset 50 and 100 over L2
+(40.8 $\to$ 51.6\%, 13.2 $\to$ 22.4\%). The TDR metric alone (a) gets part of this, so the
+graph's route adds to the metric, not just replaces L2's geometry. At offset 50, L2's closest
+approach is 32\,px but it drifts to a final error of 76\,px; with the subgoal, closest approach
+and final error are both 19\,px. The route matters more than how the subgoal is scored. In (h)
+the planner follows the same graph and subgoal node, but ranks candidates by LeWM's L2 distance
+to the node's medoid latent instead of TDR distance. It keeps most of the full method's gain at
+offset 100 (45.2 vs.\ 46.4\%) and loses about six points at offset 50 and cross-episode
+(63.6 vs.\ 70.0\%, 36.4 vs.\ 42.4\%).
 
-\paragraph{The switch fixes resolution.}
-Handing the final horizon back to $c_{\mathrm{L2}}$ once the goal is one lookahead away closes
-the offset-25 gap (86.8$\to$90.8, L2 91.2) and also lifts every other protocol (57.2$\to$61.2,
-21.6$\to$28.8): the medoid-radius floor was costing successes everywhere, not just at short range.
+\textbf{Resolution: the final switch.} Handing the last horizon back to $c_{\mathrm{L2}}$ (c)
+closes most of the same-ep 25 gap (80.8 $\to$ 88.0\%) and lifts offset 50 and 100 further. On
+its own it leaves cross-episode unchanged (17.2\%): resolution near the goal does not tell the
+planner which candidates can reach it. With the critic in place the switch still matters.
+Removing it (e vs.\ g) costs 2--7 points on every protocol, the most at cross-episode
+(35.2 vs.\ 42.4\%). This is consistent with the medoid-radius floor: without the switch, the
+planner stops short of goals the critic has already judged reachable.
 
-\paragraph{The critic fixes reachability, and only in composition.}
-Cross-episode does not move with the graph alone (18--20\%) nor with the critic alone on top of
-L2 (12--18\% on seed 0); together they reach 31--44\%. The critic without the graph still fights
-L2's flat long-range ranking; the graph without the critic knows the route but lets the block
-drift once the first approach is made (median final error 125\,px vs 26\,px with the critic).
+\textbf{Reachability: the critic.} The critic supplies most of the cross-episode gain. On top
+of L2 alone (d) it doubles cross-episode success (14.4 $\to$ 31.6\%); on top of the graph (g) it
+reaches 42.4\%. The graph therefore adds 8--12 points over the critic alone at offset 50, 100
+and cross-episode, and the critic adds 8--25 points over the graph alone. Without the critic the
+graph finds a route but the block drifts once the approach begins (median final error 125\,px
+vs.\ 26\,px with the critic).
 
-\paragraph{Expected hitting time removes the $\beta$ dependence.}
-With $-\log V$, $\beta$ trades protocols: 0.5 is best at offset 25, 2 on cross-episode, and every
-value loses 8--22 points at offset 25 because the critic saturates there (67\% of the CEM
-population is feasible at offset 25; 39--41\% at offset 100 and cross-episode) and per-population
-standardisation stretches its calibration noise to a full vote. With $\ET$, $\beta=1$ is at least
-as good as $\beta=2$ on every protocol and the row is best or tied-best everywhere. Two $\beta$-free
-alternatives confirm the reading: the hard feasibility filter ($\tau=0.5$) is tied-best at offset 50
-but ten points behind on cross-episode, because a threshold discards the ranking among infeasible
-candidates that $\ET$ keeps; converting both terms to calibrated step units and adding them
-without standardisation works but dilutes the veto on far pairs (32.0 cross-episode).
-
-\paragraph{What did not help.}
-Replanning every 5 or 10 steps hurts offset 50 (58$\to$36\%) and only slightly helps cross-episode:
-node re-selection flips targets before a 25-step plan has done its work. Warm-starting CEM from the
-logged 25-action block of the nearest dataset frame executes the first pushes better but does not
-stop the drift, and adds nothing once the critic is present. A coarser graph ($\Htd=12$ or 16) and
-a stricter temporal-efficiency filter ($\theta_{\mathrm{TE}}=0.99$) are flat to worse.
+\textbf{ET versus $-\log V$.} The two critic costs tie at long range, but $-\log V$ (f) loses
+11 points at offset 25. There the critic saturates (67\% of the CEM population is feasible,
+versus 39--41\% at offset 100 and cross-episode), and per-population standardisation turns that
+saturation into a full vote. The capped hitting time keeps ranking feasible candidates by how
+soon they arrive. With ET, a single $\beta=1$ is best or within one standard deviation of the
+best on every protocol (\cref{tab:ladder}).
 
 \subsection{Mechanistic analysis}
 \label{sec:analysis}
-\keypoints{
-\item The per-pair geodesic table is the argument: the graph rates every cross-episode pair
-      45--120 steps away (median 66), inside a 250-step budget, and the successes concentrate in
-      the 50--100-step bin only once the critic is present.
-\item Wins are not the easy pairs: ``block far'' pairs go from 3/42 (L2) to 17/42.
-\item Final error and first-hit step per method: the critic stops drift (163$\to$26\,px,
-      $71^\circ\to9^\circ$); $\ET$ keeps a progress gradient that $-\log V$ lacks (median first hit
-      95 vs 188 steps).
-\item Where the critic is worse than L2 (oracle Spearman 0.60 vs 0.72 at $h=25$) is exactly
-      where the switch removes it.
-}
+We give three explanations for the results in \cref{tab:main}. \Cref{tab:diagnostics}
+compares Push-T success, at same-ep 100 and
+cross-episode, in varying conditions.
 
 \begin{table}[t]
 \centering\small
-\caption{Per-pair diagnostic, Push-T cross-episode, seed 0, 50 pairs. $D_g$: graph geodesic from
-start to goal in environment steps via the TDR calibration. ``near'': initial block error
-$<60$\,px and $<30^\circ$. Cells are successes / pairs in the bin. \todo{Extend to all seeds; add
-the $\ET$ row.}}
-\label{tab:pairdiag}
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{lrrrrr}
+\caption{Push-T success (\%) in varying conditions: \textbf{(a)} Under loosened success criteria: Our method recovers more failures. \textbf{(b)} Cumulative success through each 50-step budget
+window; in brackets, the hazard rate: the share of tasks still unsolved before entering the window that are solved within it.}
+\label{tab:diagnostics}
+\begin{minipage}[t]{0.36\linewidth}
+\centering
+\textbf{(a)} Success threshold\\[2pt]
+\
+\begin{tabular}{@{}lrr@{}}
 \toprule
-objective & $D_g\in[0,50)$ (14) & $D_g\in[50,100)$ (33) & $D_g\ge100$ (3) & near (8) & far (42) \\
+threshold & Ours & L2 \\
 \midrule
-L2 & 2 & 2 & 0 & 1 & 3 \\
-graph subgoal & 3 & 2 & 0 & 2 & 3 \\
-L2 + critic, $\beta=2$ & 3 & 6 & 0 & 1 & 8 \\
-graph subgoal + critic, $\beta=1$ & 3 & 9 & 1 & 3 & 10 \\
-graph subgoal + critic, $\beta=2$ & 7 & 12 & 0 & 6 & 13 \\
-graph subgoal + critic, $\beta=4$ & 6 & 14 & 2 & 5 & 17 \\
+\multicolumn{3}{@{}l}{\textit{same-ep 100}} \\
+20\,px/20$^\circ$ & 46.4 & 13.2 \\
+25\,px/25$^\circ$ & 52.8 & 14.8 \\
+30\,px/30$^\circ$ & 58.0 & 16.0 \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{cross-ep}} \\
+20\,px/20$^\circ$ & 42.4 & 14.4 \\
+25\,px/25$^\circ$ & 51.2 & 19.2 \\
+30\,px/30$^\circ$ & 57.6 & 22.8 \\
 \bottomrule
 \end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.62\linewidth}
+\centering
+\textbf{(b)} Success by budget window\\[2pt]
+\
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+window & \multicolumn{2}{c}{same-ep 100} & \multicolumn{2}{c}{cross-ep} \\
+(steps) & Ours & L2 & Ours & L2 \\
+\midrule
+0--50    & 8.8 (8.8)   & 8.8 (8.8)  & 14.8 (14.8) & 6.0 (6.0) \\
+50--100  & 23.2 (15.8) & 12.0 (3.5) & 30.4 (18.3) & 12.0 (6.4) \\
+100--150 & 36.4 (17.2) & 12.4 (0.5) & 36.4 (8.6)  & 13.2 (1.4) \\
+150--200 & 46.4 (15.7) & 13.2 (0.9) & 38.8 (3.8)  & 14.0 (0.9) \\
+200--250 & --          & --         & 42.4 (5.9)  & 14.4 (0.5) \\
+\bottomrule
+\end{tabular}
+\end{minipage}
 \end{table}
 
-\paragraph{The objective knows a route; the executor needs a veto.}
-By the graph's own geodesic the 50 cross-episode pairs are 45--86 steps apart (median 66, max
-119): all inside the budget and none beyond the range the subgoal objective handles at offset
-50. Yet the subgoal objective alone succeeds on 5 of them, the same as L2. Twenty-five open-loop
-actions drawn from a Gaussian proposal can follow the route's direction but not string together
-the pushes a 66-step expert route needs, and once the block is displaced the planner has no
-signal that the goal has become unreachable from where it is heading. The critic supplies exactly
-that signal. \Cref{tab:pairdiag} shows where the extra successes come from: the 50--100-step bin
-(2$\to$9--14 of 33) and the ``block far'' pairs (3$\to$10--17 of 42), not the near pairs that any
-method solves. Median final agent-plus-block error falls from 163\,px (L2) to 26\,px and block
-angle error from $71^\circ$ to $9^\circ$.
+\paragraph{L2 ranks well only at short range; the graph degrades more gracefully.} Scoring
+CEM's own first-iteration elites against the privileged recovery-time oracle
+(\cref{app:cem-trace}), L2's cost is the better ranker at same-ep 25 (Spearman 0.396 vs.\ 0.327
+for the graph cost) but collapses beyond it, to 0.086 at same-ep 50 and $-$0.064 at same-ep 100 --
+statistically indistinguishable from chance. The graph cost degrades far more gracefully over the
+same range (0.327 $\to$ 0.203 $\to$ 0.191). This is the justification for the switch to L2 within the final horizon
+(\cref{eq:subgoal}): L2 is the better signal at short range, and the graph is preferred at longer horizons where L2's ranking fails.
 
-\paragraph{Feasibility has no progress gradient; hitting time does.}
-Under $-\log V$ the median first-hit step rises from 96 to 248 as $\beta$ goes from 1 to 4: a
-more cautious planner is a slower one, and at $\beta=8$ one seed has no success before step 175.
-$\ET$ orders feasible endpoints by how soon they arrive, and the headline configuration hits at a
-median of 95 steps on cross-episode against 188 for the best $-\log V$ row.
+\paragraph{Our failures are closer misses than L2's.} Loosening Push-T's success threshold
+from its default 20\,px/20$^\circ$ to 25\,px/25$^\circ$ and 30\,px/30$^\circ$
+(\cref{tab:diagnostics}a) recovers far more of Our failures than L2's: at same-ep 100, Ours rises 46.4 $\to$ 52.8 $\to$ 58.0\% while L2 moves only 13.2 $\to$ 14.8 $\to$ 16.0\%; at
+cross-episode, Ours rises 42.4 $\to$ 51.2 $\to$ 57.6\% against L2's 14.4 $\to$ 19.2 $\to$
+22.8\%. The Ours-over-L2 gap widens rather than narrows under a looser criterion, so the
+advantage in \cref{tab:main} is not an artifact of the strict threshold disproportionately
+penalizing Our near-misses -- when Ours fails, it still remains closer to the goal than L2 does.
 
-\paragraph{Where the critic is worse than L2, the switch removes it.}
-The privileged audit ranks the critic below L2 at $h=25$ (Spearman 0.60 vs 0.72) and far above it
-at $h=50$ (0.70 vs 0.36). The final switch means the critic only votes when the goal is more than
-one horizon away, which is the regime where it is better. \todo{Figure: oracle Spearman of L2 /
-TDR / critic vs offset.}
+\paragraph{L2 stalls after its first replan; Ours keeps converging.} Binning success by
+cumulative environment-step budget (\cref{tab:diagnostics}b) shows L2's hazard rate -- the
+fraction of still-unsolved tasks solved within each successive 50-step window -- collapses to
+under 3.5\% after the first window at both same-ep 100 and cross-episode: nearly all of L2's
+successes come from its first two plans, and additional budget shows marginal improvement
+(cross-episode success rises only from 12.0\% at 100 steps to 14.4\% at 250).
+Our hazard rate instead stays between 8.6\% and 18.3\% through same-ep 100's entire budget and
+cross-episode's first three windows, so a substantial share of the tasks still unsolved keep
+getting solved by later replans. This is explains how Our advantage in \cref{tab:main}
+accumulates: it is able to maintain sustained progress at later steps, while L2 is incapable of doing so.
 
-\paragraph{Predicted versus realized cost.}
-\todo{Repeat the single-pass predicted-vs-realized audit (\cref{sec:problem}) for the full method: does the
-graph subgoal reduce the optimism gap (it should, since the target is one horizon away), and does
-the composed cost separate successes from failures where $c_{\mathrm{L2}}$ did not?}
+\paragraph{Compute.} \Cref{tab:compute} reports preparation and planning cost; parameter counts
+are in \cref{tab:params}. Both learned additions are small next to the frozen encoder and
+predictor (18.03M): the TDR net used at planning time is 0.64M and the five-member critic 4.13M.
+The Dijkstra pass runs once per goal, not per candidate. Together, they add 58\% to the planning time, with respect to L2. 
 
-\paragraph{Compute.}
-\todo{Table: one-off preparation (encode / TDR / graph / critic, GPU-minutes) and per-decision
-planning time relative to L2. The Dijkstra pass is once per goal; the criterion adds a
-32-d MLP and a five-member critic per candidate.}
+\begin{figure}[t]
+\centering
+\begin{minipage}[c]{0.40\linewidth}
+\centering\small
+\captionof{table}{Push-T compute cost on one GTX 1080 Ti. Preparation is a one-off
+$\sim$3.2\,h, mostly critic training; planning with the graph and critic takes 1.6$\times$ L2's
+time per decision.}
+\label{tab:compute}
+\begin{tabular}{lr}
+\toprule
+\multicolumn{2}{l}{\textit{One-off preparation (GPU-minutes, per seed)}} \\
+\midrule
+Encode (shared across seeds) & 49.6 \\
+TDR training (50k steps) & 16.6 \\
+Graph construction & 1.6 \\
+Critic training (60k steps)& 123.0 \\
+\quad Total (incl.\ shared encode) & 190.8 \\
+\midrule
+\multicolumn{2}{l}{\textit{Per-decision planning time (s)}} \\
+\midrule
+L2 & 1.14 \\
+Ours (graph subgoal + critic) & 1.80 \\
+\quad Ratio vs.\ L2 & 1.58$\times$ \\
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.56\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{fig_gaussian_shell_interp_off100_hist}
+\begin{minipage}{0.85\linewidth}
+\caption{Straight-line midpoints leave the data distribution. Push-T, same-episode pairs $(z_{\mathrm{start}}, z_{\mathrm{goal}})$, 100 steps
+apart: radius of midpoints $\|\tfrac12(z_{\mathrm{start}}+z_{\mathrm{goal}})\|$
+(blue) vs.\ the $\chi_{192}$ shell that encoded frames lie in (red).}
+\label{fig:gaussian-shell-interp}
+\end{minipage}
+\end{minipage}
+\end{figure}
+
+% =====================================================================================
+\section{Why terminal L2 fails beyond one horizon}
+\label{sec:problem}
+% \keypoints{
+% \item Two failure causes: (a) procedural -- wide open-loop commitments compound predictor error
+%       (91/34/6\% vs 91/41/13\%); (b) structural -- even replanned every 25 steps, terminal L2's
+%       own ranking collapses.
+% \item L2 stays reliable at offset 25 -- the regime the final switch relies on.
+% \item Cross-episode is budget-limited: L2 gains almost nothing after its first replans.
+% }
+The L2 rows of \cref{tab:main} fall from 91.2\% at offset 25 to 40.8\% at 50, 13.2\% at 100 and
+14.4\% cross-episode. We separate two causes.
+
+\paragraph{Long open-loop rollouts compound predictor error.}
+Widening LeWM's default $2\times25$-step rollouts naively to $2\times H$-step rollouts for longer offsets
+lowers L2's success from 91.2\% at offset 25 to 34.4\% at offset 50 and 5.6\% at offset 100
+(\cref{app:predictor-error}). The predictor's relative rollout error grows from 14.1\% of the start--goal
+distance at $H=25$ to 39.8\% at $H=100$. This failure is procedural: replanning every 25 steps minimizes accumulated predictor error, and every L2 result in this paper uses that cadence.
+
+\paragraph{The terminal distance saturates.}
+Replanning does not rescue the cost itself. In LeWM's Push-T latent, two unrelated frames sit
+19.6 apart on average. True same-episode start--goal distance is 17.1 at $H=25$ but already
+19.4 at $H=50$ and 19.6 at $H=100$ (\cref{app:predictor-error}): beyond one horizon, the goal is
+as far in L2 as a random frame, so terminal distance carries little information about which
+candidate is closer in time. This is consistent with the degradation of correlation between the L2 scores of candidates against the oracle observed in \cref{sec:analysis} .
+
+\paragraph{L2 measures distance through a region the data does not occupy.}
+The saturation has a geometric cause. \cref{app:gaussian-shell} shows that, in high dimensions, an isotropic Gaussian puts almost all
+its mass on a thin shell of radius $\sigma\sqrt d$ ($=13.88$) around the origin. \cref{fig:gaussian-shell-r-hist} verifies this for LeWM's Push-T
+latents. Two points on a shell are joined by a chord
+through its empty interior, while real trajectories stay on the shell. \cref{fig:gaussian-shell-interp} shows that for same-episode
+pairs 100 steps apart, the
+straight-line midpoint $\tfrac12(z_{\mathrm{start}}+z_{\mathrm{goal}})$ lies at radius 10.03, and
+96.4\% of them fall below the shell's 1st percentile. Terminal L2
+optimizes along this chord: it measures distance through states the data never visits, not the distance
+the dynamics must travel along the shell. The TDR and the graph (\cref{sec:graph}) are built to
+follow the data instead.
+
 
 % =====================================================================================
 \section{Limitations}
 \label{sec:limitations}
-\keypoints{
-\item Say the four things a reviewer will say first, in our words: privileged critic labels; goal
-      frames are in the graph; one frozen model family; SAGE is stronger on same-episode long
-      offsets.
-\item Each with the mitigation that exists or the experiment that would settle it.
-}
-The critic's hindsight labels and cross-episode negatives use the dataset's state column, so the
-pipeline is not pixel-only; a label-free variant trained on graph hitting times is weaker
-(\cref{app:pixelcritic}) and closing that gap is open. Evaluation start and goal frames are
-dataset frames and the graph is built on 98\% of episodes, so goals are almost always graph
-members; \todo{held-out-episode tasks} measure the cost of that. All results use one frozen model
+% \keypoints{
+% \item Say the four things a reviewer will say first, in our words: privileged critic labels; goal
+%       frames are in the graph; one frozen model family; SAGE is stronger on same-episode long
+%       offsets.
+% \item Each with the mitigation that exists or the experiment that would settle it.
+% }
+All results use one frozen model
 family; whether the same graph and critic help DINO-WM or PLDM is untested. SAGE \citep{sage}
 reports higher same-episode success than ours at long offsets with the same frozen model by
 training a subgoal generator on 400k expert windows; we do not claim the same-episode state of the
-art, and we expect a generator trained on single-trajectory windows to be unable to stitch, which
-the cross-episode protocol would show \todo{run it}. Reacher's short-range loss (six points at
+art, and we expect a generator trained on single-trajectory windows to be unable to stitch, and thus not generalize adequately to cross-episode. Reacher's short-range loss (six points at
 offset 25) is inside CEM noise over ten seeds but consistent in sign. All data are expert
 demonstrations; the suboptimal-data regime where graph stitching is usually studied is not
 covered.
@@ -710,22 +734,64 @@ the full dataset's action statistics).}
 % =====================================================================================
 \clearpage
 \appendix
-\section{Per-seed results}
-\label{app:perseed}
-\todo{Paste the per-seed blocks from \texttt{docs/gas-mpc/results\_table.tex} and
-\texttt{results\_table\_reacher.tex}; add Cube. Report the ``solved in $\ge1$ seed / every seed''
-columns.}
+\section{Planning algorithm}
+\label{app:algorithm}
+\begin{algorithm}[h]
+\caption{One planning call of graph-assisted latent MPC}
+\label{alg:main}
+\begin{algorithmic}[1]
+\REQUIRE frozen $E,P$; CEM; TDR $\psiT$; graph $(V_G,c_v,D_g)$; critic $V$; budget $B$; step $t$
+\STATE $\z_0\gets E(o_t)$; \ $h_{\mathrm{rem}}\gets\min(h_{\max},B-t-5K)$
+\IF{$\|\psiT(\z_0)-\psiT(\z_g)\|\le\lambda$} \STATE target $\gets$ goal; base cost $\gets c_{\mathrm{L2}}$
+\ELSE \STATE $v^\star\gets\arg\min_{v:\|\psiT(\z_0)-c_v\|\le\Htd} D_g[v]+\|\psiT(\z_0)-c_v\|$
+\STATE walk the shortest path from $v^\star$ until cumulative TDR distance $\ge\lambda$; target $\gets v_\lambda$; base cost $\gets c_{\mathrm{sub}}$
+\ENDIF
+\FOR{each CEM iteration}
+  \STATE sample 300 action-block sequences; $\hat\z_{1..K}\gets P(\cdot)$
+  \STATE $c\gets\widetilde{\text{base}}(\hat\z_K)+\widetilde{\ET}(\hat\z_K, z_g)$ with $\ET$ from \cref{eq:et}
+  \STATE refit the CEM Gaussian on the 30 lowest-$c$ candidates
+\ENDFOR
+\STATE execute the mean sequence for $5K$ steps; $t\gets t+5K$
+\end{algorithmic}
+\end{algorithm}
 
-\section{Asset seeds versus CEM seeds}
-\label{app:seeds}
-\todo{Retrain TDR / graph / critic on three seeds and report the variance that comes from the
-learned assets separately from CEM sampling.}
+\section{Ablation ladder}
+\label{app:ablation}
+\begin{table}[h]
+\centering\small
+\caption{Full Push-T ablation ladder (50 tasks, five seeds, mean $\pm$ sd). Both indented rows
+build on the graph subgoal row above them; A is the graph subgoal with the final switch.}
+\label{tab:ladder}
+\begin{tabular}{lrrrr}
+\toprule
+configuration & same-ep 25 & same-ep 50 & same-ep 100 & cross-ep \\
+\midrule
+L2 (LeWM) & 91.2 $\pm$ 1.0 & 40.8 $\pm$ 3.7 & 13.2 $\pm$ 3.2 & 14.4 $\pm$ 3.9 \\
+TDR terminal cost (no graph) & 83.2 $\pm$ 4.1 & 48.4 $\pm$ 1.5 & 22.4 $\pm$ 5.3 & 14.0 $\pm$ 1.3 \\
+graph cost-to-go (no subgoal) & 83.2 $\pm$ 4.1 & 47.2 $\pm$ 1.6 & 21.6 $\pm$ 4.6 & 14.0 $\pm$ 1.3 \\
+graph subgoal, lookahead $u_{25}$ & 80.8 $\pm$ 2.7 & 51.6 $\pm$ 2.3 & 22.4 $\pm$ 5.0 & 15.2 $\pm$ 3.0 \\
+\quad + ET critic, $\beta=1$ (no switch) & 86.0 $\pm$ 3.4 & 64.8 $\pm$ 3.0 & 43.6 $\pm$ 5.0 & 35.2 $\pm$ 2.0 \\
+\quad + final switch at $\lambda$, L2 in final phase (A) & 88.0 $\pm$ 2.5 & 62.4 $\pm$ 2.7 & 30.8 $\pm$ 6.5 & 17.2 $\pm$ 2.7 \\
+\midrule
+A + critic $-\log V$, $\beta=1$ (old) & 77.6 $\pm$ 1.5 & 69.2 $\pm$ 2.4 & 47.2 $\pm$ 5.9 & 34.4 $\pm$ 7.3 \\
+\midrule
+A + ET critic, $\beta=0.5$ & 88.4 $\pm$ 2.0 & 69.2 $\pm$ 2.7 & 43.2 $\pm$ 3.7 & 28.0 $\pm$ 3.8 \\
+\textbf{A + ET critic, $\beta=1$ (ours)} & 88.4 $\pm$ 2.3 & 70.0 $\pm$ 2.2 & 46.4 $\pm$ 3.2 & 42.4 $\pm$ 3.2 \\
+A + ET critic, $\beta=2$ & 87.6 $\pm$ 3.2 & 72.4 $\pm$ 4.1 & 42.8 $\pm$ 4.1 & 35.2 $\pm$ 3.5 \\
+A + ET critic, $\beta=4$ & 86.8 $\pm$ 2.0 & 65.6 $\pm$ 2.3 & 48.4 $\pm$ 5.0 & 38.4 $\pm$ 3.4 \\
+\midrule
+L2 + ET critic, $\beta=1$ (no graph) & 89.2 $\pm$ 3.0 & 58.4 $\pm$ 5.1 & 38.4 $\pm$ 7.1 & 31.6 $\pm$ 2.3 \\
+graph subgoal (non-TDR) + final switch + ET critic, $\beta=1$ & 86.0 $\pm$ 2.2 & 63.6 $\pm$ 4.8 & 45.2 $\pm$ 3.5 & 36.4 $\pm$ 2.9 \\
+\midrule
+A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=4$ & 82.8 $\pm$ 2.0 & 64.0 $\pm$ 1.3 & 48.4 $\pm$ 6.1 & 35.2 $\pm$ 2.7 \\
+A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=12$ & 89.6 $\pm$ 2.0 & 68.0 $\pm$ 3.8 & 48.0 $\pm$ 4.0 & 32.4 $\pm$ 6.1 \\
+A + ET critic, $\beta=1$, $H_{\mathrm{TD}}=16$ & 91.2 $\pm$ 2.4 & 64.4 $\pm$ 6.6 & 47.6 $\pm$ 3.4 & 36.8 $\pm$ 4.5 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\section{Reacher details and the short-range gap}
-\label{app:reacher}
-\todo{Ten-seed same-25 comparison (82.6 vs 85.2, $p=0.37$); the \texttt{critic\_final=false}
-variant; calibration table ($\Htd=3.93$, $\lambda=5.78$ TDR units); graph statistics (535 nodes,
-1.9k edges); critic diagnostics (hindsight AUROC 0.906, ECE 0.010).}
+
+
 
 \section{Live rendering must match the dataset}
 \label{app:render}
@@ -736,12 +802,16 @@ cost never reaches zero even with the arm at the goal. This alone took LeWM's ow
 to 65\% at offset 25. Our launcher refuses to evaluate unless three dataset frames re-render to
 within 4/255 of the stored pixels; Push-T (pygame) and Cube pass with 0.5/255 and $\le0.2/255$.
 
-\section{A pixel-only critic}
-\label{app:pixelcritic}
-\todo{Graph hitting-time labels instead of privileged hindsight labels: oracle ranking and
-closed-loop numbers of the label-free critic; the gap to the privileged critic.}
 
-\section{Predictor rollout error by horizon}
+\section{Where the latent-L2 objective fails}
+\label{app:lewm-failure}
+This section traces one failure mode end to end: empirically, in how far apart start/goal
+pairs actually sit in latent space as the horizon grows (\cref{app:predictor-error}); and
+mechanistically, in why a straight line between two such points leaves the region the encoder
+actually populates (\cref{app:gaussian-shell}). \Cref{app:cem-trace} follows with a separate,
+operational check of the same failure inside CEM's own candidate ranking.
+
+\subsection{Predictor rollout error by horizon}
 \label{app:predictor-error}
 Rolling the frozen predictor forward under real logged actions and comparing to the true
 encoded endpoint, Push-T's latent rollout error grows with horizon but stays well below the
@@ -836,11 +906,11 @@ consistent with predictor error compounding across an open-loop commitment, and 
 default 25-step cadence used elsewhere in this paper is the more favorable setting for L2, not an
 artifact inflating the OUR-vs-L2 gaps in \cref{tab:main}.
 
-\section{Why a straight latent line goes out of distribution}
+\subsection{Why a straight latent line goes out of distribution}
 \label{app:gaussian-shell}
 \Cref{app:predictor-error} shows the predictor itself degrades gracefully with horizon; this
 section asks why the terminal L2 objective built on top of it still fails past $H{\approx}50$
-(oracle Spearman 0.72 $\to$ 0.36, \cref{sec:problem}). In a high-dimensional isotropic Gaussian,
+(elite-ranking Spearman 0.396 $\to$ 0.086, \cref{sec:problem}). In a high-dimensional isotropic Gaussian,
 essentially all probability mass concentrates on a thin shell at radius $\sigma\sqrt{d}$ rather
 than near the mean, because the volume element $r^{d-1}\,dr$ grows faster than the Gaussian
 density falls off until $r\approx\sigma\sqrt{d}$.\footnote{\url{https://aseemrb.me/blog/high-dimensional-gaussians-on-a-sphere/}}
@@ -868,25 +938,16 @@ a degenerate few dominant directions.
 
 \paragraph{A straight-line midpoint is far off the shell; the real trajectory is not.} For 200{,}000
 same-episode frame pairs 100 steps apart (the same-ep-100 horizon), both endpoints sit on the
-shell as expected (start mean 14.13, goal mean 13.56), and so does the actual logged frame at the
+shell as expected (start mean 14.15, goal mean 13.60), and so does the actual logged frame at the
 trajectory's true midpoint (mean 13.81). The linear interpolation
-$\tfrac12(z_{\mathrm{start}}+z_{\mathrm{goal}})$ does not: its mean radius is 9.99, 5.48
-shell-$\sigma$ below the shell mean, and 96.6\% of the 200{,}000 interpolated midpoints fall below
-the shell's own 1st percentile radius (\cref{fig:gaussian-shell-interp}). The two populations do
+$\tfrac12(z_{\mathrm{start}}+z_{\mathrm{goal}})$ does not: its mean radius is 10.03, 5.42
+shell-$\sigma$ below the shell mean, and 96.4\% of the 200{,}000 interpolated midpoints fall below
+the shell's own 1st percentile radius (\cref{fig:gaussian-shell-interp} in \cref{sec:problem}). The two populations do
 not overlap. This isolates the effect to interpolation itself, not to trajectory midpoints being
 unusual in general: the real dynamics stay on the shell, curving around it rather than cutting
 through its interior, which is exactly the structure a graph built in a temporal-distance
 representation is meant to follow instead of a raw latent straight line
 (\cref{sec:method,sec:main}).
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.62\linewidth]{fig_gaussian_shell_interp_off100_hist}
-  \caption{Push-T, 200{,}000 same-episode pairs 100 steps apart: radius of the straight-line
-  midpoint $\tfrac12(z_{\mathrm{start}}+z_{\mathrm{goal}})$ vs.\ the shell $\chi_{192}$
-  reference. The two distributions do not overlap.}
-  \label{fig:gaussian-shell-interp}
-\end{figure}
 
 \paragraph{Scope.} This diagnostic is Push-T-only and tests the naive linear interpolation, not
 the predictor's own imagined rollout under the $z$-space-L2 objective CEM actually optimizes;
@@ -930,81 +991,105 @@ while OUR's is not. This is the same short-range/long-range crossover \cref{tab:
 in closed-loop success, now shown at the level of a single CEM iteration's candidate ranking
 rather than a full episode. \emph{Script: \texttt{scripts/gas\_mpc\_cem\_trace\_audit.py}.}
 
+\section{Parameter counts}
+\label{app:params}
+\Cref{tab:params} lists the parameters of the frozen LeWM stack and of the two components we
+train. Only $\psi_0$ of the TDR's two networks is used at planning time.
+
+\begin{table}[h]
+\centering\small
+\caption{Push-T parameter counts. The LeWM encoder and predictor are frozen.}
+\label{tab:params}
+\begin{tabular}{lr}
+\toprule
+LeWM encoder (ViT-tiny) & 5.50M \\
+LeWM predictor & 10.79M \\
+LeWM action encoder & 0.16M \\
+\quad LeWM total (frozen) & 18.03M \\
+\midrule
+TDR (used, $\psi_0$ only) & 0.64M \\
+TDR (full 2-net ensemble) & 1.29M \\
+Critic (per member) & 0.83M \\
+Critic (5-member ensemble) & 4.13M \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \section{Hyperparameters}
-\todo{TDR: 3$\times$512 LayerNorm/GELU MLP, 32-d output, expectile 0.99, $\gamma=0.99$, 50k steps,
-batch 1024. Graph: $\theta_{\mathrm{TE}}=0.9$, $\Htd=u_{12}$, clustering radius $\Htd/2$, goal
-attachment $\max(\Htd,1.2d_{\min})$. Critic: five members, $h_{\max}=50$, grid step 5, 60k steps,
-Bellman + monotonicity, cross-episode negative gate (Push-T $\ge100$\,px block pose; Reacher
-$\ge2.5$\,rad; Cube $\ge0.48$\,m). CEM: 300 / 30 / 30, $K=5$, open-loop 25 steps. $\beta=1$.}
-
-\section{Success rate under a loosened success threshold}
-\label{app:threshold-sweep}
-\Cref{tab:main}'s success predicate requires combined agent+block position error $<20$\,px
-\emph{and} block angle error $<20^\circ$ simultaneously. \Cref{tab:threshold-sweep} recomputes
-success directly from the saved state trajectories of the same task200u eval runs under two
-loosened joint thresholds, for OUR and the L2 baseline, on the two longer-horizon protocols
-where the gap is largest.
+\label{app:hyperparams}
+\Cref{tab:hyper-shared} lists every hyperparameter shared across Push-T, Reacher, and Cube;
+\cref{tab:hyper-env} lists the handful that are environment specific. All are argparse/Hydra
+defaults in \texttt{scripts/gas\_mpc\_prepare.py}, \texttt{scripts/viability\_train.py},
+\texttt{config/eval/solver/cem.yaml}, and \texttt{scripts/gas\_mpc\_eval.py}, run unchanged for
+every headline result in \cref{tab:main} (Push-T: \texttt{scripts/ada\_gas\_mpc\_phase8.sh}
+config B; Reacher/Cube: \texttt{scripts/ada\_gas\_mpc\_reacher.sh} /
+\texttt{scripts/ada\_gas\_mpc\_cube.sh} config B) -- nothing in either table was tuned per
+environment beyond the two calibrated scalars in \cref{tab:hyper-env}.
 
 \begin{table}[h]
 \centering\small
-\caption{Push-T success (\%) under loosened joint position/angle thresholds, same-ep 100 and
-cross-ep, 50 tasks $\times$ 5 CEM seeds. Recomputed from the task200u eval trajectories underlying
-\cref{tab:main}; the 20\,px/20$^\circ$ row reproduces \cref{tab:main} exactly.}
-\label{tab:threshold-sweep}
-\begin{tabular}{llrr}
+\caption{Hyperparameters shared across all three environments. TDR and graph follow \cref{sec:graph};
+critic follows \cref{sec:critic}; CEM and the criterion follow \cref{eq:compose,alg:main}.}
+\label{tab:hyper-shared}
+\begin{tabular}{llr}
 \toprule
-protocol & threshold & OUR & L2 \\
+component & hyperparameter & value \\
 \midrule
-same-ep 100 & 20\,px / 20$^\circ$ (default) & 46.4 & 13.2 \\
-            & 25\,px / 25$^\circ$           & 52.8 & 14.8 \\
-            & 30\,px / 30$^\circ$           & 58.0 & 16.0 \\
+\multirow{7}{*}{TDR $\psiT$}
+ & architecture & 3$\times$512 LayerNorm+GELU MLP, linear head \\
+ & embedding dim & 32 \\
+ & expectile $\tau$ & 0.99 \\
+ & discount $\gamma$ & 0.99 \\
+ & training steps & 50{,}000 \\
+ & batch size & 1024 \\
+ & learning rate & 3$\times10^{-4}$ \\
 \midrule
-cross-ep    & 20\,px / 20$^\circ$ (default) & 42.4 & 14.4 \\
-            & 25\,px / 25$^\circ$           & 51.2 & 19.2 \\
-            & 30\,px / 30$^\circ$           & 57.6 & 22.8 \\
+\multirow{3}{*}{Graph}
+ & TE threshold $\theta_{\mathrm{TE}}$ & 0.9 \\
+ & clustering radius & $\Htd/2$ \\
+ & goal attachment radius & $\max(\Htd,\,1.2\,d_{\min})$ \\
+\midrule
+\multirow{10}{*}{Critic $V$}
+ & ensemble members & 5 \\
+ & architecture (per member) & 3$\times$512 MLP + SiLU, linear head \\
+ & max horizon $h_{\max}$ & 50 env steps \\
+ & horizon grid & multiples of 5, 0--$h_{\max}$ \\
+ & training steps & 60{,}000 \\
+ & Bellman pessimism $\kappa$ & 1.0 \\
+ & loss weights ($\lambda_{\mathrm{Bellman}}$, $\lambda_{\mathrm{mono}}$) & 1.0, 1.0 \\
+ & learning rate & 3$\times10^{-4}$ \\
+ & EMA target $\tau$ & 0.995 \\
+ & cross-episode negative gate & $\|\psiT(t)-\psiT(g)\|\ge 1.25\times d_{\mathrm{cal}}(h)$ \\
+\midrule
+\multirow{4}{*}{CEM (LeWM, unchanged)}
+ & population / iterations / elites & 300 / 30 / 30 \\
+ & horizon $K$ (blocks $\times$ frameskip) & 5 $\times$ 5 = 25 env steps \\
+ & replan interval (receding horizon) & 25 env steps \\
+\midrule
+\multirow{3}{*}{Criterion (\cref{eq:compose})}
+ & critic weight $\beta$ & 1 \\
+ & critic cost & $\ET$ (budget-capped expected hitting time) \\
+ & final-phase metric & LeWM's own z-space L2 to the goal \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Both methods gain 6--15 points as the threshold loosens, consistent with most failures being
-near-misses rather than gross misses. The OUR-vs-L2 gap widens rather than shrinks under looser
-thresholds (same-ep 100: $+$33.2 $\to$ $+$42.0; cross-ep: $+$28.0 $\to$ $+$34.8), so OUR's
-advantage in \cref{tab:main} is not an artifact of the strict threshold disproportionately
-penalizing OUR's near-misses -- if anything, L2's failures sit further from the success boundary.
-
-\paragraph{Success rate by budget.} \Cref{tab:budget-sweep} recomputes success in successive
-50-step env-step windows on the same task200u eval runs, at the default 20\,px/20$^\circ$
-threshold, for same-ep 100 and cross-ep. Each window reports the cumulative success rate through
-that budget, with the bracketed value giving a hazard rate: of the tasks still unsolved entering
-the window, what fraction were solved within it.
-
 \begin{table}[h]
 \centering\small
-\caption{Push-T success (\%) by env-step budget window, same-ep 100 and cross-ep, 50 tasks
-$\times$ 5 CEM seeds, default 20\,px/20$^\circ$ threshold. Each cell is the cumulative success
-rate through that budget; bracketed is the hazard rate -- \% of tasks still unsolved entering the
-window that were solved within it.}
-\label{tab:budget-sweep}
-\begin{tabular}{lrrrr}
+\caption{Environment-specific hyperparameters. $u_k$ denotes the calibrated TDR distance of a
+$k$-env-step transition (median over training transitions), read from each environment's own TDR calibration.
+$\lambda=u_{25}$ and $\Htd=u_{12}$ in every environment. Every other
+hyperparameter is
+identical across environments.}
+\label{tab:hyper-env}
+\begin{tabular}{lrrr}
 \toprule
-window & \multicolumn{2}{c}{same-ep 100} & \multicolumn{2}{c}{cross-ep} \\
-(env steps) & OUR & L2 & OUR & L2 \\
+& Push-T & Reacher & Cube \\
 \midrule
-0--50   & 8.8 (8.8\%)   & 8.8 (8.8\%)  & 14.8 (14.8\%) & 6.0 (6.0\%) \\
-50--100 & 23.2 (15.8\%) & 12.0 (3.5\%) & 30.4 (18.3\%) & 12.0 (6.4\%) \\
-100--150 & 36.4 (17.2\%) & 12.4 (0.5\%) & 36.4 (8.6\%)  & 13.2 (1.4\%) \\
-150--200 & 46.4 (15.7\%) & 13.2 (0.9\%) & 38.8 (3.8\%)  & 14.0 (0.9\%) \\
-200--250 & --            & --           & 42.4 (5.9\%)  & 14.4 (0.5\%) \\
+$\Htd$ (TDR units) & 7.59 & 3.72 & 7.25 \\
+$\lambda=u_{25}$ (TDR units) & 13.53 & 5.83 & 13.63 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-L2's hazard rate collapses almost immediately -- 8.8\% in the first window, then under 3.5\% in
-every window after, so additional replans buy it almost nothing past budget 50. OUR's hazard rate
-stays in the 8.6--18.3\% range through same-ep 100's full budget and cross-ep's first three
-windows, meaning a meaningful fraction of the tasks OUR hasn't yet solved keep getting solved by
-later replans, not just the easy fraction up front. This is where the bulk of OUR's advantage
-over L2 in \cref{tab:main} accumulates: not primarily an early edge, but a sustained one that
-L2's open-loop terminal-L2 objective cannot keep converting into progress.
 
 \end{document}

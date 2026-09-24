@@ -1040,6 +1040,27 @@ by how large it looks in the raw embedding. That training signal is exactly what
 and it is why the graph's advantage grows with horizon (more opportunity for the L2-vs-actions
 mismatch to compound) rather than shrinking.
 
+\paragraph{Task200u-pool cross-check (2026-09-23).} The audit above -- and the already-published
+0.72/0.36 this document's Question section cites -- drew its 50 (start, goal) problems from
+\texttt{planning\_cost\_gate.sample\_problems}'s own random draw over the h5 dataset, not from
+the fixed \texttt{task200u} pool \texttt{gas\_mpc\_eval.py} actually scores everywhere else in
+this document. A new \texttt{--task-pool task200u} flag on
+\texttt{viability\_inversion\_audit.py} pulls the first 50 (\texttt{start\_row},
+\texttt{goal\_row}) pairs straight from
+\texttt{outputs/pusht/pairs/pairs\_same\_episode\_off\{25,50\}\_task200u.json} instead, with
+everything else (32 candidates/task, same oracle settings) unchanged, and reruns the same
+audit on the exact tasks used elsewhere in this document. Result: \textbf{offset 25 --
+$c_{\mathrm{pred}}$ 0.785 (was 0.719), $c_{\mathrm{true}}$ 0.865 (was 0.809); offset 50 --
+$c_{\mathrm{pred}}$ 0.369 (was 0.356), $c_{\mathrm{true}}$ 0.500 (was 0.454)}. The collapse claim
+holds pool-for-pool: offset 50 is essentially unchanged and offset 25 is slightly higher but in
+the same regime, so the L2-ranking-collapses-past-one-horizon story is not an artifact of the
+older ad hoc sample. This rerun only reproduces the plain L2 numbers ($c_{\mathrm{pred}}$,
+$c_{\mathrm{true}}$), not the graph/tdr/geo/ctg columns of
+\cref{tab:graph-vs-l2-zpred,tab:graph-vs-l2-ztrue} above, which would need
+\texttt{graph\_candidate\_ranking\_diag.py} rerun on the new raw npz files. Ran on Ada (job
+2712227, gnode003, 24 CPU workers, $\sim$40\,min); raw candidate data and \texttt{results.json}
+at \texttt{outputs/pusht/experiments/viability\_exp2\_task200u/}.
+
 \subsection{Live CEM trace: does OUR rank its own elites better than L2? (2026-09-21)}
 \label{sec:cem-trace-audit}
 \emph{Script: \texttt{scripts/gas\_mpc\_cem\_trace\_audit.py}. Unlike
@@ -1102,6 +1123,30 @@ trajectory over the full 30 iterations, not in a sharper final ranking at any si
 iteration. This is consistent with, and gives a mechanistic account under, the standing
 closed-loop finding that OUR's benefit shows up over full episodes at offset 50+ rather than
 as a single-solve ranking improvement.
+
+\subsection{Cross-episode with a 750-step budget (2026-09-23, Ada job 2712749)}
+
+Push-T cross-episode, first 50 tasks of \texttt{task200u}, CEM seeds 0--2, \texttt{+mpc.budget=750}
+(tag \texttt{\_bud750}), one run per GPU (\texttt{scripts/ada\_gas\_mpc\_cross\_bud750.sh}). OUR =
+\texttt{subgoal\_tdr}, lookahead/final threshold 13.7, final metric L2, ET critic $\beta=1$. Cells
+are cumulative success pooled over 150 runs; bracketed is the hazard rate (\% of tasks unsolved
+entering the window that were solved within it). Budget-override diagnostic, not a headline run.
+
+\begin{center}\small
+\begin{tabular}{lrr}
+\toprule
+window (env steps) & OUR & L2 \\
+\midrule
+0--250   & 40.7 (40.7\%) & 12.0 (12.0\%) \\
+250--500 & 43.3 (4.5\%)  & 12.0 (0.0\%) \\
+500--750 & 46.0 (4.7\%)  & 13.3 (1.5\%) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Per seed (solves at 250/500/750 of 50): OUR 20/20/22, 21/23/25, 20/22/22; L2 7/7/7, 7/7/7,
+4/4/6. OUR keeps solving about 5\% of its remaining tasks per extra 250 steps; L2 is flat after
+step 250. The 0--250 row is 3 seeds, so it differs slightly from the 5-seed 42.4/14.4.
 
 \section{Findings log}
 % Entries are appended as runs finish; each states what was run, what happened, the

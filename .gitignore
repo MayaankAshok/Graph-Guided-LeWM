@@ -10,3 +10,4 @@ docs/**/*.synctex.gz
 docs/**/*.toc
 
 
+tmp/

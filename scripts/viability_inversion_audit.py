@@ -43,6 +43,7 @@ from concurrent.futures import ProcessPoolExecutor
 from multiprocessing import get_context
 from pathlib import Path
 
+import h5py
 import numpy as np
 from scipy import stats as sps
 
@@ -51,7 +52,53 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common.envs import ENV_MECHANICS
 from common.lewm_loader import load_lewm
 from common.log_util import log
-from planning_cost_gate import DEV, HORIZON, latent_rollout, make_candidates, make_encode_frame, sample_problems
+from planning_cost_gate import (DEV, HISTORY, HORIZON, SKIP, latent_rollout, make_candidates,
+                                 make_encode_frame, sample_problems)
+
+
+def sample_problems_from_pool(h5_path, pool_path, n):
+    """Same output schema as planning_cost_gate.sample_problems, but takes the first `n`
+    (start_row, goal_row) pairs from an existing task200u pool file (gas_mpc_make_tasks.py's
+    output, the exact pool gas_mpc_eval.py scores) instead of drawing a fresh random sample.
+    Lets this audit's Spearman-vs-oracle numbers be checked against the tasks actually used
+    for the paper's headline results, not a separate ad hoc draw. Returns (probs, goal_offset)
+    -- goal_offset is read from the pool file itself, not assumed."""
+    pool = json.loads(Path(pool_path).read_text())
+    if pool["pairing"] != "same_episode":
+        raise ValueError(f"{pool_path} is not a same-episode pool ({pool['pairing']!r})")
+    if n > pool["n"]:
+        raise ValueError(f"{pool_path} only has {pool['n']} tasks, requested {n}")
+    goal_offset = int(pool["offset"])
+    start_row = np.asarray(pool["start_row"][:n], dtype=np.int64)
+    goal_row = np.asarray(pool["goal_row"][:n], dtype=np.int64)
+    start_state = np.asarray(pool["start_state"][:n], dtype=np.float32)
+    goal_state = np.asarray(pool["goal_state"][:n], dtype=np.float32)
+
+    with h5py.File(h5_path, "r", swmr=True, rdcc_nbytes=256 * 1024 * 1024) as f:
+        _a = f["action"][:].astype(np.float64)
+        _a = _a[~np.isnan(_a).any(axis=1)]
+        act_mean, act_std = _a.mean(0).astype(np.float32), _a.std(0).astype(np.float32)
+        del _a
+
+        hist_rows = np.stack([start_row - k * SKIP for k in range(HISTORY - 1, -1, -1)], axis=1)
+        want = np.unique(np.concatenate([hist_rows.ravel(), goal_row]))
+        pix = f["pixels"][want]
+        row_to_i = {int(r): i for i, r in enumerate(want)}
+
+        past_rows = np.stack([np.arange(r - (HISTORY - 1) * SKIP, r) for r in start_row])
+        fut_rows = np.stack([np.arange(r, r + HORIZON * SKIP) for r in start_row])
+        act_all = f["action"]
+        past_act = np.stack([act_all[r[0]:r[-1] + 1] for r in past_rows]).astype(np.float32)
+        real_act = np.stack([act_all[r[0]:r[-1] + 1] for r in fut_rows]).astype(np.float32)
+
+    hist_pix = np.stack([[pix[row_to_i[int(r)]] for r in row] for row in hist_rows])
+    goal_pix = np.stack([pix[row_to_i[int(r)]] for r in goal_row])
+    probs = dict(start_row=start_row, goal_row=goal_row,
+                 start_state=start_state, goal_state=goal_state,
+                 hist_pixels=hist_pix, goal_pixels=goal_pix,
+                 past_action=past_act, real_action=real_act,
+                 act_mean=act_mean, act_std=act_std)
+    return probs, goal_offset
 
 _ORACLE_ENV = None
 EMB_DIM = 192
@@ -192,7 +239,14 @@ def run(args):
         _ORACLE_ENV = env
     K, cap = args.n_candidates, args.oracle_max_steps
     for offset in args.goal_offsets:
-        probs = sample_problems(h5_path, mech, offset, args.n_problems, args.seed + offset)
+        if args.task_pool:
+            pair_path = Path(root) / "outputs" / "pusht" / "pairs" / f"pairs_same_episode_off{offset}_{args.task_pool}.json"
+            probs, pool_offset = sample_problems_from_pool(h5_path, pair_path, args.n_problems)
+            assert pool_offset == offset, f"{pair_path} has offset={pool_offset}, expected {offset}"
+            log(f"[offset={offset}] using {args.n_problems} tasks from {pair_path.name} "
+                f"(pool n={json.loads(pair_path.read_text())['n']})")
+        else:
+            probs = sample_problems(h5_path, mech, offset, args.n_problems, args.seed + offset)
         rng = np.random.default_rng(args.seed + 1009 * offset)
         n = len(probs["start_row"])
         arrays = dict(
@@ -317,6 +371,11 @@ def main():
     p.add_argument("--oracle-elite-frac", type=float, default=0.15)
     p.add_argument("--oracle-workers", type=int, default=8)
     p.add_argument("--seed", type=int, default=17)
+    p.add_argument("--task-pool", default=None,
+                   help="e.g. task200u: take the first --n-problems (start,goal) pairs from "
+                        "outputs/pusht/pairs/pairs_same_episode_off{offset}_<task-pool>.json "
+                        "instead of drawing a fresh random sample, so this audit's numbers can "
+                        "be checked against the exact tasks gas_mpc_eval.py scores")
     p.add_argument("--no-resume", dest="resume", action="store_false",
                    help="ignore an existing raw_offset*.partial.npz and start the offset over")
     args = p.parse_args()
