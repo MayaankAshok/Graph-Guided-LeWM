@@ -1,0 +1,133 @@
+% Editable source for the method overview in main.tex.
+% Build from this directory: pdflatex -interaction=nonstopmode approach.tex
+\documentclass[tikz,border=2pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning,shapes.geometric,decorations.pathreplacing}
+\definecolor{ink}{HTML}{253449}
+\definecolor{muted}{HTML}{657386}
+\definecolor{blue}{HTML}{3069A8}
+\definecolor{bluebg}{HTML}{EAF2FA}
+\definecolor{orange}{HTML}{B76523}
+\definecolor{orangebg}{HTML}{FFF0DE}
+\definecolor{teal}{HTML}{168079}
+\definecolor{tealbg}{HTML}{E1F3F0}
+\definecolor{purple}{HTML}{7455A1}
+\definecolor{purplebg}{HTML}{F0EBF7}
+\definecolor{red}{HTML}{C44949}
+\tikzset{
+  every picture/.style={font=\sffamily},
+  panel/.style={draw=ink!50,rounded corners=3pt,line width=.55pt,fill=white},
+  flow/.style={-{Latex[length=1.9mm,width=1.3mm]},draw=ink,line width=.7pt,rounded corners=2pt},
+  paneltitle/.style={font=\sffamily\bfseries\fontsize{8}{9}\selectfont,text=ink},
+  small/.style={font=\sffamily\fontsize{6.9}{8}\selectfont,text=ink,align=center},
+  tinylabel/.style={font=\sffamily\fontsize{6.1}{7}\selectfont,text=muted,align=center},
+  box/.style={rounded corners=2pt,small,minimum height=.70cm,inner xsep=4pt,line width=.6pt},
+  frozenbox/.style={box,draw=blue,fill=bluebg},
+  trainbox/.style={box,draw=orange,fill=orangebg},
+  graphbox/.style={box,draw=purple,fill=purplebg},
+  graphnode/.style={circle,draw=purple,fill=purplebg,inner sep=0pt,minimum size=3.4mm,line width=.55pt},
+  gedge/.style={purple!55,line width=.65pt},
+}
+\begin{document}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  % Outer dimensions 13.55 x 7.12 cm, suitable for an ICLR text column.
+  \node[font=\sffamily\bfseries\fontsize{8.4}{9}\selectfont,text=orange] at (3.325,6.98) {TRAINING};
+  \node[font=\sffamily\bfseries\fontsize{8.4}{9}\selectfont,text=teal] at (10.225,6.98) {PLANNING};
+  \draw[panel] (0,1.0) rectangle (6.65,6.68);
+  \draw[panel] (6.9,3.48) rectangle (13.55,6.68);
+  \draw[panel] (6.9,1.0) rectangle (13.55,3.23);
+
+  % ---------------- Training ----------------
+  \node[paneltitle] at (3.325,6.40) {Offline representation and graph construction};
+
+  % Row 1: frames -> encoder -> z -> critic
+  \def\ya{5.35}
+  \foreach \d in {.16,.08,0} {
+    \draw[fill=bluebg,draw=blue!65,rounded corners=1pt] (.30+\d,\ya-.27+\d) rectangle (.94+\d,\ya+.23+\d);
+    \draw[blue!60,line width=.6pt] (.40+\d,\ya-.14+\d) -- (.62+\d,\ya+.08+\d) -- (.84+\d,\ya-.10+\d);
+  }
+  \coordinate (fr) at (1.16,\ya);
+  \node[tinylabel] at (.70,\ya-.56) {frames};
+  \node[frozenbox] (enc) at (2.20,\ya) {LeWM Enc};
+  \node[tinylabel,text=blue,inner sep=1pt,below=0pt of enc] {frozen};
+  \node[frozenbox,minimum width=.55cm] (z) at (3.62,\ya) {$z$};
+  \node[trainbox,minimum width=1.9cm] (critic) at (5.25,\ya) {Critic\\$V(z,z_g,h)$};
+  \node[tinylabel,text=orange,inner sep=1pt,below=0pt of critic] {trained};
+  \draw[flow] (fr) -- (enc);
+  \draw[flow] (enc) -- (z);
+  \draw[flow] (z) -- (critic);
+
+  % Row 2: TDR -> psi(z) -> TE filtering (fed from z)
+  \def\yb{3.75}
+  \node[trainbox,minimum width=1.1cm] (tdr) at (1.45,\yb) {TDR $\psi$};
+  \node[tinylabel,text=orange,inner sep=1pt,below=0pt of tdr] {trained};
+  \node[trainbox,minimum width=.95cm] (psi) at (3.00,\yb) {$\psi(z)$};
+  \node[graphbox,minimum width=1.6cm] (te) at (4.95,\yb) {TE filtering\\+ clustering};
+  \draw[flow] (z.south) -- ++(0,-.45) -| (tdr.north);
+  \draw[flow] (tdr) -- (psi);
+  \draw[flow] (psi) -- (te);
+
+  % Graph, directly below the clustering step
+  \begin{scope}[shift={(4.95,2.10)}]
+    \node[graphnode] (n1) at (-.95,.05) {};
+    \node[graphnode] (n2) at (-.45,.45) {};
+    \node[graphnode] (n3) at (-.40,-.35) {};
+    \node[graphnode] (n4) at (.15,.10) {};
+    \node[graphnode] (n5) at (.55,.50) {};
+    \node[graphnode] (n6) at (.60,-.35) {};
+    \node[graphnode] (n7) at (1.05,.10) {};
+    \foreach \u/\v in {n1/n2,n1/n3,n2/n4,n3/n4,n4/n5,n4/n6,n5/n7,n6/n7,n3/n6}
+      \draw[gedge] (\u) -- (\v);
+  \end{scope}
+  \draw[flow] (te.south) -- (4.95,2.80);
+  \node[small,text=purple,anchor=east] at (3.75,2.40) {Graph $G$};
+  \node[tinylabel,anchor=north east,align=right] at (3.75,2.24) {$V$: medoids\\$E$: TD-weighted edges};
+
+  % ---------------- Planning: subgoal generation ----------------
+  \node[paneltitle] at (10.225,6.40) {Subgoal generation};
+  \begin{scope}[shift={(6.9,3.48)}]
+    \def\yc{1.50}
+    \node[circle,fill=blue,inner sep=0pt,minimum size=3.6mm] (s) at (.75,\yc) {};
+    \node[graphnode] (g1) at (1.60,\yc+.35) {};
+    \node[graphnode] (g2) at (2.40,\yc-.25) {};
+    \node[circle,draw=teal,fill=tealbg,inner sep=0pt,minimum size=5mm,line width=1pt] (g3) at (3.25,\yc+.35) {};
+    \node[graphnode] (g4) at (4.10,\yc-.25) {};
+    \node[graphnode] (g5) at (4.95,\yc+.30) {};
+    \node[star,star points=5,fill=red,inner sep=0pt,minimum size=4.4mm] (goal) at (5.85,\yc) {};
+    \node[graphnode] (low) at (3.25,\yc-.75) {};
+    \node[graphnode] (up) at (4.10,\yc+.85) {};
+    \foreach \u/\v in {g2/low,low/g4,g3/up,up/g5}
+      \draw[gedge] (\u) -- (\v);
+    \draw[teal,line width=1.5pt] (s) -- (g1) -- (g2) -- (g3);
+    \draw[teal!70,line width=1.1pt,dash pattern=on 2.5pt off 1.8pt] (g3) -- (g4) -- (g5) -- (goal);
+    \node[tinylabel,text=blue,below=3pt of s] {current\\$\psi(z_0)$};
+    \node[tinylabel,text=teal,above=2pt of g3] {subgoal $v_\lambda$};
+    \node[tinylabel,text=red,below=3pt of goal] {goal\\$\psi(z_g)$};
+    \draw[decorate,decoration={brace,mirror,amplitude=3pt},muted,line width=.5pt]
+      (.75,.45) -- (3.25,.45);
+    \node[tinylabel] at (2.00,.22) {$\lambda = 1$ planning horizon};
+  \end{scope}
+
+  % ---------------- Planning: CEM rollout ----------------
+  \node[paneltitle] at (10.225,2.95) {CEM rollout};
+  \begin{scope}[shift={(6.9,0)}]
+    \def\yd{1.98}
+    \node[frozenbox] (pred) at (1.05,\yd) {frozen LeWM\\predictor};
+    \node[tinylabel,below=2pt of pred] {CEM action samples};
+    \coordinate (root) at (2.00,\yd);
+    \draw[ink,line width=.7pt] (pred.east) -- (root);
+    \foreach \dy [count=\i] in {.35,0,-.35} {
+      \coordinate (p\i) at (3.05,\yd+\dy);
+      \draw[blue!60,line width=.65pt,-{Latex[length=1.4mm,width=1mm]}] (root) to[out=0,in=180] ($(p\i)+(-.09,0)$);
+      \fill[blue] (p\i) circle (.075);
+    }
+    \node[tinylabel] at (3.05,\yd+.58) {predicted $\hat z_K$};
+    \node[trainbox,text width=2.3cm,minimum height=.80cm] (cost) at (5.00,\yd)
+      {$\|\psi(\hat z_K) - v_\lambda\|$\\$+\ \mathrm{ET}(\hat z_K, z_g)$};
+    \node[small,text=orange,above=2pt of cost] {Cost$(\hat z_K)$};
+    \node[tinylabel,text=orange,below=2pt of cost] {final horizon: goal L2 $+$ ET};
+    \draw[flow] (3.30,\yd) -- (cost.west);
+  \end{scope}
+\end{tikzpicture}
+\end{document}
