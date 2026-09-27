@@ -2050,38 +2050,63 @@ for same-ep 100 (\texttt{receding=20}), and 3 rollouts of 100 steps each for cro
 to 50 steps by the remaining budget). Same held-out \texttt{task200u} pool, same 5 CEM seeds,
 same L2 method (no graph/critic) as the default baseline in Table~\ref{tab:task-critic-refresh}.
 
+\paragraph{Extension (2026-09-25): shorter and intermediate plan lengths.}
+Two more settings use the same rule (\texttt{plan\_config.horizon} $=$ \texttt{receding}, so
+CEM plans exactly as far ahead as it executes). \emph{5-step plans} (\texttt{horizon=receding=1}
+block, tag \texttt{l2\_rh1\_h1}): CEM looks one block ahead, executes it, and replans, i.e.\
+10 / 20 / 40 / 50 plan calls for same-ep 25 / 50 / 100 / cross-ep. \emph{50-step plans}
+(\texttt{horizon=receding=10}, tag \texttt{l2\_rh10\_h10}) for same-ep 100 (4$\times$50) and
+cross-ep (5$\times$50), matching the same-ep 50 long row above. Same pool, seeds, and budgets
+(\texttt{scripts/ada\_gas\_mpc\_l2\_rh1.sh}, \texttt{scripts/ada\_gas\_mpc\_l2\_rh10.sh}).
+The default rows are the headline 2026-09-19 runs used throughout this document; a 2026-09-21
+rerun of the same config (which overwrote the per-seed JSONs on Ada) gives
+91.2 / 42.0 / 13.2 / 14.0, within 2 points of every entry.
+
 \begin{table}[t]
 \centering
 \small
-\caption{Push-T L2 baseline, default replan cadence (25-step chunks) vs.\ long-chunk ablation:
-success (\%) on 50 fixed tasks per CEM seed. The final column is mean $\pm$ sample standard
-deviation over five CEM seeds.}
+\caption{Push-T L2 baseline vs.\ plan length. In every row CEM plans exactly as far ahead as it
+executes before replanning ($\texttt{horizon}=\texttt{receding}$); the default is 25 steps.
+Success (\%) on 50 fixed \texttt{task200u} tasks per CEM seed; the final column is mean $\pm$
+sample standard deviation over five CEM seeds.}
 \label{tab:replan-frequency}
 \begin{tabular}{llrrrrrr}
 \toprule
-protocol & chunking & s0 & s1 & s2 & s3 & s4 & mean $\pm$ std \\
+protocol & plan length (calls$\times$steps) & s0 & s1 & s2 & s3 & s4 & mean $\pm$ std \\
 \midrule
-same-ep 50  & default (4$\times$25) & 34 & 40 & 42 & 44 & 44 & $40.8 \pm 4.1$ \\
-            & long (2$\times$50)    & 34 & 38 & 34 & 30 & 36 & $34.4 \pm 3.0$ \\
+same-ep 25  & 5 (10$\times$5)        & 66 & 62 & 66 & 64 & 62 & $64.0 \pm 2.0$ \\
+            & default (2$\times$25)  & 92 & 92 & 90 & 92 & 90 & $91.2 \pm 1.1$ \\
 \midrule
-same-ep 100 & default (8$\times$25) & 18 & 14 & 14 & 12 & 8  & $13.2 \pm 3.6$ \\
-            & long (2$\times$100)   & 4  & 6  & 4  & 4  & 10 & $5.6 \pm 2.5$ \\
+same-ep 50  & 5 (20$\times$5)        & 18 & 20 & 18 & 16 & 24 & $19.2 \pm 3.0$ \\
+            & default (4$\times$25)  & 34 & 40 & 42 & 44 & 44 & $40.8 \pm 4.1$ \\
+            & 50 (2$\times$50)       & 34 & 38 & 34 & 30 & 36 & $34.4 \pm 3.0$ \\
 \midrule
-cross-ep    & default (10$\times$25) & 14 & 14 & 8  & 16 & 20 & $14.4 \pm 4.3$ \\
-            & long (3$\times$100)    & 4  & 4  & 6  & 2  & 8  & $4.8 \pm 2.2$ \\
+same-ep 100 & 5 (40$\times$5)        & 0  & 2  & 0  & 0  & 4  & $1.2 \pm 1.8$ \\
+            & default (8$\times$25)  & 18 & 14 & 14 & 12 & 8  & $13.2 \pm 3.6$ \\
+            & 50 (4$\times$50)       & 10 & 14 & 16 & 10 & 14 & $12.8 \pm 2.7$ \\
+            & 100 (2$\times$100)     & 4  & 6  & 4  & 4  & 10 & $5.6 \pm 2.5$ \\
+\midrule
+cross-ep    & 5 (50$\times$5)        & 6  & 6  & 4  & 2  & 4  & $4.4 \pm 1.7$ \\
+            & default (10$\times$25) & 14 & 14 & 8  & 16 & 20 & $14.4 \pm 4.3$ \\
+            & 50 (5$\times$50)       & 24 & 12 & 16 & 14 & 10 & $15.2 \pm 5.4$ \\
+            & 100 (3$\times$100)     & 4  & 4  & 6  & 2  & 8  & $4.8 \pm 2.2$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Replanning less often costs the L2 baseline everywhere, and the cost grows with how much of
-the budget each open-loop chunk covers: $-6.4$ points at same-ep 50 (each chunk is half the
-budget either way, so this is the mildest case), $-7.6$ points at same-ep 100, and $-9.6$
-points (roughly a $3\times$ relative drop) on cross-episode goals, which combines the longest
-individual chunk (100 of 250 steps) with the hardest task distribution. This is consistent
-with longer open-loop commitments giving CEM fewer chances to correct for predictor drift
-between replans, and it means the OUR-vs-L2 gaps in Table~\ref{tab:task-critic-refresh} are
-not an artifact of L2 replanning too rarely --- the default 25-step cadence is in fact the
-more favorable setting for the L2 baseline.
+Performance is non-monotonic in plan length, peaking at 25--50 steps. Replanning less often
+(100-step plans) costs the L2 baseline $-7.6$ points at same-ep 100 and $-9.6$ on cross-ep
+goals, consistent with longer open-loop commitments giving CEM fewer chances to correct for
+predictor drift. Replanning more often with a correspondingly short 5-step lookahead is worse
+still: $-27.2$ at same-ep 25, $-21.6$ at same-ep 50, and near zero at same-ep 100 (1.2\%) and
+cross-ep (4.4\%). A one-block lookahead makes the L2 cost greedy: CEM picks the action block
+that moves the latent closest to the goal right now, which cannot plan the multi-step
+approach-and-push that moving the block requires. The 50-step setting ties the default at
+long range (same-ep 100: $12.8$ vs.\ $13.2$; cross-ep: $15.2$ vs.\ $14.4$, both within
+seed noise) and loses $6.4$ points at same-ep 50. No plan length lifts L2 above
+$\approx$15\% at same-ep 100 or cross-ep, so the OUR-vs-L2 gaps in
+Table~\ref{tab:task-critic-refresh} are not an artifact of the L2 cadence: the default
+25-step setting is at or near the best one for the L2 baseline.
 
 \section{Cube diagnosis/tuning sweep: final-switch, critic, and retrieval variants (2026-09-19)}
 \label{sec:cube-variants}

@@ -82,7 +82,7 @@
   \end{scope}
   \draw[flow] (te.south) -- (4.95,2.80);
   \node[small,text=purple,anchor=east] at (3.75,2.40) {Graph $G$};
-  \node[tinylabel,anchor=north east,align=right] at (3.75,2.24) {$V$: medoids\\$E$: TD-weighted edges};
+  \node[tinylabel,anchor=north east,align=right] at (3.75,2.24) {nodes: TDR clusters\\edges: TDR distance $\le r_{\mathrm{TD}}$};
 
   % ---------------- Planning: subgoal generation ----------------
   \node[paneltitle] at (10.225,6.40) {Subgoal generation};
@@ -102,11 +102,11 @@
     \draw[teal,line width=1.5pt] (s) -- (g1) -- (g2) -- (g3);
     \draw[teal!70,line width=1.1pt,dash pattern=on 2.5pt off 1.8pt] (g3) -- (g4) -- (g5) -- (goal);
     \node[tinylabel,text=blue,below=3pt of s] {current\\$\psi(z_0)$};
-    \node[tinylabel,text=teal,above=2pt of g3] {subgoal $v_\lambda$};
+    \node[tinylabel,text=teal,above=2pt of g3] {subgoal $y_q$};
     \node[tinylabel,text=red,below=3pt of goal] {goal\\$\psi(z_g)$};
     \draw[decorate,decoration={brace,mirror,amplitude=3pt},muted,line width=.5pt]
       (.75,.45) -- (3.25,.45);
-    \node[tinylabel] at (2.00,.22) {$\lambda = 1$ planning horizon};
+    \node[tinylabel] at (2.00,.22) {$\lambda$: one planning horizon};
   \end{scope}
 
   % ---------------- Planning: CEM rollout ----------------
@@ -124,9 +124,9 @@
     }
     \node[tinylabel] at (3.05,\yd+.58) {predicted $\hat z_K$};
     \node[trainbox,text width=2.3cm,minimum height=.80cm] (cost) at (5.00,\yd)
-      {$\|\psi(\hat z_K) - v_\lambda\|$\\$+\ \mathrm{ET}(\hat z_K, z_g)$};
+      {$\|\psi(\hat z_K) - y_q\|$\\$+\ \mathrm{ET}(\hat z_K, z_g)$};
     \node[small,text=orange,above=2pt of cost] {Cost$(\hat z_K)$};
-    \node[tinylabel,text=orange,below=2pt of cost] {final horizon: goal L2 $+$ ET};
+    \node[tinylabel,text=orange,below=2pt of cost] {within $\lambda$ of goal: L2 to goal $+$ ET};
     \draw[flow] (3.30,\yd) -- (cost.west);
   \end{scope}
 \end{tikzpicture}
