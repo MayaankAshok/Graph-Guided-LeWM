@@ -1,0 +1,4 @@
+extends: [paper_reacher.yaml]
+evaluation:
+  methods: [gciql]
+  seeds: [0]

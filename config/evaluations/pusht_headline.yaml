@@ -1,0 +1,1 @@
+extends: [base.yaml, env/pusht.yaml, method/l2.yaml, method/our.yaml]

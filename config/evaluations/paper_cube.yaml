@@ -1,0 +1,15 @@
+extends: [cube_headline.yaml, paper_pusht.yaml]
+environment: cube
+output_root: outputs/cube
+train_cache_dir: ${oc.env:GAS_MPC_TRAIN_CACHE_DIR,${output_root}}
+dataset:
+  path: ${oc.env:CUBE_H5_PATH,data/datasets/ogbench/cube_single_expert.h5}
+model:
+  directory: ${oc.env:CUBE_CKPT_DIR,data/checkpoints/models--quentinll--lewm-cube}
+training:
+  h_td: 7.25
+paper:
+  lookahead: 13.63
+evaluation:
+  methods: [random, l2, our, tdr, graph, graph_switch, l2_et,
+            graph_et, graph_nlv, subgoal_l2, retrieval]

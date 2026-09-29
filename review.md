@@ -1,31 +1,27 @@
+## Title
+Graph-Guided Long-Horizon MPC with LeWorldModel
 
 ## Abstract
-The cross-entropy method (CEM) planner used with LeWorldModel (LeWM) ranks candidate action
-sequences by the Euclidean distance between a predicted terminal latent and a goal latent. While
-this objective succeeds on short-horizon goals, its performance degrades sharply as goals become
-more temporally distant or come from a different episode.   
-On Push-T, the planner reaches
-same-episode goals 25, 50 and 100 steps ahead, and cross-episode goals, with success rates of
-91/41/13/14\%, respectively. We address this degradation at long horizons and across episodes
-without retraining the world model or learning a subgoal generator.   
-We learn a temporal distance representation over frozen latents, build a graph of the offline dataset, and use
-shortest paths to select a data-supported subgoal one planning horizon ahead. A budget-clocked
-expected-hitting-time critic scores predicted endpoints by time to goal under the remaining
-budget, and the planner switches back to latent L2 for the final horizon. Each component addresses a distinct
-limitation: the subgoal provides *direction*, the critic accounts for *feasibility*,
-and the final switch restores near-goal *resolution*.   
-Across fixed task pools and five seeds,
-our method raises success from 41/13/14\% to 70/46/42\% on Push-T and from 91/83/29\% to
-98/98/66\% on Reacher at offsets 50, 100 and cross-episode. At the
-25-step horizon, however, it does not outperform L2, trailing by 3 percentage points on Push-T and
-1 point on Reacher. Per-pair diagnostics show that the graph contains routes for all evaluated
-cross-episode pairs, but executing them requires the feasibility critic.
+Terminal latent distance can poorly reflect progress in long-horizon world-model
+planning. We add a temporal distance representation, a graph of offline experience,
+and a budget-conditioned reachability critic to a frozen LeWorldModel (LeWM).
+Graph search supplies an intermediate target. The critic scores predicted endpoints
+by the expected time to reach goal, and the controller switches to latent L2 near the goal.
+We keep the encoder, predictor, and cross-entropy method (CEM) search settings fixed.
+We bound the number of replanning calls needed to reach the goal under explicit
+execution, model, search, and critic error conditions. We also bound critic error
+across horizons and state when its score equals a truncated expected time to reach the goal.
+On fixed evaluation tasks, cross-episode success increases from 14.4 to 42.4\% on Push-T,
+29.2 to 65.6\% on Reacher, and 16.4 to 27.6\% on Cube. Improvements are largest beyond one
+planning horizon; short-range losses remain on Push-T and Reacher. Ablations show that
+graph guidance and the critic are complementary on Push-T, whereas Cube benefits primarily
+from the learned temporal representation.
 
 ## Keywords
 world models,long-horizon planning,graph-based planning,temporal distance representation
 
 ## TLDR
-Without retraining LeWorld Model, we add a graph-based subgoal  for direction, a budget-aware hitting-time critic for feasibility, and a switch back to plain L2 near the goal for final precision to improve performance on long-horizon tasks. 
+Without retraining LeWorld Model, we add a graph-based subgoal, and hitting-time critic to improve LeWM's performance on long-horizon tasks. 
 
 
 ## NARRATIVE

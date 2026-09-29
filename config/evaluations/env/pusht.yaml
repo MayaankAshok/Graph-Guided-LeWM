@@ -1,0 +1,9 @@
+environment: pusht
+output_root: outputs/pusht
+train_cache_dir: ${oc.env:GAS_MPC_TRAIN_CACHE_DIR,${output_root}}
+dataset:
+  path: ${oc.env:PUSHT_H5_PATH,data/datasets/pusht_expert_train.h5}
+model:
+  directory: ${oc.env:PUSHT_CKPT_DIR,data/checkpoints/models--quentinll--lewm-pusht}
+training:
+  h_td: 8.0

@@ -1,0 +1,4 @@
+extends: [paper_pusht.yaml]
+evaluation:
+  methods: [gciql]
+  seeds: [0]

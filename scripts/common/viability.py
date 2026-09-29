@@ -360,31 +360,3 @@ class HittingTimeHead(nn.Module):
 
     def forward(self, z, zg):
         return self.log_pmf(z, zg)
-
-
-def hitting_time_bin(t_env, b_max):
-    """Env-step hitting time -> class index. t_env < 0 encodes 'beyond the search bound /
-    disconnected' -> the '> B_max' class. Otherwise ceil(t / SKIP), which makes
-    P(bin <= h/SKIP) == P(t <= h) on the 5-step h grid; anything past B_max also lands in
-    the last class."""
-    t = torch.as_tensor(t_env)
-    b = torch.div(t + SKIP - 1, SKIP, rounding_mode="floor")
-    return torch.where(t < 0, torch.full_like(b, b_max + 1), b.clamp(max=b_max + 1)).long()
-
-
-def hitting_time_loss(log_pmf, label_bin, censored, weight):
-    """Proposal losses on one batch. label_bin (B,) class index; censored (B,) bool: True
-    means the label is only 'T > c' with c = label_bin, i.e. loss = -log sum_{b > c} p(b)
-    (the '> B_max' class is the censored case c = B_max, and is where the disconnected
-    weight applies); False means exact, loss = -log p(label_bin). weight (B,) per-row.
-    Returns the weighted mean."""
-    B, C = log_pmf.shape
-    label_bin = label_bin.clamp(max=C - 1)
-    # 'T > c' with c >= B_max has the single-class tail {'> B_max'}: same as exact on it
-    censored = censored & (label_bin < C - 1)
-    exact = -log_pmf.gather(-1, label_bin[:, None]).squeeze(-1)
-    b_idx = torch.arange(C, device=log_pmf.device)[None]
-    tail_mask = b_idx > label_bin[:, None]
-    tail = -torch.logsumexp(log_pmf.masked_fill(~tail_mask, float("-inf")), dim=-1)
-    loss = torch.where(censored, tail, exact)
-    return (loss * weight).sum() / weight.sum().clamp_min(1e-8)

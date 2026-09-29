@@ -1,0 +1,69 @@
+extends: [pusht_headline.yaml]
+paper:
+  lookahead: 13.7
+evaluation:
+  methods: [random, l2, our, tdr, ctg, graph, graph_switch, l2_et,
+            graph_et, graph_nlv, subgoal_l2, beta05, beta2, beta4, retrieval]
+methods:
+  our:
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=1, +mpc.critic_cost=et, +mpc.compose=std]
+  random:
+    requires: [dataset, embeddings_test, tasks]
+    overrides: [+mpc.method=random]
+  gciql:
+    requires: [dataset, embeddings_test, tasks]
+    overrides: [+mpc.method=gciql]
+  tdr:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, tasks]
+    overrides: [+mpc.method=tdr]
+  ctg:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, tasks]
+    overrides: [+mpc.method=ctg]
+  graph:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}']
+  graph_switch:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2]
+  l2_et:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, critic, tasks]
+    overrides: [+mpc.method=l2, +mpc.critic_beta=1, +mpc.critic_cost=et]
+  graph_et:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                +mpc.critic_beta=1, +mpc.critic_cost=et]
+  graph_nlv:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=1, +mpc.critic_cost=nlv]
+  subgoal_l2:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=1, +mpc.critic_cost=et]
+  beta05:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=0.5, +mpc.critic_cost=et]
+  beta2:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=2, +mpc.critic_cost=et]
+  beta4:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=4, +mpc.critic_cost=et]
+  retrieval:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides: [+mpc.method=subgoal_tdr, '+mpc.lookahead=${paper.lookahead}',
+                '+mpc.final_thresh=${paper.lookahead}', +mpc.final_metric=l2,
+                +mpc.critic_beta=1, +mpc.critic_cost=et, +mpc.retrieval=true]
+
+

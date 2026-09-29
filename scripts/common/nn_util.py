@@ -1,20 +1,6 @@
-"""Small neural-network and evaluation helpers shared by active diagnostics."""
+"""Evaluation helper shared by active diagnostics."""
 
 import numpy as np
-import torch.nn as nn
-
-
-class MLP(nn.Module):
-    def __init__(self, in_dim, hidden, out_dim=1):
-        super().__init__()
-        self.net = nn.Sequential(
-            nn.Linear(in_dim, hidden), nn.ReLU(),
-            nn.Linear(hidden, hidden), nn.ReLU(),
-            nn.Linear(hidden, out_dim),
-        )
-
-    def forward(self, x):
-        return self.net(x)
 
 
 def precompute_eval_set(row_pool, proprio, true_dist_oracle, n_pairs, seed):

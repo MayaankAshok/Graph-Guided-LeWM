@@ -9,26 +9,26 @@ Code: `/home2/mayaank.ashok/lewm_research/`; activate
 Stage large datasets on compute-node `/ssd_scratch`, pulling compressed masters from login-node
 `/share1`; set `PUSHT_H5_PATH` to the staged Push-T dataset.
 
-Prepare with `scripts/gas_mpc_prepare.py`; evaluate with `scripts/gas_mpc_eval.py`.
-Inspect queues in `scripts/gas_mpc_run.sh` or `scripts/ada_gas_mpc*.sh` before launching.
+Prepare and evaluate with `python evaluator.py --config config/evaluations/paper_pusht.yaml --run`.
+See `docs/iclr2027/REPRODUCE.md` for all submitted-paper commands.
 `GAS_MPC_ENV` selects the environment; `GAS_MPC_OUT` overrides the output root. Default roots:
 `outputs/pusht/` (Push-T), `outputs/<env>/` (other environments).
 Keep large assets within quota and back up scratch assets before the allocation ends.
 Node changes require restaging data and restoring/rebuilding scratch-local planning assets.
 Old tier/rollout-cache commands below apply to historical actor experiments.
-Regenerate current tables with `scripts/gas_mpc_report.py`.
+Regenerate current tables with `scripts/gas_mpc/gas_mpc_report.py`.
 
 Evaluation preferences (2026-09-19): call the former configuration B **OUR method**.
 OUR is `subgoal_tdr` with a final switch to goal L2 at one calibrated lookahead,
 budget-capped expected-hitting-time critic cost, beta 1, and std composition.
 Default evaluation is the **first 50 tasks of each fixed 200-task `task200u` pool**,
 for CEM/learned-asset seeds 0--4 and protocols same25, same50, same100, cross.
-Do not silently increase this default to 200. `scripts/ada_planning_pipeline.py`
-implements the resumable Push-T/Reacher/Cube workflow and defaults to dry-run;
-`--run` executes missing work, `--n` explicitly changes the evaluated prefix.
+Do not silently increase this default to 200. `evaluator.py`
+implements the resumable Push-T/Reacher/Cube workflow and defaults to preview;
+`--run` executes missing work, and `evaluation.num_eval` changes the evaluated prefix.
 Superseded assets are in `outputs/<env>/bak/superseded_2026-09-19/` on Ada and locally.
 Corrected Push-T critics seeds 1--4 completed 60k steps; clean seed 0 remains to train.
-Pipeline rehearsal: `ada_planning_pipeline.py --smoke` executes preparation,
+Historical pipeline rehearsal used the retired Ada orchestrator to execute preparation,
 five short TDR/critic trainings and L2/OUR evaluations for all four protocols in
 isolated `/ssd_scratch/mayaank.ashok/pipeline_smoke/<run>/<env>/` directories.
 Fixtures use only main-training episodes. Smoke evaluations have an explicit
@@ -42,7 +42,7 @@ runner for every job. Verified normal validation rejects every smoke result
 and every short critic; smoke mode rejects the canonical main output path.
 Main dry-run still schedules 11 critics and 120 first-50-task evaluations.
 
-Strict final-holdout isolation (2026-09-18): `scripts/ada_prepare_trainonly.sh` is rebuilding
+Strict final-holdout isolation (2026-09-18): the retired Ada preparation driver rebuilt
 training-only caches, TDR diagnostics, features, gap calibration and graphs for Push-T,
 Reacher and Cube. It reuses the verified TDR weights and archives earlier diagnostic tables
 and preparation assets. It does not restart critic training. Active preparation loads

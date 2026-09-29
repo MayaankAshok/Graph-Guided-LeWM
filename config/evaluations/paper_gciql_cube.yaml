@@ -1,0 +1,4 @@
+extends: [paper_cube.yaml]
+evaluation:
+  methods: [gciql]
+  seeds: [0]

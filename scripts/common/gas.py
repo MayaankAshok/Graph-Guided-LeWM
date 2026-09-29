@@ -21,7 +21,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 from scipy.sparse import csr_matrix
-from scipy.sparse.csgraph import dijkstra
 
 DEV = "cuda" if torch.cuda.is_available() else "cpu"
 EPS = 1e-10  # official code's normalisation epsilon
@@ -192,40 +191,6 @@ def temporal_efficiency(H, episodes, way, h_td):
     return te
 
 
-def td_aware_clustering(Hk, h_td):
-    """Alg. 2's sequential clustering over the TE-kept states (in dataset order): assign to
-    the nearest existing centre if within H_TD/2, else open a new cluster; centres are then
-    re-set to member means (one pass, no re-assignment -- official code). Returns
-    (centers (V,dim), assign (M,), medoid_member (V,) index into Hk)."""
-    M, dim = Hk.shape
-    cap = M
-    C = np.empty((cap, dim), dtype=np.float32)
-    assign = np.empty(M, dtype=np.int64)
-    C[0] = Hk[0]
-    n = 1
-    half = h_td / 2.0
-    for i in range(1, M):
-        d = np.linalg.norm(C[:n] - Hk[i], axis=1)
-        j = int(np.argmin(d))
-        if d[j] > half:
-            C[n] = Hk[i]
-            assign[i] = n
-            n += 1
-        else:
-            assign[i] = j
-    assign[0] = 0
-    centers = np.zeros((n, dim), dtype=np.float64)
-    counts = np.bincount(assign, minlength=n)
-    np.add.at(centers, assign, Hk)
-    centers = (centers / counts[:, None]).astype(np.float32)
-    # medoid: member closest to the mean centre; retained for graph diagnostics.
-    dist_to_center = np.linalg.norm(Hk - centers[assign], axis=1)
-    order = np.lexsort((dist_to_center, assign))
-    first = np.searchsorted(assign[order], np.arange(n))
-    medoid = order[first]
-    return centers, assign, medoid
-
-
 def build_node_graph(centers, h_td):
     """Edges between every pair of nodes with ||v_i - v_j|| <= H_TD, weight = the distance
     (official code; the paper's Alg. 2 only states the threshold). Symmetric csr."""
@@ -241,87 +206,6 @@ def build_node_graph(centers, h_td):
     return csr_matrix((vals.astype(np.float64), (rows, cols)), shape=(n, n))
 
 
-def build_gas_graph(H, train_episodes, h_td, te_threshold):
-    """Build graph assets and report TE retention, node count, and edge count."""
-    way = waypoint_by_distance(H, train_episodes, h_td)
-    te = temporal_efficiency(H, train_episodes, way, h_td)
-    train_rows = np.concatenate(train_episodes)
-    kept_rows = train_rows[te[train_rows] >= te_threshold]
-    Hk = H[kept_rows]
-    centers, assign, medoid = td_aware_clustering(Hk, h_td)
-    graph = build_node_graph(centers, h_td)
-    n_comp = _n_components(graph)
-    return dict(
-        centers=centers, node_medoid_row=kept_rows[medoid], graph=graph, way=way, te=te,
-        kept_rows=kept_rows, assign=assign, h_td=float(h_td), te_threshold=float(te_threshold),
-        stats=dict(n_train_states=int(len(train_rows)), n_kept=int(len(kept_rows)),
-                   te_retention=float(len(kept_rows) / max(1, len(train_rows))),
-                   n_nodes=int(len(centers)), n_edges=int(graph.nnz // 2),
-                   mean_degree=float(graph.nnz / max(1, len(centers))), n_components=int(n_comp)),
-    )
-
-
 def _n_components(graph):
     from scipy.sparse.csgraph import connected_components
     return connected_components(graph, directed=False)[0]
-
-
-# ------------------------------------------------------------------
-# Stage 4: planning (Alg. 1 with the official code's goal attachment)
-# ------------------------------------------------------------------
-
-class GASPlanner:
-    """Per-goal Dijkstra over the node graph plus per-step subgoal selection.
-
-    set_goal(h_g): the goal embedding becomes a temporary node connected to every node
-    within max(H_TD, 1.2 * nearest-node distance) (official code's add_target_node), edge
-    weight = distance; Dijkstra from it gives dist_to_goal[v] for all nodes.
-    subgoal(h_cur): Alg. 1 -- among nodes within H_TD of h_cur (all nodes if none), pick
-    argmin dist_to_goal[v] + ||h_cur - v||; if the goal itself is within H_TD, target it
-    directly (the official code's final-goal switch)."""
-
-    def __init__(self, centers, graph, h_td, subgoal_threshold=None):
-        self.centers = np.asarray(centers, dtype=np.float32)
-        self.graph = graph
-        self.h_td = float(h_td)
-        self.subgoal_threshold = float(subgoal_threshold if subgoal_threshold is not None else h_td)
-        self.h_g = None
-        self.dist_to_goal = None
-
-    def set_goal(self, h_g):
-        h_g = np.asarray(h_g, dtype=np.float32).reshape(-1)
-        d = np.linalg.norm(self.centers - h_g, axis=1)
-        thresh = max(self.h_td, 1.2 * float(d.min()))
-        attach = np.nonzero(d <= thresh)[0]
-        n = len(self.centers)
-        g = self.graph.tocoo()
-        rows = np.concatenate([g.row, np.full(len(attach), n), attach])
-        cols = np.concatenate([g.col, attach, np.full(len(attach), n)])
-        vals = np.concatenate([g.data, d[attach], d[attach]])
-        aug = csr_matrix((vals, (rows, cols)), shape=(n + 1, n + 1))
-        dist = dijkstra(aug, directed=False, indices=n)
-        self.h_g = h_g
-        self.dist_to_goal = dist[:n]
-        self.n_attached = int(len(attach))
-        self.n_reachable = int(np.isfinite(self.dist_to_goal).sum())
-
-    def subgoal(self, h_cur):
-        """Returns (target embedding (dim,), info dict)."""
-        h_cur = np.asarray(h_cur, dtype=np.float32).reshape(-1)
-        d_goal = float(np.linalg.norm(self.h_g - h_cur))
-        if d_goal <= self.subgoal_threshold:
-            return self.h_g, dict(node=-1, final=True, d_goal=d_goal, fallback=False)
-        d = np.linalg.norm(self.centers - h_cur, axis=1)
-        near = np.nonzero(d <= self.subgoal_threshold)[0]
-        fallback = len(near) == 0
-        if fallback:
-            near = np.arange(len(self.centers))
-        score = self.dist_to_goal[near] + d[near]
-        if not np.isfinite(score).any():
-            # no node in reach connects to the goal at all: fall back to the nearest node
-            # (keeps the agent moving toward supported states rather than freezing)
-            v = int(near[np.argmin(d[near])])
-            return self.centers[v], dict(node=v, final=False, d_goal=d_goal, fallback=True, unreachable=True)
-        v = int(near[np.argmin(score)])
-        return self.centers[v], dict(node=v, final=False, d_goal=d_goal, fallback=fallback,
-                                     path_len=float(score.min()))

@@ -1,0 +1,7 @@
+extends: [pusht_headline.yaml]
+evaluation:
+  methods: [l2]
+  protocols: [same50, same100, cross]
+methods:
+  l2:
+    overrides: [+mpc.method=l2, +mpc.receding=10, plan_config.horizon=10]

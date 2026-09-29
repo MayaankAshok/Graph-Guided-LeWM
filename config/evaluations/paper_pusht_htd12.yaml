@@ -1,0 +1,5 @@
+extends: [paper_pusht.yaml]
+training:
+  h_td: 12.0
+evaluation:
+  methods: [our]

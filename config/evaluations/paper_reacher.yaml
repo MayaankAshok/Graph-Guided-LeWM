@@ -1,0 +1,14 @@
+extends: [reacher_headline.yaml, paper_pusht.yaml]
+environment: reacher
+output_root: outputs/reacher
+train_cache_dir: ${oc.env:GAS_MPC_TRAIN_CACHE_DIR,${output_root}}
+dataset:
+  path: ${oc.env:REACHER_H5_PATH,data/datasets/reacher.h5}
+model:
+  directory: ${oc.env:REACHER_CKPT_DIR,data/checkpoints/models--quentinll--lewm-reacher}
+training:
+  h_td: 3.72
+paper:
+  lookahead: 5.83
+evaluation:
+  methods: [random, l2, our, retrieval]

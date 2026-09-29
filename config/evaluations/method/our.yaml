@@ -1,0 +1,11 @@
+methods:
+  our:
+    requires: [dataset, model, embeddings_train, embeddings_test, tdr, graph, critic, tasks]
+    overrides:
+      - +mpc.method=subgoal_tdr
+      - +mpc.lookahead=auto
+      - +mpc.final_thresh=auto
+      - +mpc.final_metric=l2
+      - +mpc.critic_beta=1
+      - +mpc.critic_cost=et
+      - +mpc.compose=std

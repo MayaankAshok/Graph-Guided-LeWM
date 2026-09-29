@@ -1,0 +1,24 @@
+environment: pusht
+output_root: outputs/pusht
+train_cache_dir: ${output_root}
+dataset:
+  path: ${oc.env:PUSHT_H5_PATH,data/datasets/pusht_expert_train.h5}
+  prepare: []  # optional argv commands when the extracted HDF5 is absent
+model:
+  directory: ${oc.env:PUSHT_CKPT_DIR,data/checkpoints/models--quentinll--lewm-pusht}
+  prepare: []  # optional argv commands when weights.pt/config.json are absent
+training:
+  heldout_frac: 0.02
+  tdr_steps: 50000
+  critic_steps: 60000
+  h_td: 8.0
+  te: 0.9
+evaluation:
+  pool: task200u
+  num_eval: 50
+  seeds: [0, 1, 2, 3, 4]
+  protocols: [same25, same50, same100, cross]
+  methods: [l2, our]
+  gpu_slots: [0]
+  workers_per_gpu: 1
+methods: {}

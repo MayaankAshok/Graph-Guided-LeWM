@@ -24,7 +24,6 @@ both versions (only the per-block attention/mlp names moved).
 import json
 import os
 import re
-import sys
 from pathlib import Path
 
 import torch
@@ -102,27 +101,6 @@ ACTION_ENCODER_DIM = 10  # both quentinll/lewm-tworooms and lewm-pusht declare a
 # one-step forward-prediction MSE ~0.13 on real Two-Room transitions vs. ~0.82-0.97 for
 # no-action/mean baselines); tiling the action to fill 10 dims is actively worse than doing
 # nothing (MSE 1.79) -- confirmed wrong, not just unverified.
-
-
-def load_local_jepa_checkpoint(ckpt_dir: Path, weights_file: str, device: str = "cpu"):
-    """Load a checkpoint produced by THIS repo's own train.py (e.g.
-    data/checkpoints/lewm_pusht_1step_predictor) -- distinct from load_tworoom_lewm's HF
-    quentinll/lewm-<env> checkpoints. config.json's `_target_`s point at top-level jepa.py/
-    module.py (jepa.JEPA, module.ARPredictor, module.Embedder, module.MLP), not
-    stable_worldmodel.wm.lewm.*, so those modules must be importable -- add REPO_ROOT to
-    sys.path since callers typically run from scripts/. No ViT key remap needed: this state
-    dict was saved by the currently-installed library (utils.SaveCkptCallback ->
-    stable_worldmodel.wm.utils.save_pretrained, a plain `torch.save(model.state_dict(), ...)`),
-    never an older one."""
-    if str(REPO_ROOT) not in sys.path:
-        sys.path.insert(0, str(REPO_ROOT))
-    cfg = json.loads((ckpt_dir / "config.json").read_text())
-    model = instantiate(cfg)
-    sd = torch.load(ckpt_dir / weights_file, map_location="cpu")
-    missing, unexpected = model.load_state_dict(sd, strict=True)
-    model = model.to(device).eval()
-    model.requires_grad_(False)
-    return model
 
 
 def pad_action(action):

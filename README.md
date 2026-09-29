@@ -9,9 +9,10 @@ or expected-hitting-time objectives. Push-T is the primary study; Reacher is the
 transfer study. IQL/GCIQL actors, `auxphi` value/reward shaping, and GAS with a learned
 low-level policy are historical approaches outside the active scope.
 
-Start with [project guidance](AGENTS.md) and the [working writeup](docs/gas-mpc/main.tex).
-Main entry points: `scripts/gas_mpc_prepare.py`, `scripts/gas_mpc_eval.py`, and
-`scripts/gas_mpc_report.py`. Cluster details are in [notes.md](notes.md).
+Start with [project guidance](AGENTS.md), the [working writeup](docs/gas-mpc/main.tex), and the [config-driven evaluator](docs/evaluator.md).
+Run active evaluation sets through `evaluator.py` with a composed config from
+`config/evaluations/`; it resolves training and held-out embeddings and their downstream
+requirements. Cluster details are in [notes.md](notes.md).
 The original LeWM paper and base training/evaluation instructions follow below; they describe
 the upstream model. Graph-assisted CEM experiments have their own assets and output directories.
 
@@ -195,5 +196,13 @@ PY
 
 After conversion, load via `swm.policy.AutoCostModel('pusht/lewm')` as usual.
 
+## Research workflows
+
+The research workflows and their role in GAS-MPC and the submitted ICLR results are
+listed in [scripts/README.md](scripts/README.md). Use root `evaluator.py` with a
+config from `config/evaluations/`; see [the reproduction guide](docs/iclr2027/REPRODUCE.md)
+for commands. Standalone scripts are grouped by workflow under `scripts/`.
+
 ## Contact & Contributions
+
 Feel free to open [issues](https://github.com/lucas-maes/le-wm/issues)! For questions or collaborations, please contact `lucas.maes@mila.quebec`

@@ -1,0 +1,5 @@
+methods:
+  l2:
+    requires: [dataset, model, embeddings_test, tasks]
+    overrides:
+      - +mpc.method=l2

@@ -23,6 +23,17 @@ def validate_training_cache(cache):
     return held
 
 
+def validate_test_cache(cache):
+    """Require embeddings from exactly the fixed final holdout."""
+    if not bool(cache.get("heldout_only", False)):
+        raise ValueError("A physically held-out test cache is required; run gas_mpc_prepare.py encode")
+    train, held = fixed_episode_split(np.arange(int(cache["n_source_episodes"])),
+                                     float(cache["heldout_frac"]))
+    if not np.array_equal(cache["episode_id"], held) or not np.array_equal(cache["training_episode_ids"], train):
+        raise ValueError("Test cache does not match the fixed final holdout")
+    return held
+
+
 def source_rows(cache, rows):
     """Translate compact training-cache rows back to evaluation-dataset rows."""
     rows = np.asarray(rows)
@@ -30,18 +41,14 @@ def source_rows(cache, rows):
     return cache["source_ep_offset"][ep] + rows - cache["ep_offset"][ep]
 
 
-def critic_episode_split(n_ep, heldout_frac, val_frac, seed):
-    """Reserve TDR's fixed seed-0 holdout; validate within the remaining episodes."""
-    if not 0 < heldout_frac < 1 or not 0 < val_frac < 1:
-        raise ValueError("Holdout and validation fractions must be between zero and one")
-    perm = np.random.default_rng(0).permutation(n_ep)
-    n_test = max(1, int(n_ep * heldout_frac))
-    test = np.sort(perm[:n_test])
-    available = np.random.default_rng(seed).permutation(perm[n_test:])
-    n_val = max(1, int(round(len(available) * val_frac)))
-    if len(available) <= n_val:
-        raise ValueError("Not enough episodes for critic training and validation")
-    return np.sort(available[n_val:]), np.sort(available[:n_val]), test
+def cache_rows(cache, source_rows):
+    """Translate dataset rows into one split cache, rejecting rows outside its episodes."""
+    rows = np.asarray(source_rows, dtype=np.int64)
+    source, length = cache["source_ep_offset"], cache["ep_len"]
+    ep = np.searchsorted(source, rows, side="right") - 1
+    if np.any(ep < 0) or np.any(rows >= source[ep] + length[ep]):
+        raise ValueError("Dataset row is outside the selected embedding split")
+    return cache["ep_offset"][ep] + rows - source[ep]
 
 
 def sample_disjoint_rows(ep_col, step_col, state_col, n, seed, pairing, offset,
